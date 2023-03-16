@@ -18,9 +18,9 @@ public class DataCollection implements SensorEventListener {
     public DataCollection(Context context){
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 
-        mMagneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        Accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        Gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        mMagneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED);
+        Accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER_UNCALIBRATED);
+        Gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE_UNCALIBRATED);
     }
 
     public void setOnMotionSensorManagerListener(OnMotionSensorManagerListener motionSensorManagerListener){
@@ -44,15 +44,15 @@ public class DataCollection implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent sensorEvent){
         switch (sensorEvent.sensor.getType()){
-            case Sensor.TYPE_ACCELEROMETER:
+            case Sensor.TYPE_ACCELEROMETER_UNCALIBRATED:
                 motionSensorManagerListener.onAccValueUpdated(sensorEvent.values);
                 break;
 
-            case Sensor.TYPE_GYROSCOPE:
+            case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
                 motionSensorManagerListener.onGyroValueUpdated(sensorEvent.values);
                 break;
 
-            case Sensor.TYPE_MAGNETIC_FIELD:
+            case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
                 h = Math.sqrt(sensorEvent.values[0] * sensorEvent.values[0] + sensorEvent.values[1] * sensorEvent.values[1] +
                         sensorEvent.values[2] * sensorEvent.values[2]);
 
