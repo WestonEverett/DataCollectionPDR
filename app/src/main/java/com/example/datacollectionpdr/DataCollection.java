@@ -14,6 +14,7 @@ public class DataCollection implements SensorEventListener {
     private Sensor Accelerometer;
     private Sensor Gyroscope;
     private Sensor mMagneticField;
+    private Sensor Barometer;
 
     public DataCollection(Context context){
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -21,6 +22,7 @@ public class DataCollection implements SensorEventListener {
         mMagneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED);
         Accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER_UNCALIBRATED);
         Gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE_UNCALIBRATED);
+        Barometer = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
     }
 
     public void setOnMotionSensorManagerListener(OnMotionSensorManagerListener motionSensorManagerListener){
