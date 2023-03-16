@@ -15,6 +15,7 @@ public class DataCollection implements SensorEventListener {
     private Sensor Gyroscope;
     private Sensor mMagneticField;
     private Sensor Barometer;
+    private Sensor Gravity;
 
     public DataCollection(Context context){
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -23,6 +24,7 @@ public class DataCollection implements SensorEventListener {
         Accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER_UNCALIBRATED);
         Gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE_UNCALIBRATED);
         Barometer = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
+        Gravity = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
     }
 
     public void setOnMotionSensorManagerListener(OnMotionSensorManagerListener motionSensorManagerListener){
@@ -34,13 +36,14 @@ public class DataCollection implements SensorEventListener {
     }
 
     public void registerMotionSensors(){
-        sensorManager.registerListener(this, mMagneticField, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener(this, Accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        sensorManager.registerListener(this, Gyroscope, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, mMagneticField, 10000);
+        sensorManager.registerListener(this, Accelerometer, 10000);
+        sensorManager.registerListener(this, Gyroscope, 10000);
+        sensorManager.registerListener(this, Gravity, 10000);
+        sensorManager.registerListener(this, Barometer, 1000000);
     }
 
     private double h;
-    final float alpha = .8f;
     private float gravity[] = new float[3];
 
     @Override
