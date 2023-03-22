@@ -2,12 +2,11 @@ package com.example.datacollectionpdr;
 
 public class PDRStep {
 
-    float xyMag;
-    float zMag;
-    float xyAngle;
-    public PDRStep(float xyMag, float xyAngle, float zMag){
-        this.xyMag = xyMag;
-        this.zMag = zMag;
-        this.xyAngle = xyAngle;
+    float x;
+    float y;
+
+    public PDRStep(float x, float y){
+        this.x = x;
+        this.y = y;
     }
 }
