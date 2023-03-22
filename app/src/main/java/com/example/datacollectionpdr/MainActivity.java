@@ -10,7 +10,7 @@ public class MainActivity extends AppCompatActivity implements com.example.datac
 
     private com.example.datacollectionpdr.DataCollection mMotionSensorManager;
 
-    private static final int REQUEST_ID_READ_WRITE_PERMISSION = 99;
+    private static final int REQUEST_ID_READ_WRITE_PERMISSION = 99; // What is this constant even?
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
