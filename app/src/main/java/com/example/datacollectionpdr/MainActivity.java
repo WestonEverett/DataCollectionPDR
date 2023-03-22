@@ -11,6 +11,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements com.example.datac
     private com.example.datacollectionpdr.DataCollection mMotionSensorManager;
     WifiManager wifiManager;
     String wifis[];
+    ListView lv;
     private static final int REQUEST_ID_READ_WRITE_PERMISSION = 99; // What is this constant even?
 
     BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements com.example.datac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        lv = (ListView)findViewById(R.id.lv);
         mMotionSensorManager = new com.example.datacollectionpdr.DataCollection(this);
         mMotionSensorManager.setOnMotionSensorManagerListener(this);
 
@@ -128,24 +131,57 @@ public class MainActivity extends AppCompatActivity implements com.example.datac
     }
 
     @Override
-    public void onAccValueUpdated(float[] acceleration) {
+    public void onAccelerometerValueUpdated(float[] acceleration) {
         //acc[0].setText("acc_Xaxis:" + acceleration[0]);
         //acc[1].setText("acc_Yaxis:" + acceleration[1]);
         //acc[2].setText("acc_Zaxis:" + acceleration[2]);
     }
 
     @Override
-    public void onGyroValueUpdated(float[] gyroscope) {
+    public void onGyroscopeValueUpdated(float[] gyroscope) {
         //gyro[0].setText("gyro_Xaxis:" + gyroscope[0]);
         //gyro[1].setText("gyro_Yaxis:" + gyroscope[1]);
         //gyro[2].setText("gyro_Zaxis:" + gyroscope[2]);
     }
 
     @Override
-    public void onMagValueUpdated(float[] magneticField, float h) {
+    public void onMagnetometerValueUpdated(float[] magneticField, float h) {
         //mag[0].setText("mag_Xaxis:" + magneticfield[0]);
         //mag[1].setText("mag_Yaxis:" + magneticfield[1]);
         //mag[2].setText("mag_Zaxis:" + magneticfield[2]);
         //mag[3].setText("magnetic_field:" + h);
+    }
+    @Override
+    public void onMagnetometerUncalibratedValueUpdated(float[] magneticfield, float h){
+
+    }
+
+    @Override
+    public void onAccelerometerUncalibratedValueUpdated(float[] acceleration){
+
+    }
+    @Override
+    public void onGyroscopeUncalibratedValueUpdated(float[] gyroscope){
+
+    }
+    @Override
+    public void onBarometerValueUpdated(float pressure){
+
+    }
+    @Override
+    public void onAmbientLightValueChanged(float luminance){
+
+    }
+    @Override
+    public void onProximityValueUpdated(float proximity){
+
+    }
+    @Override
+    public void onGravityValueUpdated(float[] gravity){
+
+    }
+    @Override
+    public void onWifiValueUpdated(String[] wifis){
+        lv.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1,wifis));
     }
 }
