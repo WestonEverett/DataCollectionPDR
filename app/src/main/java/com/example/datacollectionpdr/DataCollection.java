@@ -70,7 +70,7 @@ public class DataCollection implements SensorEventListener {
     public interface OnMotionSensorManagerListener{
         void onAccValueUpdated(float[] acceleration);
         void onGyroValueUpdated(float[] gyroscope);
-        void onMagValueUpdated(float[] magneticfield, float h);
+        void onMagValueUpdated(float[] magneticField, float h);
     }
 
     @Override

@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements com.example.datac
     }
 
     @Override
-    public void onMagValueUpdated(float[] magneticfield, float h) {
+    public void onMagValueUpdated(float[] magneticField, float h) {
         //mag[0].setText("mag_Xaxis:" + magneticfield[0]);
         //mag[1].setText("mag_Yaxis:" + magneticfield[1]);
         //mag[2].setText("mag_Zaxis:" + magneticfield[2]);
