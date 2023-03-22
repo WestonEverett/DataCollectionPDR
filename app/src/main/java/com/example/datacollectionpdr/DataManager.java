@@ -27,17 +27,53 @@ public class DataManager extends PermissionsManager implements com.example.datac
     }
 
     @Override
-    public void onAccValueUpdated(float[] acceleration) {
+    public void onMagnetometerUncalibratedValueUpdated(float[] magneticfield, float h){
 
     }
 
     @Override
-    public void onGyroValueUpdated(float[] gyroscope) {
+    public void onMagnetometerValueUpdated(float[] magneticfield, float h){
 
     }
 
     @Override
-    public void onMagValueUpdated(float[] magneticfield, float h) {
+    public void onAccelerometerUncalibratedValueUpdated(float[] acceleration){
+
+    }
+
+    @Override
+    public void onAccelerometerValueUpdated(float[] acceleration){
+
+    }
+
+    @Override
+    public void onGyroscopeUncalibratedValueUpdated(float[] gyroscope){
+
+    }
+
+    @Override
+    public void onGyroscopeValueUpdated(float[] gyroscope){
+
+    }
+
+    @Override
+    public void onBarometerValueUpdated(float pressure){
+
+    }
+    @Override
+    public void onAmbientLightValueChanged(float luminance){
+
+    }
+    @Override
+    public void onProximityValueUpdated(float proximity){
+
+    }
+    @Override
+    public void onGravityValueUpdated(float[] gravity){
+
+    }
+    @Override
+    public void onWifiValueUpdated(String[] wifis){
 
     }
 }
