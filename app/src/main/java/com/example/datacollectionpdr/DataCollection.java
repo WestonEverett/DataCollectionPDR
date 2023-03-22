@@ -37,6 +37,7 @@ public class DataCollection implements SensorEventListener {
         sensorManager.registerListener(this, mMagneticField, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this, Accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this, Gyroscope, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, Barometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     private double h;
