@@ -10,8 +10,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dashboard"
-        android:textSize="50sp"
+        android:text="Here put all the server stuff"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:layout_centerInParent="true"/>
 

@@ -68,6 +68,12 @@ public class MainActivity extends AppCompatActivity implements com.example.datac
                 });
             }
 
+    /** method linking to the help view triggered by a button */
+    public void startRecording(View view){
+        Intent intent = new Intent(this, RecordingActivity.class);
+        startActivity(intent); //Go to the Show Help activity and its view
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

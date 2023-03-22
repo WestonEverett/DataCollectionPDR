@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DataCollectionPDR">
         <activity
+            android:name=".RecordingReview"
+            android:exported="false" />
+        <activity
+            android:name=".RecordingActivity"
+            android:exported="false" />
+        <activity
             android:name=".About"
             android:exported="false" />
         <activity
