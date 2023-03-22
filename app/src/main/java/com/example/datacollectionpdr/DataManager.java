@@ -2,6 +2,8 @@ package com.example.datacollectionpdr;
 
 import android.os.Bundle;
 
+import java.util.HashMap;
+
 public class DataManager extends PermissionsManager implements com.example.datacollectionpdr.DataCollection.OnMotionSensorManagerListener{
 
     private com.example.datacollectionpdr.DataCollection mMotionSensorManager;
@@ -73,7 +75,7 @@ public class DataManager extends PermissionsManager implements com.example.datac
 
     }
     @Override
-    public void onWifiValueUpdated(String[] wifis){
+    public void onWifiValueUpdated(String[] wifis, HashMap map){
 
     }
 }

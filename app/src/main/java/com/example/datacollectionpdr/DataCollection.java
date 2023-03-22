@@ -12,11 +12,15 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 public class DataCollection implements SensorEventListener {
 
+    private static final int WIFI_UPDATE_INTERVAL = 5000; // 5s update interval for WiFi
+    private static final int UPDATES_BEFORE_WIFI_PURGE = 5; // 5 data aggregations before list purge
     WifiManager wifiManager;
     String wifis[];
     private OnMotionSensorManagerListener motionSensorManagerListener;
@@ -36,18 +40,31 @@ public class DataCollection implements SensorEventListener {
     private Sensor StepCounter;
     private Context context;
 
+    HashMap<String, Integer> map = new HashMap<>();
     BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
         public void onReceive(Context c, Intent intent) {
             List<ScanResult> wifiScanList = wifiManager.getScanResults();
             wifis = new String[wifiScanList.size()];
             Log.e("WiFi", String.valueOf(wifiScanList.size()));
             for(int i = 0; i<wifiScanList.size(); i++){
-                wifis[i] = wifiScanList.get(i).SSID +
-                        "," + wifiScanList.get(i).BSSID +
-                        "," + String.valueOf(wifiScanList.get(i).level);
+                int power = wifiScanList.get(i).level;
+                String id = wifiScanList.get(i).BSSID;
+                // If the entry doesn't exist, add it to the list.
+                if(!map.containsKey(id)){
+                    map.put(id, power);
+                }
+                // Else update it with the maximum power value
+                else{
+                    int chosenIntensity = (map.get(id) > power) ? map.get(id): power;
+                    map.put(id,chosenIntensity);
+                    map.put(id,wifiScanList.get(i).level);
+                }
+
+                wifis[i] = wifiScanList.get(i).BSSID +
+                        "    " + String.valueOf(wifiScanList.get(i).level);
                 Log.e("WiFi", String.valueOf(wifis[i]));
             }
-            motionSensorManagerListener.onWifiValueUpdated(wifis);
+            motionSensorManagerListener.onWifiValueUpdated(wifis, map);
         }
     };
 
@@ -119,14 +136,22 @@ public class DataCollection implements SensorEventListener {
     private float gravity[] = new float[3];
     private long lastTimestamp = System.currentTimeMillis();
     private long currentTimestamp;
+    private int purgeWifiDataCount;
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent){
         currentTimestamp = System.currentTimeMillis();
-        if(currentTimestamp-lastTimestamp > 1000){
+        if(currentTimestamp-lastTimestamp > WIFI_UPDATE_INTERVAL){
             wifiManager.startScan();
             lastTimestamp = currentTimestamp;
+            purgeWifiDataCount++;
             Log.e("Timestamp", String.valueOf(currentTimestamp));
+        }
+        if(purgeWifiDataCount == UPDATES_BEFORE_WIFI_PURGE){
+            map.clear();
+            purgeWifiDataCount = 0;
+            List<String> keys = new ArrayList<>(map.keySet());
+            Log.i("Map cleared", String.valueOf(keys));
         }
         switch (sensorEvent.sensor.getType()){
             case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
@@ -189,7 +214,7 @@ public class DataCollection implements SensorEventListener {
         void onAmbientLightValueChanged(float luminance);
         void onProximityValueUpdated(float proximity);
         void onGravityValueUpdated(float[] gravity);
-        void onWifiValueUpdated(String[] wifis);
+        void onWifiValueUpdated(String[] wifis, HashMap map);
 
     }
 
