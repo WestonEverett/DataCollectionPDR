@@ -23,6 +23,8 @@ public class DataCollection implements SensorEventListener {
     private Sensor AmbientLight;
     private Sensor Proximity;
     private Sensor Gravity;
+    private Sensor StepDetector;
+    private Sensor StepCounter;
 
     public DataCollection(Context context){
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -40,6 +42,8 @@ public class DataCollection implements SensorEventListener {
         AmbientLight = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         Proximity = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         Gravity = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        StepDetector = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
+        StepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
     }
 
     // Function returns sensor vendor or version
