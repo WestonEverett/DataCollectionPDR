@@ -10,7 +10,8 @@
     android:layout_marginHorizontal="12dp"
     android:layout_marginVertical="12dp"
     android:layout_marginStart="12dp"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="#FF929C9E">
 
 
     <com.androidplot.xy.XYPlot

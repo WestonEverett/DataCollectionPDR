@@ -41,8 +41,9 @@ public class RecordingActivity extends DataManager {
 
         // add the fragments
         viewPagerAdapter.add(new MapFragment(), "MAP");
-        viewPagerAdapter.add(new GraphsFragment(), "SENSOR DATA");
         viewPagerAdapter.add(new PathFragment(), "TRAJECTORY");
+        viewPagerAdapter.add(new GraphsFragment(), "SENSOR DATA");
+
 
         // Set the adapter
         viewPager.setAdapter(viewPagerAdapter);
@@ -51,6 +52,7 @@ public class RecordingActivity extends DataManager {
         // tabLayout hence we need to  set the page viewer
         // we use the setupWithViewPager().
         tabLayout = findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
 
     }
 

@@ -57,7 +57,7 @@
                     app:tabIndicatorColor="#00BCD4"
                     app:tabIndicatorHeight="264dp"
                     app:tabMode="fixed"
-                    app:tabSelectedTextColor="#E91E63" />
+                    app:tabSelectedTextColor="#FFEBEE" />
 
             </com.google.android.material.appbar.AppBarLayout>
 
