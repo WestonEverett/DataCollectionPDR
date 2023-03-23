@@ -16,6 +16,8 @@ import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 
+import com.example.datacollectionpdr.nativedata.SensorDetails;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +26,17 @@ public class DataCollection implements SensorEventListener {
 
     private static final int WIFI_UPDATE_INTERVAL = 5000; // 5s update interval for WiFi
     private static final int UPDATES_BEFORE_WIFI_PURGE = 5; // 5 data aggregations before list purge
+
+    // Function returns sensor info object
+    public SensorDetails sensorDetails(int type){
+        String name = sensorManager.getDefaultSensor(type).getName();
+        Log.i("SensorDetails",name);
+        String vendor = sensorManager.getDefaultSensor(type).getVendor();
+        float res = sensorManager.getDefaultSensor(type).getResolution();
+        float power = sensorManager.getDefaultSensor(type).getPower();
+        int version = sensorManager.getDefaultSensor(type).getVersion();
+        return new SensorDetails(name, vendor,res,power,version,type);
+    };
     WifiManager wifiManager;
     private OnMotionSensorManagerListener motionSensorManagerListener;
 
@@ -132,6 +145,13 @@ public class DataCollection implements SensorEventListener {
         sensorManager.registerListener(this,StepDetector,10000); // 100 Samples/s
         sensorManager.registerListener(this, StepCounter, 10000); // 100 Samples/s
         context.registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        SensorDetails accInfo = sensorDetails(Sensor.TYPE_ACCELEROMETER);
+        SensorDetails gyrInfo = sensorDetails(Sensor.TYPE_GYROSCOPE);
+        SensorDetails magInfo = sensorDetails(Sensor.TYPE_MAGNETIC_FIELD);
+        SensorDetails barInfo = sensorDetails(Sensor.TYPE_ACCELEROMETER);
+        SensorDetails ambInfo = sensorDetails(Sensor.TYPE_LIGHT);
+        SensorDetails rotInfo = sensorDetails(Sensor.TYPE_ROTATION_VECTOR);
+        motionSensorManagerListener.onSensorInfoCollected(accInfo, gyrInfo, magInfo, barInfo, ambInfo, rotInfo);
     }
 
     //Magnetic field stuff, remove?
@@ -239,6 +259,9 @@ public class DataCollection implements SensorEventListener {
         void onStepDetectorUpdated();
         void onStepCountValueUpdated(int stepcount);
         void onWifiValueUpdated(HashMap map);
+        void onSensorInfoCollected(SensorDetails AccInfo, SensorDetails GyrInfo,
+                                   SensorDetails MagInfo, SensorDetails BarInfo,
+                                   SensorDetails AmbInfo, SensorDetails RotInfo);
     }
 
     @Override
