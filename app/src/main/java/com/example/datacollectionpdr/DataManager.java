@@ -78,4 +78,12 @@ public class DataManager extends PermissionsManager implements com.example.datac
     public void onWifiValueUpdated(String[] wifis, HashMap map){
 
     }
+    @Override
+    public void onStepDetectorUpdated(){
+
+    }
+    @Override
+    public void onStepCountValueUpdated(int stepcount){
+
+    }
 }

@@ -15,7 +15,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 public class DataCollection implements SensorEventListener {
 
@@ -40,7 +39,7 @@ public class DataCollection implements SensorEventListener {
     private Sensor StepCounter;
     private Context context;
 
-    HashMap<String, Integer> map = new HashMap<>();
+    HashMap<String, Integer> WifiData = new HashMap<>();
     BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
         public void onReceive(Context c, Intent intent) {
             List<ScanResult> wifiScanList = wifiManager.getScanResults();
@@ -50,21 +49,21 @@ public class DataCollection implements SensorEventListener {
                 int power = wifiScanList.get(i).level;
                 String id = wifiScanList.get(i).BSSID;
                 // If the entry doesn't exist, add it to the list.
-                if(!map.containsKey(id)){
-                    map.put(id, power);
+                if(!WifiData.containsKey(id)){
+                    WifiData.put(id, power);
                 }
                 // Else update it with the maximum power value
                 else{
-                    int chosenIntensity = (map.get(id) > power) ? map.get(id): power;
-                    map.put(id,chosenIntensity);
-                    map.put(id,wifiScanList.get(i).level);
+                    int chosenIntensity = (WifiData.get(id) > power) ? WifiData.get(id): power;
+                    WifiData.put(id,chosenIntensity);
+                    WifiData.put(id,wifiScanList.get(i).level);
                 }
 
                 wifis[i] = wifiScanList.get(i).BSSID +
                         "    " + String.valueOf(wifiScanList.get(i).level);
                 Log.e("WiFi", String.valueOf(wifis[i]));
             }
-            motionSensorManagerListener.onWifiValueUpdated(wifis, map);
+            motionSensorManagerListener.onWifiValueUpdated(wifis, WifiData);
         }
     };
 
@@ -96,17 +95,7 @@ public class DataCollection implements SensorEventListener {
 
         context.registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan();
-        //Toast.makeText(this, "Scanning WiFi..", Toast.LENGTH_SHORT).show();
     }
-
-    // Function returns sensor vendor or version
-    public String sensorDetails(String query, int type){
-        String result = "";
-        if(Objects.equals(query, "Vendor")) result = sensorManager.getDefaultSensor(type).getVendor();
-        else if(Objects.equals(query, "Version")) result = String.valueOf(sensorManager.getDefaultSensor(type).getVersion());
-        else if(Objects.equals(query, "Power")) result = String.valueOf(sensorManager.getDefaultSensor(type).getPower());
-        return result;
-    };
 
     public void setOnMotionSensorManagerListener(OnMotionSensorManagerListener motionSensorManagerListener){
         this.motionSensorManagerListener = motionSensorManagerListener;
@@ -128,6 +117,8 @@ public class DataCollection implements SensorEventListener {
         sensorManager.registerListener(this, AmbientLight, 1000000); // 1 Sample/s
         sensorManager.registerListener(this, Proximity, 1000000); // 1 Sample/s
         sensorManager.registerListener(this, Gravity, 10000); // 100 Samples/s
+        sensorManager.registerListener(this,StepDetector,10000); // 100 Samples/s
+        sensorManager.registerListener(this, StepCounter, 10000); // 100 Samples/s
         context.registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
     }
 
@@ -148,9 +139,9 @@ public class DataCollection implements SensorEventListener {
             Log.e("Timestamp", String.valueOf(currentTimestamp));
         }
         if(purgeWifiDataCount == UPDATES_BEFORE_WIFI_PURGE){
-            map.clear();
+            WifiData.clear();
             purgeWifiDataCount = 0;
-            List<String> keys = new ArrayList<>(map.keySet());
+            List<String> keys = new ArrayList<>(WifiData.keySet());
             Log.i("Map cleared", String.valueOf(keys));
         }
         switch (sensorEvent.sensor.getType()){
@@ -199,6 +190,12 @@ public class DataCollection implements SensorEventListener {
             case Sensor.TYPE_GRAVITY:
                 motionSensorManagerListener.onGravityValueUpdated(sensorEvent.values);
                 break;
+            case Sensor.TYPE_STEP_DETECTOR:
+                motionSensorManagerListener.onStepDetectorUpdated();
+                break;
+            case Sensor.TYPE_STEP_COUNTER:
+                motionSensorManagerListener.onStepCountValueUpdated((int)sensorEvent.values[0]);
+                break;
 
         }
     }
@@ -214,6 +211,8 @@ public class DataCollection implements SensorEventListener {
         void onAmbientLightValueChanged(float luminance);
         void onProximityValueUpdated(float proximity);
         void onGravityValueUpdated(float[] gravity);
+        void onStepDetectorUpdated();
+        void onStepCountValueUpdated(int stepcount);
         void onWifiValueUpdated(String[] wifis, HashMap map);
 
     }
@@ -256,6 +255,12 @@ public class DataCollection implements SensorEventListener {
                 break;
 
             case Sensor.TYPE_GRAVITY:
+
+                break;
+            case Sensor.TYPE_STEP_DETECTOR:
+
+                break;
+            case Sensor.TYPE_STEP_COUNTER:
 
                 break;
 
