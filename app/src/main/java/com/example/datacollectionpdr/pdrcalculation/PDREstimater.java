@@ -1,4 +1,6 @@
-package com.example.datacollectionpdr;
+package com.example.datacollectionpdr.pdrcalculation;
+
+import com.example.datacollectionpdr.nativedata.PDRStep;
 
 public class PDREstimater {
 

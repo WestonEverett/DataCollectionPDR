@@ -1,10 +1,10 @@
 package com.example.datacollectionpdr;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+
+import com.example.datacollectionpdr.datacollectionandpreparation.DataManager;
 
 public class RecordingActivity extends DataManager {
 

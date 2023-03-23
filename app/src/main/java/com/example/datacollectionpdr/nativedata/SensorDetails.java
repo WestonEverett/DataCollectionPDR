@@ -1,4 +1,4 @@
-package com.example.datacollectionpdr;
+package com.example.datacollectionpdr.nativedata;
 
 public class SensorDetails {
 

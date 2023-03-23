@@ -1,18 +1,18 @@
-package com.example.datacollectionpdr;
+package com.example.datacollectionpdr.datacollectionandpreparation;
 
 import android.os.Bundle;
 
 import java.util.HashMap;
 
-public class DataManager extends PermissionsManager implements com.example.datacollectionpdr.DataCollection.OnMotionSensorManagerListener{
+public class DataManager extends PermissionsManager implements DataCollection.OnMotionSensorManagerListener{
 
-    private com.example.datacollectionpdr.DataCollection mMotionSensorManager;
+    private DataCollection mMotionSensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mMotionSensorManager = new com.example.datacollectionpdr.DataCollection(this);
+        mMotionSensorManager = new DataCollection(this);
         mMotionSensorManager.setOnMotionSensorManagerListener(this);
     }
 

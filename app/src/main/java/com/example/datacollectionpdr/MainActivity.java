@@ -7,24 +7,18 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
-
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.MenuItem;
 
+import com.example.datacollectionpdr.datacollectionandpreparation.DataCollection;
+import com.example.datacollectionpdr.datacollectionandpreparation.DataManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
-public class MainActivity extends DataManager implements com.example.datacollectionpdr.DataCollection.OnMotionSensorManagerListener{
+public class MainActivity extends DataManager implements DataCollection.OnMotionSensorManagerListener{
 
-    private com.example.datacollectionpdr.DataCollection mMotionSensorManager;
+    private DataCollection mMotionSensorManager;
 
     private static final int REQUEST_ID_READ_WRITE_PERMISSION = 99;
     BottomNavigationView bottomNavigationView;
@@ -35,7 +29,7 @@ public class MainActivity extends DataManager implements com.example.datacollect
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mMotionSensorManager = new com.example.datacollectionpdr.DataCollection(this);
+        mMotionSensorManager = new DataCollection(this);
         mMotionSensorManager.setOnMotionSensorManagerListener(this);
 
 

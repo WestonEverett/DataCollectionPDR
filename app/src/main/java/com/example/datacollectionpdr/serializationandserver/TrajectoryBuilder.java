@@ -1,4 +1,4 @@
-package com.example.datacollectionpdr;
+package com.example.datacollectionpdr.serializationandserver;
 
 import com.example.datacollectionpdr.data.AP_Data;
 import com.example.datacollectionpdr.data.GNSS_Sample;
@@ -11,6 +11,16 @@ import com.example.datacollectionpdr.data.Pressure_Sample;
 import com.example.datacollectionpdr.data.Sensor_Info;
 import com.example.datacollectionpdr.data.Trajectory;
 import com.example.datacollectionpdr.data.WiFi_Sample;
+import com.example.datacollectionpdr.nativedata.APData;
+import com.example.datacollectionpdr.nativedata.GNSSData;
+import com.example.datacollectionpdr.nativedata.LightData;
+import com.example.datacollectionpdr.nativedata.MacData;
+import com.example.datacollectionpdr.nativedata.MotionSample;
+import com.example.datacollectionpdr.nativedata.PDRStep;
+import com.example.datacollectionpdr.nativedata.PositionData;
+import com.example.datacollectionpdr.nativedata.PressureData;
+import com.example.datacollectionpdr.nativedata.SensorDetails;
+import com.example.datacollectionpdr.nativedata.WifiSample;
 
 public class TrajectoryBuilder {
 

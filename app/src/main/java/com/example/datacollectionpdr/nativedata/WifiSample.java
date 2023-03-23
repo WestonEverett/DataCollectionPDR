@@ -1,4 +1,4 @@
-package com.example.datacollectionpdr;
+package com.example.datacollectionpdr.nativedata;
 
 import java.util.ArrayList;
 import java.util.HashMap;

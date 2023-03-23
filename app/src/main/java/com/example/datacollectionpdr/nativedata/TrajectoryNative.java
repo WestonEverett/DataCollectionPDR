@@ -1,5 +1,6 @@
-package com.example.datacollectionpdr;
+package com.example.datacollectionpdr.nativedata;
 
+import com.example.datacollectionpdr.serializationandserver.TrajectoryBuilder;
 import com.example.datacollectionpdr.data.Trajectory;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.example.datacollectionpdr;
+package com.example.datacollectionpdr.datacollectionandpreparation;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

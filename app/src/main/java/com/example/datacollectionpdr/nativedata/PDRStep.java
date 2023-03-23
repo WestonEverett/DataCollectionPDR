@@ -1,10 +1,10 @@
-package com.example.datacollectionpdr;
+package com.example.datacollectionpdr.nativedata;
 
 public class PDRStep {
 
-    float x;
-    float y;
-    long initTime;
+    public float x;
+    public float y;
+    public long initTime;
 
     public PDRStep(float x, float y, long initTime){
         this.x = x;
