@@ -38,6 +38,7 @@ public class DataCollection implements SensorEventListener {
     private Sensor AmbientLight;
     private Sensor Proximity;
     private Sensor Gravity;
+    private Sensor RotationVector;
     private Sensor StepDetector;
     private Sensor StepCounter;
     private Context context;
@@ -72,9 +73,8 @@ public class DataCollection implements SensorEventListener {
                         WifiData.put(id,wifiScanList.get(i).level);
                     }
                 }
-                motionSensorManagerListener.onWifiValueUpdated(WifiData);
+                //motionSensorManagerListener.onWifiValueUpdated(WifiData);
             }
-
         }
     };
 
@@ -87,7 +87,7 @@ public class DataCollection implements SensorEventListener {
         MagneticFieldUncalibrated = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED);
         AccelerometerUncalibrated = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER_UNCALIBRATED);
         GyroscopeUncalibrated = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE_UNCALIBRATED);
-        //Calibrated sensors for data processing
+        //Calibrated and virtual sensors for data processing
         MagneticField = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         Accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         Gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
@@ -95,9 +95,11 @@ public class DataCollection implements SensorEventListener {
         AmbientLight = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
         Proximity = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         Gravity = sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+        RotationVector = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         StepDetector = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         StepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        //Enable WiFi if disabled
         if(wifiManager.getWifiState()==wifiManager.WIFI_STATE_DISABLED){
             wifiManager.setWifiEnabled(true);
         }
@@ -126,27 +128,33 @@ public class DataCollection implements SensorEventListener {
         sensorManager.registerListener(this, AmbientLight, 1000000); // 1 Sample/s
         sensorManager.registerListener(this, Proximity, 1000000); // 1 Sample/s
         sensorManager.registerListener(this, Gravity, 10000); // 100 Samples/s
+        sensorManager.registerListener(this, RotationVector, 10000); // 100 Samples/s
         sensorManager.registerListener(this,StepDetector,10000); // 100 Samples/s
         sensorManager.registerListener(this, StepCounter, 10000); // 100 Samples/s
         context.registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
     }
 
+    //Magnetic field stuff, remove?
     private double h;
     final float alpha = .8f;
     private float gravity[] = new float[3];
+    //Timestamps for WiFi data aggregation
     private long lastTimestamp = System.currentTimeMillis();
     private long currentTimestamp;
+    //Counter for number of currently aggregated samples
     private int purgeWifiDataCount;
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent){
+        //Scan for WiFi networks every interval and increment count
         currentTimestamp = System.currentTimeMillis();
         if(currentTimestamp-lastTimestamp > WIFI_UPDATE_INTERVAL){
             wifiManager.startScan();
             lastTimestamp = currentTimestamp;
             purgeWifiDataCount++;
-            Log.e("Timestamp", String.valueOf(currentTimestamp));
+            Log.i("Timestamp", String.valueOf(currentTimestamp));
         }
+        //When count reaches max number of aggregated samples, send data to DataManager and clear data
         if(purgeWifiDataCount == UPDATES_BEFORE_WIFI_PURGE){
             motionSensorManagerListener.onWifiValueUpdated(WifiData); // Once we have an aggregate of wifi samples, send it to DataManager
             WifiData = new HashMap<>(); // Clear wifi data
@@ -154,6 +162,7 @@ public class DataCollection implements SensorEventListener {
             List<String> keys = new ArrayList<>(WifiData.keySet());
             Log.i("Map cleared", String.valueOf(keys));
         }
+
         switch (sensorEvent.sensor.getType()){
             case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
                 h = Math.sqrt(sensorEvent.values[0] * sensorEvent.values[0] + sensorEvent.values[1] * sensorEvent.values[1] +
@@ -200,13 +209,18 @@ public class DataCollection implements SensorEventListener {
             case Sensor.TYPE_GRAVITY:
                 motionSensorManagerListener.onGravityValueUpdated(sensorEvent.values);
                 break;
+
+            case Sensor.TYPE_ROTATION_VECTOR:
+                motionSensorManagerListener.onRotationVectorValueUpdated(sensorEvent.values);
+                break;
+
             case Sensor.TYPE_STEP_DETECTOR:
                 motionSensorManagerListener.onStepDetectorUpdated();
                 break;
+
             case Sensor.TYPE_STEP_COUNTER:
                 motionSensorManagerListener.onStepCountValueUpdated((int)sensorEvent.values[0]);
                 break;
-
         }
     }
 
@@ -221,6 +235,7 @@ public class DataCollection implements SensorEventListener {
         void onAmbientLightValueChanged(float luminance);
         void onProximityValueUpdated(float proximity);
         void onGravityValueUpdated(float[] gravity);
+        void onRotationVectorValueUpdated(float[] rotationvector);
         void onStepDetectorUpdated();
         void onStepCountValueUpdated(int stepcount);
         void onWifiValueUpdated(HashMap map);
@@ -264,6 +279,9 @@ public class DataCollection implements SensorEventListener {
                 break;
 
             case Sensor.TYPE_GRAVITY:
+
+                break;
+            case Sensor.TYPE_ROTATION_VECTOR:
 
                 break;
             case Sensor.TYPE_STEP_DETECTOR:
