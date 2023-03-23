@@ -35,7 +35,7 @@ public class About extends AppCompatActivity {
         setContentView(R.layout.activity_about);
 
         //Simple TextView for accelerometer info, change into menu later
-        TextView textView9 = findViewById(R.id.textView9);
+        TextView textView9 = findViewById(R.id.text_sensor_info1);
         SensorDetails Accelerometer = sensorDetails(Sensor.TYPE_ACCELEROMETER); // Instantiate SensorDetails object with the sensor type
         textView9.setText(Accelerometer.name+" "+Accelerometer.vendor+" "+Accelerometer.version);
         // Initialize and assign variable
