@@ -48,7 +48,6 @@ public class GraphsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_graphs, container, false);
         // initialize our XYPlot reference:
         plot = (XYPlot) view.findViewById(R.id.plot);
-        Log.e("plt","im here");
 
         RecordingActivity activity = (RecordingActivity) getActivity();
         Number[][] PlotData = activity.getMyData(currentDisplaySensor); //CHANGE HERE SO SENSOR IS MANIPULATABLE
@@ -77,14 +76,18 @@ public class GraphsFragment extends Fragment {
         Number[] series2Numbers=PlotData[2];
         Number[] series3Numbers=PlotData[3];
 
+        Log.d("plt", "Value: " + Float.toString((Float) series1Numbers[0]));
+        Log.d("plt", "Current Display Sensor: " + currentDisplaySensor);
+        Log.d("plt","should be showing a value");
+
         // turn the above arrays into XYSeries':
         // (Y_VALS_ONLY means use the element index as the x value)
         XYSeries series1 = new SimpleXYSeries(
-                Arrays.asList(series1Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series1");
+                Arrays.asList(series1Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "X data");
         XYSeries series2 = new SimpleXYSeries(
-                Arrays.asList(series2Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series2");
+                Arrays.asList(series2Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Y data");
         XYSeries series3 = new SimpleXYSeries(
-                Arrays.asList(series3Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Series3");
+                Arrays.asList(series3Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Z data");
 
         // create formatters to use for drawing a series using LineAndPointRenderer
         // and configure them from xml:
@@ -94,11 +97,13 @@ public class GraphsFragment extends Fragment {
 
 
         if (plot !=null){
-            Log.e("plt","im here");
+            plot.clear();
+
             // add a new series' to the xyplot:
             plot.addSeries(series1, series1Format);
             plot.addSeries(series2, series2Format);
             plot.addSeries(series3, series3Format);
+
 
             plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
                 @Override
@@ -112,6 +117,7 @@ public class GraphsFragment extends Fragment {
                     return null;
                 }
             });
+            plot.redraw();
         }
     }
 
@@ -128,6 +134,8 @@ public class GraphsFragment extends Fragment {
                 currentDisplaySensor=(String) parent.getItemAtPosition(position);
                 RecordingActivity activity = (RecordingActivity) getActivity();
                 PlotThePlot(activity.getMyData(currentDisplaySensor));
+
+
 
              }
 
