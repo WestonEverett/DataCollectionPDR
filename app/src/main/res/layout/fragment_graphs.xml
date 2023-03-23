@@ -3,12 +3,12 @@
     xmlns:ap="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="500dp"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <com.androidplot.xy.XYPlot
         android:id="@+id/plot"
         style="@style/APDefacto.Light"
-        android:layout_width="297dp"
+        android:layout_width="match_parent"
         android:layout_height="317dp"
         ap:domainTitle="domain"
         ap:lineLabelRotationBottom="-45"
@@ -18,7 +18,7 @@
 
     <Spinner
         android:id="@+id/spinner2"
-        android:layout_width="324dp"
-        android:layout_height="125dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_weight="1" />
 </LinearLayout>
