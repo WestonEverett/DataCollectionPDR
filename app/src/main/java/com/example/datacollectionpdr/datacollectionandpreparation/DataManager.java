@@ -102,8 +102,8 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     }
     @Override
     public void onStepDetectorUpdated(){
-        //Log.i("DataM", "StpD data updated");
-        //PDRStep pdrStep = new PDRStep(1.f,2.f, System.currentTimeMillis());
+        Log.i("DataM", "StpD data updated");
+        PDRStep pdrStep = new PDRStep(1.f,2.f, System.currentTimeMillis());
     }
     @Override
     public void onStepCountValueUpdated(int stepcount){
