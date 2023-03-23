@@ -28,14 +28,16 @@ public class SetLengthFloatArray {
 
     public Float[] getArray(){
 
+        /*
         Float[] floatArray = new Float[internalArray.size()];
         int i = 0;
 
         for (Float f : internalArray) {
             floatArray[i++] = f;
         }
+        */
 
-        return floatArray;
+        return internalArray.toArray(new Float[0]);
     }
 
 }

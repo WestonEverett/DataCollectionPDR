@@ -134,6 +134,5 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     }
 
     protected void newCompleteMotionSample(MotionSample motionSample){
-
     }
 }

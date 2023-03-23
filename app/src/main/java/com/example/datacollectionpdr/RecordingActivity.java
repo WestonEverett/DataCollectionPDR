@@ -5,11 +5,14 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.example.datacollectionpdr.datacollectionandpreparation.DataManager;
 import com.example.datacollectionpdr.nativedata.MotionSample;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.Arrays;
 
 public class RecordingActivity extends DataManager {
 
@@ -17,8 +20,6 @@ public class RecordingActivity extends DataManager {
     private ViewPagerAdapter viewPagerAdapter;
     private ViewPager viewPager;
     private TabLayout tabLayout;
-
-    private Number[][] PlotSeriesData = {{ 1,2,3,4,5,6,7,8,9,10}, { 3, 4,3,3,33,3,3,3,3,3}, { 43, 44,43,3,1,3,3,43,43,43}, { 2, 2,2,3,1,2,2,2,2,2} };
 
     private final int graphPoints = 20;
     private SetLengthLongArray motionTimeRecentMeasurements;
@@ -100,21 +101,25 @@ public class RecordingActivity extends DataManager {
     public Number[][] getMyData(String sensor) {
 
         Long[] times = motionTimeRecentMeasurements.getArray();
+        times = new Long[]{0L,1L,2L,3L,4L,5L,6L,7L,8L,9L,10L,11L,12L,13L,14L,15L,16L,17L,18L,19L};
         switch (sensor){
             case "Accelerometer":
                 Float[] accX = accRecentMeasurements[0].getArray();
                 Float[] accY = accRecentMeasurements[1].getArray();
                 Float[] accZ = accRecentMeasurements[2].getArray();
+                Log.e("Hm", Arrays.toString(accX));
                 return new Number[][]{times, accX, accY, accZ};
             case "Gyroscope":
                 Float[] gyroX = gyroRecentMeasurements[0].getArray();
                 Float[] gyroY = gyroRecentMeasurements[1].getArray();
                 Float[] gyroZ = gyroRecentMeasurements[2].getArray();
+                Log.e("Hm", Arrays.toString(gyroX));
                 return new Number[][]{times, gyroX, gyroY, gyroZ};
             case "Rotation":
                 Float[] rotX = rotRecentMeasurements[0].getArray();
                 Float[] rotY = rotRecentMeasurements[1].getArray();
                 Float[] rotZ = rotRecentMeasurements[2].getArray();
+                Log.e("Hm", Arrays.toString(rotX));
                 return new Number[][]{times, rotX, rotY, rotZ};
         }
 

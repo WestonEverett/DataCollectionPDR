@@ -33,14 +33,14 @@ import java.util.*;
 public class GraphsFragment extends Fragment {
 
     String[] SensorList = { "Accelerometer", "Gyroscope",
-            "Magnetometer", "Rotation"};
+            "Rotation"};
 
     public GraphsFragment() {
         // required empty public constructor.
     }
     XYPlot plot;
     Spinner dropdown;
-    String CurrentDisplaySensor;
+    String currentDisplaySensor;
 
     @Nullable
     @Override
@@ -51,7 +51,7 @@ public class GraphsFragment extends Fragment {
         Log.e("plt","im here");
 
         RecordingActivity activity = (RecordingActivity) getActivity();
-        Number[][] PlotData = activity.getMyData("Accelerometer"); //CHANGE HERE SO SENSOR IS MANIPULATABLE
+        Number[][] PlotData = activity.getMyData(currentDisplaySensor); //CHANGE HERE SO SENSOR IS MANIPULATABLE
 
         dropdown = view.findViewById(R.id.spinner2);
         initspinnerfooter();
@@ -65,12 +65,14 @@ public class GraphsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        currentDisplaySensor = "Accelerometer";
+
         PixelUtils.init(getActivity());
     }
 
     public void PlotThePlot(Number[][] PlotData){
 
-        Number[]domainLabels=PlotData[0];
+        Number[] domainLabels=PlotData[0];
         Number[] series1Numbers=PlotData[1];
         Number[] series2Numbers=PlotData[2];
         Number[] series3Numbers=PlotData[3];
@@ -123,7 +125,9 @@ public class GraphsFragment extends Fragment {
                 Log.v("item", (String) parent.getItemAtPosition(position));
                 ((TextView) parent.getChildAt(0)).setTextColor(Color.BLUE);
 
-                CurrentDisplaySensor=(String) parent.getItemAtPosition(position);
+                currentDisplaySensor=(String) parent.getItemAtPosition(position);
+                RecordingActivity activity = (RecordingActivity) getActivity();
+                PlotThePlot(activity.getMyData(currentDisplaySensor));
 
              }
 
