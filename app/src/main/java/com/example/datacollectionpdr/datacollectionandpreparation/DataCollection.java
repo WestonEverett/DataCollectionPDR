@@ -10,11 +10,15 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import com.example.datacollectionpdr.nativedata.SensorDetails;
@@ -39,6 +43,7 @@ public class DataCollection implements SensorEventListener {
     };
     WifiManager wifiManager;
     LocationManager locationManager;
+    LocationListener locationListener;
     private OnMotionSensorManagerListener motionSensorManagerListener;
 
     private SensorManager sensorManager;
@@ -98,6 +103,23 @@ public class DataCollection implements SensorEventListener {
         }
     };
 
+    class dcLocationListener implements LocationListener{
+        @Override
+        public void onLocationChanged(@NonNull Location location){
+            if(location != null){
+                String provider = location.getProvider();
+                float acc = location.getAccuracy();
+                float alt = (float) location.getAltitude();
+                long initTime = location.getTime();
+                float lon = (float) location.getLongitude();
+                float lat = (float) location.getLatitude();
+                float speed = location.getSpeed();
+                Log.i("Location",provider);
+                motionSensorManagerListener.onLocationValueUpdated(provider,acc,alt,initTime,lon,lat,speed);
+            }
+        }
+    }
+
     public DataCollection(Context context){
         this.context = context;
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -119,7 +141,13 @@ public class DataCollection implements SensorEventListener {
         StepDetector = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         StepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+
+        //Initialise location manager and listener, prompt the user to enable GPS if disabled
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new dcLocationListener();
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            Toast.makeText(context, "Open GPS", Toast.LENGTH_SHORT).show();
+        }
         //Enable WiFi if disabled
         if(wifiManager.getWifiState()==wifiManager.WIFI_STATE_DISABLED){
             wifiManager.setWifiEnabled(true);
@@ -286,6 +314,7 @@ public class DataCollection implements SensorEventListener {
         void onStepDetectorUpdated();
         void onStepCountValueUpdated(int stepcount);
         void onWifiValueUpdated(HashMap map);
+        void onLocationValueUpdated(String provider, float acc, float alt, long initTime, float lon, float lat, float speed);
         void onSensorInfoCollected(SensorDetails AccInfo, SensorDetails GyrInfo,
                                    SensorDetails MagInfo, SensorDetails BarInfo,
                                    SensorDetails AmbInfo, SensorDetails RotInfo);

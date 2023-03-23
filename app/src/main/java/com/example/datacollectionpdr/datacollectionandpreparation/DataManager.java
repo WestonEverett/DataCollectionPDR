@@ -2,6 +2,7 @@ package com.example.datacollectionpdr.datacollectionandpreparation;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.datacollectionpdr.nativedata.GNSSData;
 import com.example.datacollectionpdr.nativedata.LightData;
 import com.example.datacollectionpdr.nativedata.MotionSample;
 import com.example.datacollectionpdr.nativedata.PDRStep;
@@ -99,6 +100,12 @@ public class DataManager extends PermissionsManager implements DataCollection.On
        WifiSample wifiSample = new WifiSample(System.currentTimeMillis());
        wifiSample.addMacSampleDict(map);
        trajectoryNative.addWifi(wifiSample);
+    }
+
+    @Override
+    public void onLocationValueUpdated(String provider, float acc, float alt, long initTime, float lon, float lat, float speed){
+        GNSSData gnssData = new GNSSData(provider,acc,alt,initTime,lon,lat,speed);
+        trajectoryNative.addGNSS(gnssData);
     }
     @Override
     public void onStepDetectorUpdated(){
