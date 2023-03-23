@@ -33,13 +33,14 @@ import java.util.*;
 public class GraphsFragment extends Fragment {
 
     String[] SensorList = { "Accelerometer", "Gyroscope",
-            "Magnetometer", "Barometer"};
+            "Magnetometer", "Rotation"};
 
     public GraphsFragment() {
         // required empty public constructor.
     }
     XYPlot plot;
     Spinner dropdown;
+    String CurrentDisplaySensor;
 
     @Nullable
     @Override
@@ -65,8 +66,6 @@ public class GraphsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         PixelUtils.init(getActivity());
-        //
-
     }
 
     public void PlotThePlot(Number[][] PlotData){
@@ -90,14 +89,6 @@ public class GraphsFragment extends Fragment {
         LineAndPointFormatter series1Format = new LineAndPointFormatter(Color.RED, Color.RED, null, null);
         LineAndPointFormatter series2Format = new LineAndPointFormatter(Color.BLUE, Color.BLUE, null, null);
         LineAndPointFormatter series3Format = new LineAndPointFormatter(Color.GREEN, Color.GREEN, null, null);
-
-    // just for fun, add some smoothing to the lines:
-    // see: http://androidplot.com/smooth-curves-and-androidplot/
-        series1Format.setInterpolationParams(
-                new CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal));
-
-        series2Format.setInterpolationParams(
-                new CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal));
 
 
         if (plot !=null){
@@ -130,8 +121,11 @@ public class GraphsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.v("item", (String) parent.getItemAtPosition(position));
-                ((TextView) parent.getChildAt(0)).setTextColor(Color.WHITE);
-            }
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLUE);
+
+                CurrentDisplaySensor=(String) parent.getItemAtPosition(position);
+
+             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
