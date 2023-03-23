@@ -117,6 +117,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
             // Create new motionsample
             //Log.i("Motion sample", String.valueOf(System.currentTimeMillis()));
             trajectoryNative.addMotion(motionSample);
+            this.newCompleteMotionSample(motionSample);
             this.motionSample = new MotionSample(System.currentTimeMillis(),stepcountDM);
         }
     }
@@ -132,4 +133,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         trajectoryNative.setRotVectorInfo(rotInfo);
     }
 
+    protected void newCompleteMotionSample(MotionSample motionSample){
+
+    }
 }
