@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ap="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
+    android:orientation="vertical">
 
     <com.androidplot.xy.XYPlot
-        style="@style/APDefacto.Dark"
         android:id="@+id/plot"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        ap:title="A Simple XY Plot"
-        ap:rangeTitle="range"
+        style="@style/APDefacto.Light"
+        android:layout_width="match_parent"
+        android:layout_height="317dp"
         ap:domainTitle="domain"
+        ap:lineLabelRotationBottom="-45"
         ap:lineLabels="left|bottom"
-        ap:lineLabelRotationBottom="-45"/>
+        ap:rangeTitle="range"
+        ap:title="Live Sensor Data Plot" />
+
+    <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 </LinearLayout>
