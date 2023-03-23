@@ -3,16 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PathFragment">
+    tools:context=".MapFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="here will go a path visualisation squiggle later on add graph and map fragments"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:text="map fragment" />
 
 </FrameLayout>
 
-
+    <?xml version="1.0" encoding="utf-8"?>

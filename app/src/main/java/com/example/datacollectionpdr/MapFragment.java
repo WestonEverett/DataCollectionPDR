@@ -10,9 +10,9 @@ import androidx.fragment.app.Fragment;
 
 import com.example.datacollectionpdr.R;
 
-public class PathFragment extends Fragment {
+public class MapFragment extends Fragment {
 
-    public PathFragment() {
+    public MapFragment() {
         // required empty public constructor.
     }
 
@@ -24,6 +24,6 @@ public class PathFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_path, container, false);
+        return inflater.inflate(R.layout.fragment_map, container, false);
     }
 }
