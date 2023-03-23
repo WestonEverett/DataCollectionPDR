@@ -16,6 +16,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DataCollectionPDR">
         <activity
+            android:name=".RecordingReview"
+            android:exported="false" />
+        <activity
+            android:name=".RecordingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".About"
+            android:exported="false" />
+        <activity
+            android:name=".DashBoard"
+            android:exported="false" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="$AIzaSyCj8oPCU4exZJYll7ROqLAh8Bs1c5ZJLKU" />
+
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_settings" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
