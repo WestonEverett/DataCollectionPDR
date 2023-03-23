@@ -1,5 +1,6 @@
 package com.example.datacollectionpdr.datacollectionandpreparation;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -33,19 +34,22 @@ public class PermissionsManager extends AppCompatActivity{
             int coarseLocationPermission = ActivityCompat.checkSelfPermission(this , android.Manifest.permission.ACCESS_COARSE_LOCATION);
             int fineLocationPermission = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
             int activityRecognitionPermission = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACTIVITY_RECOGNITION);
+            int internetPermission = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.INTERNET);
 
             //If we don't have the permissions
             if(wifiAccessPermission != PackageManager.PERMISSION_GRANTED ||
                     wifiChangePermission != PackageManager.PERMISSION_GRANTED ||
                     coarseLocationPermission != PackageManager.PERMISSION_GRANTED ||
                     fineLocationPermission != PackageManager.PERMISSION_GRANTED ||
-                    activityRecognitionPermission != PackageManager.PERMISSION_GRANTED){
+                    activityRecognitionPermission != PackageManager.PERMISSION_GRANTED ||
+                    internetPermission != PackageManager.PERMISSION_GRANTED){
                 this.requestPermissions(
                         new String[]{android.Manifest.permission.ACCESS_WIFI_STATE,
                                 android.Manifest.permission.CHANGE_WIFI_STATE,
                                 android.Manifest.permission.ACCESS_COARSE_LOCATION,
                                 android.Manifest.permission.ACCESS_FINE_LOCATION,
-                                android.Manifest.permission.ACTIVITY_RECOGNITION},
+                                android.Manifest.permission.ACTIVITY_RECOGNITION,
+                                android.Manifest.permission.INTERNET},
                         REQUEST_ID_READ_WRITE_PERMISSION
                 );
                 return;
@@ -65,7 +69,8 @@ public class PermissionsManager extends AppCompatActivity{
                         grantResults[1] == PackageManager.PERMISSION_GRANTED &&
                         grantResults[2] == PackageManager.PERMISSION_GRANTED &&
                         grantResults[3] == PackageManager.PERMISSION_GRANTED &&
-                        grantResults[4] == PackageManager.PERMISSION_GRANTED){
+                        grantResults[4] == PackageManager.PERMISSION_GRANTED &&
+                        grantResults[5] == PackageManager.PERMISSION_GRANTED){
                     Toast.makeText(this, "Permission Granted!", Toast.LENGTH_LONG).show();
                 }
                 //Cancelled or denied

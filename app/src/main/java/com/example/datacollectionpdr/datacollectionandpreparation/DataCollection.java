@@ -10,6 +10,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.LocationManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.util.Log;
@@ -30,7 +31,6 @@ public class DataCollection implements SensorEventListener {
     // Function returns sensor info object
     public SensorDetails sensorDetails(int type){
         String name = sensorManager.getDefaultSensor(type).getName();
-        Log.i("SensorDetails",name);
         String vendor = sensorManager.getDefaultSensor(type).getVendor();
         float res = sensorManager.getDefaultSensor(type).getResolution();
         float power = sensorManager.getDefaultSensor(type).getPower();
@@ -38,6 +38,7 @@ public class DataCollection implements SensorEventListener {
         return new SensorDetails(name, vendor,res,power,version,type);
     };
     WifiManager wifiManager;
+    LocationManager locationManager;
     private OnMotionSensorManagerListener motionSensorManagerListener;
 
     private SensorManager sensorManager;
@@ -54,6 +55,12 @@ public class DataCollection implements SensorEventListener {
     private Sensor RotationVector;
     private Sensor StepDetector;
     private Sensor StepCounter;
+    SensorDetails accInfo;
+    SensorDetails gyrInfo;
+    SensorDetails magInfo;
+    SensorDetails barInfo;
+    SensorDetails ambInfo;
+    SensorDetails rotInfo;
     private Context context;
 
     // WiFi data works differently to all other sensors
@@ -112,6 +119,7 @@ public class DataCollection implements SensorEventListener {
         StepDetector = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         StepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         //Enable WiFi if disabled
         if(wifiManager.getWifiState()==wifiManager.WIFI_STATE_DISABLED){
             wifiManager.setWifiEnabled(true);
@@ -145,12 +153,31 @@ public class DataCollection implements SensorEventListener {
         sensorManager.registerListener(this,StepDetector,10000); // 100 Samples/s
         sensorManager.registerListener(this, StepCounter, 10000); // 100 Samples/s
         context.registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-        SensorDetails accInfo = sensorDetails(Sensor.TYPE_ACCELEROMETER);
-        SensorDetails gyrInfo = sensorDetails(Sensor.TYPE_GYROSCOPE);
-        SensorDetails magInfo = sensorDetails(Sensor.TYPE_MAGNETIC_FIELD);
-        SensorDetails barInfo = sensorDetails(Sensor.TYPE_ACCELEROMETER);
-        SensorDetails ambInfo = sensorDetails(Sensor.TYPE_LIGHT);
-        SensorDetails rotInfo = sensorDetails(Sensor.TYPE_ROTATION_VECTOR);
+        //Check if sensor exists before trying to get its details
+        if(sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){
+            accInfo = sensorDetails(Sensor.TYPE_ACCELEROMETER);
+            Log.i("HasSensor", "Acc");
+        }
+        if(sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null){
+            gyrInfo = sensorDetails(Sensor.TYPE_GYROSCOPE);
+            Log.i("HasSensor", "Gyr");
+        }
+        if(sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null){
+            magInfo = sensorDetails(Sensor.TYPE_MAGNETIC_FIELD);
+            Log.i("HasSensor", "Mag");
+        }
+        if(sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE) != null){
+            barInfo = sensorDetails(Sensor.TYPE_PRESSURE);
+            Log.i("HasSensor", "Bar");
+        }
+        if(sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null){
+            ambInfo = sensorDetails(Sensor.TYPE_LIGHT);
+            Log.i("HasSensor", "Amb");
+        }
+        if(sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) != null){
+            rotInfo = sensorDetails(Sensor.TYPE_ROTATION_VECTOR);
+            Log.i("HasSensor", "Rot");
+        }
         motionSensorManagerListener.onSensorInfoCollected(accInfo, gyrInfo, magInfo, barInfo, ambInfo, rotInfo);
     }
 
