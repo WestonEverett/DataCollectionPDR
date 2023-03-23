@@ -21,6 +21,6 @@ public class PDREstimater {
     }
 
     public PDRStep calcStep() {
-        return new PDRStep(0, 0);
+        return new PDRStep(0, 0, System.currentTimeMillis());
     }
 }

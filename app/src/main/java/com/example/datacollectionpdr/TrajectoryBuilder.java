@@ -38,7 +38,7 @@ public class TrajectoryBuilder {
         trajectoryBuilder.setDataIdentifier(dataID);
     }
 
-    public void setAndroidVerion(String androidVersion){
+    public void setAndroidVersion(String androidVersion){
         trajectoryBuilder.setAndroidVersion(androidVersion);
     }
 
@@ -51,6 +51,10 @@ public class TrajectoryBuilder {
         trajectoryBuilder.addPdrData(newPDR.build());
     }
 
+    public void addPDR(PDRStep pdrStep){
+        addPDR(pdrStep.x, pdrStep.y, pdrStep.initTime);
+    }
+
     public void addAP(long mac, String ssid, long freq){
         AP_Data.Builder newAP = AP_Data.newBuilder();
         newAP.setMac(mac);
@@ -58,6 +62,10 @@ public class TrajectoryBuilder {
         newAP.setFrequency(freq);
 
         trajectoryBuilder.addApsData(newAP.build());
+    }
+
+    public void addAP(APData apdata){
+        addAP(apdata.mac, apdata.ssid, apdata.freq);
     }
 
     public void addGNSS(String provider, float acc, float alt, long curTime, float lon, float lat, float speed){
@@ -73,12 +81,20 @@ public class TrajectoryBuilder {
         trajectoryBuilder.addGnssData(newGNSS.build());
     }
 
+    public void addGNSS(GNSSData gnssData){
+        addGNSS(gnssData.provider, gnssData.acc, gnssData.alt, gnssData.initTime, gnssData.lon, gnssData.lat, gnssData.speed);
+    }
+
     public void addLight(float light, long curTime){
         Light_Sample.Builder newLight = Light_Sample.newBuilder();
         newLight.setLight(light);
         newLight.setRelativeTimestamp(curTime- initTime);
 
         trajectoryBuilder.addLightData(newLight.build());
+    }
+
+    public void addLight(LightData lightData){
+        addLight(lightData.light, lightData.initTime);
     }
 
     public void addWifi(long curTime, long[] mac, int[] rssi){
@@ -91,6 +107,24 @@ public class TrajectoryBuilder {
             Mac_Scan.Builder newMac = Mac_Scan.newBuilder();
             newMac.setMac(mac[i]);
             newMac.setRssi(rssi[i]);
+            newMac.setRelativeTimestamp(relTime);
+
+            newWifi.addMacScans(newMac.build());
+        }
+
+        trajectoryBuilder.addWifiData(newWifi.build());
+    }
+
+    public void addWifi(WifiSample wifiSample){
+        WiFi_Sample.Builder newWifi = WiFi_Sample.newBuilder();
+        long relTime = wifiSample.initTime - initTime;
+
+        newWifi.setRelativeTimestamp(relTime);
+
+        for(MacData macData : wifiSample.macSamples){
+            Mac_Scan.Builder newMac = Mac_Scan.newBuilder();
+            newMac.setMac(macData.mac);
+            newMac.setRssi(macData.rssi);
             newMac.setRelativeTimestamp(relTime);
 
             newWifi.addMacScans(newMac.build());
@@ -121,6 +155,10 @@ public class TrajectoryBuilder {
         trajectoryBuilder.addImuData(newMotion.build());
     }
 
+    public void addMotion(MotionSample motionSample){
+        addMotion(motionSample.getAcc(), motionSample.getGyro(), motionSample.getRotVector(), motionSample.steps, motionSample.initTime);
+    }
+
     public void addPosition(long curTime, float[] mag){
         Position_Sample.Builder newPosition = Position_Sample.newBuilder();
         newPosition.setRelativeTimestamp(curTime - initTime);
@@ -131,6 +169,10 @@ public class TrajectoryBuilder {
         trajectoryBuilder.addPositionData(newPosition.build());
     }
 
+    public void addPosition(PositionData positionData){
+        addPosition(positionData.initTime, positionData.mag);
+    }
+
     public void addBaro(float pressure, long curTime){
         Pressure_Sample.Builder newPressure = Pressure_Sample.newBuilder();
         newPressure.setPressure(pressure);
@@ -139,10 +181,18 @@ public class TrajectoryBuilder {
         trajectoryBuilder.addPressureData(newPressure.build());
     }
 
+    public void addBaro(PressureData pressureData){
+        addBaro(pressureData.pressure, pressureData.timestamp);
+    }
+
     public void addAccInfo(String name, String vendor, float res, float power, int version, int type){
         Sensor_Info newSensor = createSensorInfo(name, vendor, res, power, version, type);
 
         trajectoryBuilder.setAccelerometerInfo(newSensor);
+    }
+
+    public void addAccInfo(SensorDetails sensorDetails){
+        addAccInfo(sensorDetails.name, sensorDetails.vendor, sensorDetails.res, sensorDetails.power, sensorDetails.version, sensorDetails.type);
     }
 
     public void addGyroInfo(String name, String vendor, float res, float power, int version, int type){
@@ -151,10 +201,18 @@ public class TrajectoryBuilder {
         trajectoryBuilder.setGyroscopeInfo(newSensor);
     }
 
+    public void addGyroInfo(SensorDetails sensorDetails){
+        addGyroInfo(sensorDetails.name, sensorDetails.vendor, sensorDetails.res, sensorDetails.power, sensorDetails.version, sensorDetails.type);
+    }
+
     public void addRotationVectorInfo(String name, String vendor, float res, float power, int version, int type){
         Sensor_Info newSensor = createSensorInfo(name, vendor, res, power, version, type);
 
         trajectoryBuilder.setRotationVectorInfo(newSensor);
+    }
+
+    public void addRotationVectorInfo(SensorDetails sensorDetails){
+        addRotationVectorInfo(sensorDetails.name, sensorDetails.vendor, sensorDetails.res, sensorDetails.power, sensorDetails.version, sensorDetails.type);
     }
 
     public void addMagnetomerInfo(String name, String vendor, float res, float power, int version, int type){
@@ -163,16 +221,28 @@ public class TrajectoryBuilder {
         trajectoryBuilder.setMagnetometerInfo(newSensor);
     }
 
+    public void addMagnetomerInfo(SensorDetails sensorDetails){
+        addMagnetomerInfo(sensorDetails.name, sensorDetails.vendor, sensorDetails.res, sensorDetails.power, sensorDetails.version, sensorDetails.type);
+    }
+
     public void addBaroInfo(String name, String vendor, float res, float power, int version, int type){
         Sensor_Info newSensor = createSensorInfo(name, vendor, res, power, version, type);
 
         trajectoryBuilder.setBarometerInfo(newSensor);
     }
 
+    public void addBaroInfo(SensorDetails sensorDetails){
+        addBaroInfo(sensorDetails.name, sensorDetails.vendor, sensorDetails.res, sensorDetails.power, sensorDetails.version, sensorDetails.type);
+    }
+
     public void addLightInfo(String name, String vendor, float res, float power, int version, int type){
         Sensor_Info newSensor = createSensorInfo(name, vendor, res, power, version, type);
 
         trajectoryBuilder.setLightSensorInfo(newSensor);
+    }
+
+    public void addLightInfo(SensorDetails sensorDetails){
+        addLightInfo(sensorDetails.name, sensorDetails.vendor, sensorDetails.res, sensorDetails.power, sensorDetails.version, sensorDetails.type);
     }
 
     private Sensor_Info createSensorInfo(String name, String vendor, float res, float power, int version, int type){
