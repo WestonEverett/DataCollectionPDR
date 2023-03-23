@@ -1,10 +1,11 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.protobuf'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'}
+}
 
 android {
     compileSdk 33
-
 
     defaultConfig {
         applicationId "com.example.datacollectionpdr"
@@ -25,12 +26,62 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
-
-
     }
 }
 
+sourceSets {
+    main.java.srcDirs +=  "${protobuf.generatedFilesBaseDir}/main/javalite"
+    main.java.srcDirs += "$projectDir/src/main/proto"
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.0.0"
+    }
+    plugins {
+        lite {
+            artifact = "com.google.protobuf:protoc-gen-javalite:3.0.0"
+        }
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                remove java
+            }
+            task.plugins {
+                lite { }
+            }
+        }
+    }
+}
+
+/*
+
+protobuf {
+  protoc {
+    artifact = 'com.google.protobuf:protoc:3.0.0'
+  }
+  plugins {
+    javalite {
+      artifact = 'com.google.protobuf:protoc-gen-javalite:3.0.0'
+    }
+  }
+// this is a task which wil generate classes for our proto files
+  generateProtoTasks {
+    all().each { task ->
+      task.builtins {
+        remove java
+      }
+      task.plugins {
+        javalite {}
+      }
+    }
+  }
+}
+ */
+
 dependencies {
+    implementation 'com.google.protobuf:protobuf-lite:3.0.0'
 
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.0'
@@ -41,7 +92,4 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-
-
-
 }
