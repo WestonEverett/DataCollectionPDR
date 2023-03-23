@@ -7,7 +7,7 @@ public class SetLengthLongArray {
     private int maxLength;
     private ArrayList<Long> internalArray;
 
-    public SetLengthLongArray(int maxLength, long defaultVal){
+    public SetLengthLongArray(int maxLength, Long defaultVal){
         this.maxLength = maxLength;
         internalArray = new ArrayList<>();
         for(int i = 0; i < 20; i++){
@@ -16,23 +16,23 @@ public class SetLengthLongArray {
     }
 
     public SetLengthLongArray(int maxLength){
-        this(maxLength, 0);
+        this(maxLength, 0L);
     }
 
-    public void addValue(long val){
+    public void addValue(Long val){
         internalArray.add(0, val);
         while(internalArray.size() > maxLength){
             internalArray.remove(maxLength);
         }
     }
 
-    public long[] getArray(){
+    public Long[] getArray(){
 
-        long[] longArray = new long[internalArray.size()];
+        Long[] longArray = new Long[internalArray.size()];
         int i = 0;
 
         for (Long l : internalArray) {
-            longArray[i++] = (l != null ? l : 0);
+            longArray[i++] = (l);
         }
 
         return longArray;

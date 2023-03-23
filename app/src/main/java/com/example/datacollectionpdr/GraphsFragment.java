@@ -51,7 +51,7 @@ public class GraphsFragment extends Fragment {
         Log.e("plt","im here");
 
         RecordingActivity activity = (RecordingActivity) getActivity();
-        Number[][] PlotData = activity.getMyData();
+        Number[][] PlotData = activity.getMyData("Accelerometer"); //CHANGE HERE SO SENSOR IS MANIPULATABLE
 
         dropdown = view.findViewById(R.id.spinner2);
         initspinnerfooter();

@@ -7,7 +7,7 @@ public class SetLengthFloatArray {
     private int maxLength;
     private ArrayList<Float> internalArray;
 
-    public SetLengthFloatArray(int maxLength, float defaultVal){
+    public SetLengthFloatArray(int maxLength, Float defaultVal){
         this.maxLength = maxLength;
         internalArray = new ArrayList<>();
         for(int i = 0; i < 20; i++){
@@ -26,13 +26,13 @@ public class SetLengthFloatArray {
         }
     }
 
-    public float[] getArray(){
+    public Float[] getArray(){
 
-        float[] floatArray = new float[internalArray.size()];
+        Float[] floatArray = new Float[internalArray.size()];
         int i = 0;
 
         for (Float f : internalArray) {
-            floatArray[i++] = (f != null ? f : 0f);
+            floatArray[i++] = f;
         }
 
         return floatArray;
