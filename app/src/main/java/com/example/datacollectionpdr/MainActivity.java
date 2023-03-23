@@ -22,7 +22,7 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
-public class MainActivity extends AppCompatActivity implements com.example.datacollectionpdr.DataCollection.OnMotionSensorManagerListener{
+public class MainActivity extends DataManager implements com.example.datacollectionpdr.DataCollection.OnMotionSensorManagerListener{
 
     private com.example.datacollectionpdr.DataCollection mMotionSensorManager;
 
@@ -40,33 +40,37 @@ public class MainActivity extends AppCompatActivity implements com.example.datac
 
 
                 // Initialize and assign variable
-                BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_navigation);
+        BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_navigation);
 
                 // Set Home selected
-                bottomNavigationView.setSelectedItemId(R.id.home);
+        bottomNavigationView.setSelectedItemId(R.id.home);
 
                 // Perform item selected listener
-                bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                        switch(item.getItemId())
-                        {
-                            case R.id.dashboard:
-                                startActivity(new Intent(getApplicationContext(),DashBoard.class));
-                                overridePendingTransition(0,0);
-                                return true;
-                            case R.id.home:
-                                return true;
-                            case R.id.about:
-                                startActivity(new Intent(getApplicationContext(),About.class));
-                                overridePendingTransition(0,0);
-                                return true;
-                        }
-                        return false;
-                    }
-                });
+                switch(item.getItemId())
+                {
+                    case R.id.dashboard:
+                        startActivity(new Intent(getApplicationContext(),DashBoard.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
+                    case R.id.home:
+                        return true;
+
+                    case R.id.about:
+                            startActivity(new Intent(getApplicationContext(),About.class));
+                            overridePendingTransition(0,0);
+                            return true;
+                }
+
+                return false;
             }
+        });
+    }
+
 
     /** method linking to the help view triggered by a button */
     public void startRecording(View view){
@@ -107,27 +111,5 @@ public class MainActivity extends AppCompatActivity implements com.example.datac
         super.onPause();
 
         mMotionSensorManager.unregisterMotionSensors();
-    }
-
-    @Override
-    public void onAccValueUpdated(float[] acceleration) {
-        //acc[0].setText("acc_Xaxis:" + acceleration[0]);
-        //acc[1].setText("acc_Yaxis:" + acceleration[1]);
-        //acc[2].setText("acc_Zaxis:" + acceleration[2]);
-    }
-
-    @Override
-    public void onGyroValueUpdated(float[] gyroscope) {
-        //gyro[0].setText("gyro_Xaxis:" + gyroscope[0]);
-        //gyro[1].setText("gyro_Yaxis:" + gyroscope[1]);
-        //gyro[2].setText("gyro_Zaxis:" + gyroscope[2]);
-    }
-
-    @Override
-    public void onMagValueUpdated(float[] magneticField, float h) {
-        //mag[0].setText("mag_Xaxis:" + magneticfield[0]);
-        //mag[1].setText("mag_Yaxis:" + magneticfield[1]);
-        //mag[2].setText("mag_Zaxis:" + magneticfield[2]);
-        //mag[3].setText("magnetic_field:" + h);
     }
 }
