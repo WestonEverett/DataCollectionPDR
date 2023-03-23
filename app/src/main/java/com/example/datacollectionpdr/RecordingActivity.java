@@ -17,7 +17,7 @@ public class RecordingActivity extends DataManager {
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
-    private Number[] series1Numbers = {100, 100, 102, 108, 14, 12, 18, 72, 36, 74};
+    private Number[][] PlotSeriesData = {{ 1,2,3,4,5,6,7,8,9,10}, { 3, 4,3,3,33,3,3,3,3,3}, { 43, 44,43,3,1,3,3,43,43,43}, { 2, 2,2,3,1,2,2,2,2,2} };
 
 
     @Override
@@ -45,8 +45,9 @@ public class RecordingActivity extends DataManager {
 
     }
 
-    public Number[] getMyData() {
-        return series1Numbers;
+    public Number[][] getMyData() {
+
+        return PlotSeriesData;
     }
 
     /** method linking to the help view triggered by a button */

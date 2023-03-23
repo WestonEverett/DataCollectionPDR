@@ -39,8 +39,8 @@
         </LinearLayout>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:layout_width="410dp"
-            android:layout_height="577dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginTop="8dp">
 
             <com.google.android.material.appbar.AppBarLayout
@@ -64,7 +64,7 @@
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewpager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="500dp"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 tools:ignore="SpeakableTextPresentCheck" />
 
