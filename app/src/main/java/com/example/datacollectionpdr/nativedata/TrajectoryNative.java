@@ -29,6 +29,14 @@ public class TrajectoryNative {
     public TrajectoryNative(long initTime)
     {
         this.initTime = initTime;
+        pdrs = new ArrayList<>();
+        aps = new ArrayList<>();
+        gnssSamples = new ArrayList<>();
+        lights = new ArrayList<>();
+        wifis = new ArrayList<>();
+        motions = new ArrayList<>();
+        positions = new ArrayList<>();
+        baros = new ArrayList<>();
     }
 
     public TrajectoryNative(long initTime, String androidVersion, String dataID){
