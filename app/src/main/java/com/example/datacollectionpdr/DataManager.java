@@ -5,13 +5,14 @@ import android.os.Bundle;
 import java.util.HashMap;
 
 public class DataManager extends PermissionsManager implements com.example.datacollectionpdr.DataCollection.OnMotionSensorManagerListener{
-
+    private int stepcountDM;
+    private MotionSample motionSample;
     private com.example.datacollectionpdr.DataCollection mMotionSensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        motionSample = new MotionSample(System.currentTimeMillis(),stepcountDM);
         mMotionSensorManager = new com.example.datacollectionpdr.DataCollection(this);
         mMotionSensorManager.setOnMotionSensorManagerListener(this);
     }
@@ -30,7 +31,7 @@ public class DataManager extends PermissionsManager implements com.example.datac
 
     @Override
     public void onMagnetometerUncalibratedValueUpdated(float[] magneticfield, float h){
-
+        PositionData positionData = new PositionData(System.currentTimeMillis(), magneticfield);
     }
 
     @Override
@@ -40,7 +41,8 @@ public class DataManager extends PermissionsManager implements com.example.datac
 
     @Override
     public void onAccelerometerUncalibratedValueUpdated(float[] acceleration){
-
+        motionSample.setAcc(acceleration);
+        dealWithMotionSample(motionSample);
     }
 
     @Override
@@ -50,7 +52,8 @@ public class DataManager extends PermissionsManager implements com.example.datac
 
     @Override
     public void onGyroscopeUncalibratedValueUpdated(float[] gyroscope){
-
+        motionSample.setGyro(gyroscope);
+        dealWithMotionSample(motionSample);
     }
 
     @Override
@@ -60,11 +63,11 @@ public class DataManager extends PermissionsManager implements com.example.datac
 
     @Override
     public void onBarometerValueUpdated(float pressure){
-
+        PressureData pressureData = new PressureData(System.currentTimeMillis(), pressure);
     }
     @Override
     public void onAmbientLightValueChanged(float luminance){
-
+        LightData lightData = new LightData(System.currentTimeMillis(),luminance);
     }
     @Override
     public void onProximityValueUpdated(float proximity){
@@ -75,8 +78,9 @@ public class DataManager extends PermissionsManager implements com.example.datac
 
     }
     @Override
-    public void onWifiValueUpdated(String[] wifis, HashMap map){
-
+    public void onWifiValueUpdated(HashMap map){
+       WifiSample wifiSample = new WifiSample(System.currentTimeMillis());
+       wifiSample.addMacSampleDict(map);
     }
     @Override
     public void onStepDetectorUpdated(){
@@ -84,6 +88,15 @@ public class DataManager extends PermissionsManager implements com.example.datac
     }
     @Override
     public void onStepCountValueUpdated(int stepcount){
+        stepcountDM = stepcount;
+    }
 
+    private MotionSample dealWithMotionSample(MotionSample motionSample){
+        // Check if all flags are set
+        if(motionSample.isComplete()){
+            // Create new motionsample
+            motionSample = new MotionSample(System.currentTimeMillis(),stepcountDM);
+        }
+        return motionSample;
     }
 }
