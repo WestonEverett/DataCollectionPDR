@@ -8,11 +8,10 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.datacollectionpdr.datacollectionandpreparation.DataManager;
-
-public class RecordingActivity extends DataManager {
 import com.google.android.material.tabs.TabLayout;
 
-public class RecordingActivity extends AppCompatActivity {
+public class RecordingActivity extends DataManager {
+
 
     private ViewPagerAdapter viewPagerAdapter;
     private ViewPager viewPager;
