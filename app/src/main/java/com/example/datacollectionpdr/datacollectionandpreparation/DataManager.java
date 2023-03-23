@@ -1,20 +1,25 @@
 package com.example.datacollectionpdr.datacollectionandpreparation;
-package com.example.datacollectionpdr.nativedata;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.datacollectionpdr.nativedata.LightData;
+import com.example.datacollectionpdr.nativedata.MotionSample;
+import com.example.datacollectionpdr.nativedata.PositionData;
+import com.example.datacollectionpdr.nativedata.PressureData;
+import com.example.datacollectionpdr.nativedata.WifiSample;
+
 import java.util.HashMap;
 
-public class DataManager extends PermissionsManager implements com.example.datacollectionpdr.DataCollection.OnMotionSensorManagerListener{
+public class DataManager extends PermissionsManager implements DataCollection.OnMotionSensorManagerListener{
     private int stepcountDM;
     private MotionSample motionSample;
-    private com.example.datacollectionpdr.DataCollection mMotionSensorManager;
+    private com.example.datacollectionpdr.datacollectionandpreparation.DataCollection mMotionSensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         motionSample = new MotionSample(System.currentTimeMillis(),stepcountDM);
-        mMotionSensorManager = new com.example.datacollectionpdr.DataCollection(this);
+        mMotionSensorManager = new com.example.datacollectionpdr.datacollectionandpreparation.DataCollection(this);
         mMotionSensorManager.setOnMotionSensorManagerListener(this);
     }
     @Override
