@@ -1,17 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MapFragment"
-    android:background="#FF929C9E">
+    android:layout_height="500dp"
+    android:background="#FF929C9E"
+    tools:context=".MapFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
+        android:id="@+id/textView7"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="map fragment" />
+        android:layout_height="40dp"
+        android:text="map fragment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</FrameLayout>
+    <fragment
+        android:id="@+id/google_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-    <?xml version="1.0" encoding="utf-8"?>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
