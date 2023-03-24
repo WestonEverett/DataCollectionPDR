@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.app.Activity;
 import android.graphics.*;
 
@@ -41,29 +43,43 @@ public class GraphsFragment extends Fragment {
     XYPlot plot;
     Spinner dropdown;
     String currentDisplaySensor;
+    private DataViewModel viewModel;
+    private RecentMeasurements recentMeasurements;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
         View view = inflater.inflate(R.layout.fragment_graphs, container, false);
         // initialize our XYPlot reference:
         plot = (XYPlot) view.findViewById(R.id.plot);
 
         RecordingActivity activity = (RecordingActivity) getActivity();
-        Number[][] PlotData = activity.getMyData(currentDisplaySensor); //CHANGE HERE SO SENSOR IS MANIPULATABLE
 
         dropdown = view.findViewById(R.id.spinner2);
         initspinnerfooter();
 
-        PlotThePlot(PlotData);
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        viewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
+        viewModel.getSample().observe(getViewLifecycleOwner(), item -> {
+            recentMeasurements.updateMeasurements(item);
+            PlotThePlot(recentMeasurements.getData(currentDisplaySensor));
+        });
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        recentMeasurements = new RecentMeasurements(200);
         currentDisplaySensor = "Accelerometer";
 
         PixelUtils.init(getActivity());
@@ -133,7 +149,6 @@ public class GraphsFragment extends Fragment {
 
                 currentDisplaySensor=(String) parent.getItemAtPosition(position);
                 RecordingActivity activity = (RecordingActivity) getActivity();
-                PlotThePlot(activity.getMyData(currentDisplaySensor));
 
 
 
