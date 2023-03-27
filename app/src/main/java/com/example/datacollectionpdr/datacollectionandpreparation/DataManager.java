@@ -19,19 +19,21 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     private MotionSample motionSample;
     private com.example.datacollectionpdr.datacollectionandpreparation.DataCollection mMotionSensorManager;
     private TrajectoryNative trajectoryNative;
+    private boolean isRecording;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        motionSample = new MotionSample(System.currentTimeMillis(),stepcountDM);
         mMotionSensorManager = new com.example.datacollectionpdr.datacollectionandpreparation.DataCollection(this);
         mMotionSensorManager.setOnMotionSensorManagerListener(this);
-        trajectoryNative = new TrajectoryNative(System.currentTimeMillis());
+        isRecording = false;
     }
     @Override
     protected void onResume() {
         super.onResume();
-        mMotionSensorManager.registerMotionSensors();
+        if(isRecording){
+            mMotionSensorManager.registerMotionSensors();
+        }
     }
     @Override
     protected void onPause(){
@@ -141,5 +143,18 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     }
 
     protected void newCompleteMotionSample(MotionSample motionSample){
+    }
+
+    public TrajectoryNative endRecording(){
+        mMotionSensorManager.unregisterMotionSensors();
+        isRecording = false;
+        return trajectoryNative;
+    }
+
+    public void startRecording(){
+        motionSample = new MotionSample(System.currentTimeMillis(),stepcountDM);
+        trajectoryNative = new TrajectoryNative(System.currentTimeMillis());
+        isRecording = true;
+        mMotionSensorManager.registerMotionSensors();
     }
 }

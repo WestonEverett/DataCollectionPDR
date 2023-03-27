@@ -152,9 +152,6 @@ public class DataCollection implements SensorEventListener {
         if(wifiManager.getWifiState()==wifiManager.WIFI_STATE_DISABLED){
             wifiManager.setWifiEnabled(true);
         }
-
-        context.registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-        wifiManager.startScan();
     }
 
     public void setOnMotionSensorManagerListener(OnMotionSensorManagerListener motionSensorManagerListener){
@@ -181,6 +178,8 @@ public class DataCollection implements SensorEventListener {
         sensorManager.registerListener(this,StepDetector,10000); // 100 Samples/s
         sensorManager.registerListener(this, StepCounter, 10000); // 100 Samples/s
         context.registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        wifiManager.startScan();
+
         //Check if sensor exists before trying to get its details
         if(sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){
             accInfo = sensorDetails(Sensor.TYPE_ACCELEROMETER);

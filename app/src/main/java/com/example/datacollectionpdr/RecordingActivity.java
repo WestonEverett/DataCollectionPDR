@@ -50,6 +50,8 @@ public class RecordingActivity extends DataManager {
         tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
 
+        this.startRecording();
+
     }
 
     @Override
