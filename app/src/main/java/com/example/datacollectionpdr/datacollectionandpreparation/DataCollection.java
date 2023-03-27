@@ -68,38 +68,15 @@ public class DataCollection implements SensorEventListener {
     SensorDetails rotInfo;
     private Context context;
 
+    private List<ScanResult> wifiScanList = null; // Initialise WiFi scan list
+
     // WiFi data works differently to all other sensors
     // Stored as hashmap of BSSID and maximum observed signal level in dBm
     HashMap<String, Integer> WifiData = new HashMap<>();
     BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
         public void onReceive(Context c, Intent intent) {
-            List<ScanResult> wifiScanList = null; // Initialise WiFi scan list
-            //Check that permissions have been given before asking for the WiFi scan results
-            if(ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_WIFI_STATE) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.CHANGE_WIFI_STATE) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
 
-                wifiScanList = wifiManager.getScanResults(); //Get WiFi scan results
-                Log.i("Number of WiFi networks:", String.valueOf(wifiScanList.size())); //Log the number of wifi networks detected
-                //For all networks in the scan
-                for(int i = 0; i<wifiScanList.size(); i++){
-                    // Temporary ID and signal level variables
-                    int power = wifiScanList.get(i).level;
-                    String id = wifiScanList.get(i).BSSID;
-                    // If the entry doesn't exist, add it to the hashmap.
-                    if(!WifiData.containsKey(id)){
-                        WifiData.put(id, power);
-                    }
-                    // Else update entry with the maximum power value
-                    else{
-                        int chosenIntensity = (WifiData.get(id) > power) ? WifiData.get(id): power;
-                        WifiData.put(id,chosenIntensity);
-                        WifiData.put(id,wifiScanList.get(i).level);
-                    }
-                }
-                //motionSensorManagerListener.onWifiValueUpdated(WifiData);
-            }
+
         }
     };
 
@@ -114,9 +91,11 @@ public class DataCollection implements SensorEventListener {
                 float lon = (float) location.getLongitude();
                 float lat = (float) location.getLatitude();
                 float speed = location.getSpeed();
-                Log.i("Location",provider);
+                //Log.i("Longitude", String.valueOf(lon));
+                //Log.i("Latitude", String.valueOf(lat));
                 motionSensorManagerListener.onLocationValueUpdated(provider,acc,alt,initTime,lon,lat,speed);
             }
+            else Log.e("Location","=null");
         }
     }
 
@@ -175,7 +154,7 @@ public class DataCollection implements SensorEventListener {
         sensorManager.registerListener(this, Proximity, 1000000); // 1 Sample/s
         sensorManager.registerListener(this, Gravity, 10000); // 100 Samples/s
         sensorManager.registerListener(this, RotationVector, 10000); // 100 Samples/s
-        sensorManager.registerListener(this,StepDetector,10000); // 100 Samples/s
+        sensorManager.registerListener(this, StepDetector,10000); // 100 Samples/s
         sensorManager.registerListener(this, StepCounter, 10000); // 100 Samples/s
         context.registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan();
@@ -223,7 +202,37 @@ public class DataCollection implements SensorEventListener {
         //Scan for WiFi networks every interval and increment count
         currentTimestamp = System.currentTimeMillis();
         if(currentTimestamp-lastTimestamp > WIFI_UPDATE_INTERVAL){
-            wifiManager.startScan();
+            //Check that permissions have been given before asking for the WiFi scan results
+            if(ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_WIFI_STATE) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(context, Manifest.permission.CHANGE_WIFI_STATE) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(context, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED){
+
+                wifiScanList = wifiManager.getScanResults(); //Get WiFi scan results
+                Log.i("Number of WiFi networks:", String.valueOf(wifiScanList.size())); //Log the number of wifi networks detected
+                //For all networks in the scan
+                for(int i = 0; i<wifiScanList.size(); i++){
+                    // Temporary ID and signal level variables
+                    int power = wifiScanList.get(i).level;
+                    String id = wifiScanList.get(i).BSSID;
+                    //Log.i(id, String.valueOf(power));
+                    // If the entry doesn't exist, add it to the hashmap.
+                    if(!WifiData.containsKey(id)){
+                        WifiData.put(id, power);
+                    }
+                    // Else update entry with the maximum power value
+                    else{
+                        int chosenIntensity = (WifiData.get(id) > power) ? WifiData.get(id): power;
+                        WifiData.put(id,chosenIntensity);
+                        WifiData.put(id,wifiScanList.get(i).level);
+                    }
+                }
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
+            }
+            //////////////////////
+
+            /////////////////////////
             lastTimestamp = currentTimestamp;
             purgeWifiDataCount++;
             Log.i("Timestamp", String.valueOf(currentTimestamp));
