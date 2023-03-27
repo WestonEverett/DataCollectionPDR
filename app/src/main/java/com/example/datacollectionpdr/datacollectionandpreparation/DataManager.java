@@ -160,6 +160,8 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     public void startRecording(){
         motionSample = new MotionSample(System.currentTimeMillis(),stepcountDM);
         trajectoryNative = new TrajectoryNative(System.currentTimeMillis());
+        trajectoryNative.setAndroidVersion("28");
+        trajectoryNative.setDataID("hmmmmm");
         isRecording = true;
         mMotionSensorManager.registerMotionSensors();
     }

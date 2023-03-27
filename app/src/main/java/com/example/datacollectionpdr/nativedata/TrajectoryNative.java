@@ -1,5 +1,7 @@
 package com.example.datacollectionpdr.nativedata;
 
+import android.util.Log;
+
 import com.example.datacollectionpdr.serializationandserver.TrajectoryBuilder;
 import com.example.datacollectionpdr.data.Trajectory;
 
@@ -101,6 +103,10 @@ public class TrajectoryNative {
         lightInfo = sensorDetails;
     }
 
+    public void setAndroidVersion(String version) { androidVersion = version; }
+
+    public void setDataID(String dataID) { this.dataID = dataID; }
+
     public Trajectory generateSerialized()
     {
         TrajectoryBuilder trajectoryBuilder = new TrajectoryBuilder(initTime, androidVersion, dataID);
@@ -144,6 +150,8 @@ public class TrajectoryNative {
             trajectoryBuilder.addBaro(pressureData);
         }
 
-        return trajectoryBuilder.build();
+        Trajectory traj = trajectoryBuilder.build();
+        Log.e("hm", String.valueOf(traj));
+        return traj;
     }
 }

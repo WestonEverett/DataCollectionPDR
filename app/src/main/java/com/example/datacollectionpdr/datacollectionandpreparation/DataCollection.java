@@ -103,7 +103,7 @@ public class DataCollection implements SensorEventListener {
         }
     };
 
-    class dcLocationListener implements LocationListener{
+    class  dcLocationListener implements LocationListener{
         @Override
         public void onLocationChanged(@NonNull Location location){
             if(location != null){

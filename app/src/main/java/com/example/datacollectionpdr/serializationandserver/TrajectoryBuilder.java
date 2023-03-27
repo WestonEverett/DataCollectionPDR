@@ -30,7 +30,7 @@ public class TrajectoryBuilder {
 
     public TrajectoryBuilder(long initTime){
         this.initTime = initTime;
-        Trajectory.Builder trajectoryBuilder = Trajectory.newBuilder();
+        trajectoryBuilder = Trajectory.newBuilder();
         trajectoryBuilder.setStartTimestamp(initTime);
     }
 
