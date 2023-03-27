@@ -1,5 +1,7 @@
 package com.example.datacollectionpdr.nativedata;
 
+import android.os.Build;
+
 import com.example.datacollectionpdr.serializationandserver.TrajectoryBuilder;
 import com.example.datacollectionpdr.data.Trajectory;
 
@@ -29,6 +31,7 @@ public class TrajectoryNative {
     public TrajectoryNative(long initTime)
     {
         this.initTime = initTime;
+        this.androidVersion = String.valueOf(Build.VERSION.SDK_INT);
         pdrs = new ArrayList<>();
         aps = new ArrayList<>();
         gnssSamples = new ArrayList<>();
@@ -39,9 +42,8 @@ public class TrajectoryNative {
         baros = new ArrayList<>();
     }
 
-    public TrajectoryNative(long initTime, String androidVersion, String dataID){
+    public TrajectoryNative(long initTime, String dataID){
         this(initTime);
-        this.androidVersion = androidVersion;
         this.dataID = dataID;
     }
 
@@ -100,8 +102,6 @@ public class TrajectoryNative {
     public void setLightInfo(SensorDetails sensorDetails){
         lightInfo = sensorDetails;
     }
-
-    public void setAndroidVersion(String version) { androidVersion = version; }
 
     public void setDataID(String dataID) { this.dataID = dataID; }
 
