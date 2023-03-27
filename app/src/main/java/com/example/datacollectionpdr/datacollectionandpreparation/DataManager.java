@@ -106,6 +106,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
 
     @Override
     public void onLocationValueUpdated(String provider, float acc, float alt, long initTime, float lon, float lat, float speed){
+        //Log.i("DataM", "GNSS data updated");
         GNSSData gnssData = new GNSSData(provider,acc,alt,initTime,lon,lat,speed);
         trajectoryNative.addGNSS(gnssData);
     }
