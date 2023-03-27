@@ -21,6 +21,9 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     private TrajectoryNative trajectoryNative;
     private boolean isRecording;
 
+    private float[] curGravity;
+    private float[] curMagnetic;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +52,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     @Override
     public void onMagnetometerValueUpdated(float[] magneticfield, float h){
         //Log.i("DataM", "Mag data updated");
+        curMagnetic = magneticfield;
     }
     @Override
     public void onAccelerometerUncalibratedValueUpdated(float[] acceleration){
@@ -89,6 +93,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     @Override
     public void onGravityValueUpdated(float[] gravity){
         //Log.i("DataM", "Grav data updated");
+        curGravity = gravity;
     }
     @Override
     public void onRotationVectorValueUpdated(float[] rotationvector){
@@ -112,7 +117,8 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     @Override
     public void onStepDetectorUpdated(){
         Log.i("DataM", "StpD data updated");
-        PDRStep pdrStep = new PDRStep(1.f,2.f, System.currentTimeMillis());
+        PDRStep pdrStep = new PDRStep(curGravity, curMagnetic, System.currentTimeMillis());
+        trajectoryNative.addPDRStep(pdrStep);
     }
     @Override
     public void onStepCountValueUpdated(int stepcount){
