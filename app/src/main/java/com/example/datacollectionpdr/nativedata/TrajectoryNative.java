@@ -101,6 +101,51 @@ public class TrajectoryNative {
         lightInfo = sensorDetails;
     }
 
+    public static class DistanceCalculator {
+
+        private static final double EARTH_RADIUS = 6371000;
+
+        public static double calculateDistance(float startLon, float startLat, float endLon, float endLat) {
+            double dLat = Math.toRadians(endLat - startLat);
+            double dLon = Math.toRadians(endLon - startLon);
+            double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(Math.toRadians(startLat)) * Math.cos(Math.toRadians(endLat)) *
+                            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            double distance = EARTH_RADIUS * c;
+            return distance;
+        }
+    }
+
+    /* Trajectory correction function
+       Takes two map points (latitudes and longitudes) provided by the user and computes the
+       displacement of the user, and multiplies all the PDR step coordinates by the ratio of
+       the magnitude the user provided to the magnitude calculated by the app.
+       - Convert LatLon points to displacement magnitude
+       - Multiply all PDR step points' x and y coordinates by userDistance/appDistance
+     */
+    public ArrayList<PDRStep> trajectoryCorrection(float startLon, float startLat, float endLon, float endLat, ArrayList<PDRStep> pdrs){
+        ArrayList<PDRStep> newPDRs;
+        newPDRs = pdrs;
+        float startPointX, startPointY, endPointX, endPointY;
+        float appDistance = 1;
+        // Check to make sure PDR ArrayList is not empty or null
+        if(pdrs != null && !pdrs.isEmpty()) {
+            startPointX = pdrs.get(0).x;
+            startPointY = pdrs.get(0).y;
+            endPointX = pdrs.get(pdrs.size()-1).x;
+            endPointY = pdrs.get(pdrs.size()-1).y;
+            // Magnitude of PDR displacement using phone sensor data
+            appDistance = (float) Math.sqrt((endPointX-startPointX)*(endPointX-startPointX)+(endPointY-startPointY)*(endPointY-startPointY));
+        }
+        // Magnitude of PDR displacement using user provided location pins
+        float userDistance = (float) DistanceCalculator.calculateDistance(startLat,startLon,endLat,endLon);
+        float ratio = userDistance/ appDistance;
+        newPDRs.forEach(pdrStep -> pdrStep.x = pdrStep.x*ratio);
+        newPDRs.forEach(pdrStep -> pdrStep.y = pdrStep.y*ratio);
+        return newPDRs;
+    }
+
     public Trajectory generateSerialized()
     {
         TrajectoryBuilder trajectoryBuilder = new TrajectoryBuilder(initTime, androidVersion, dataID);
