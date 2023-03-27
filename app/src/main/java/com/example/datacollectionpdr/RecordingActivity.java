@@ -39,7 +39,6 @@ public class RecordingActivity extends DataManager {
         viewPagerAdapter.add(new MapFragment(), "MAP");
         viewPagerAdapter.add(new GraphsFragment(), "SENSOR DATA");
         viewPagerAdapter.add(new PathFragment(), "TRAJECTORY");
-        viewPagerAdapter.add(new GraphsFragment(), "SENSOR DATA");
 
 
         // Set the adapter

@@ -57,28 +57,24 @@ public class RecentMeasurements {
     public Number[][] getData(String sensor) {
 
         Long[] times = motionTimeRecentMeasurements.getArray();
-        //times = new Long[]{0L,1L,2L,3L,4L,5L,6L,7L,8L,9L,10L,11L,12L,13L,14L,15L,16L,17L,18L,19L};
         switch (sensor){
             case "Accelerometer":
                 Float[] accX = accRecentMeasurements[0].getArray();
-                //accX = new Float[]{0F, 1F, 2F, 3F, 4F, 5F, 6F, 7F, 8F, 9F, 10F, 11F, 12F, 13F, 14F, 15F, 16F, 17F, 18F, 19F};
                 Float[] accY = accRecentMeasurements[1].getArray();
                 Float[] accZ = accRecentMeasurements[2].getArray();
-                Log.e("Hm", Arrays.toString(accX));
+                //Log.e("Hm", Arrays.toString(accX));
                 return new Number[][]{times, accX, accY, accZ};
             case "Gyroscope":
                 Float[] gyroX = gyroRecentMeasurements[0].getArray();
-                //gyroX= new Float[]{10F, 11F, 12F, 13F, 14F, 15F, 16F, 7F, 8F, 9F, 10F, 11F, 12F, 10F, 14F, 15F, 16F, 17F, 18F, 19F};
                 Float[] gyroY = gyroRecentMeasurements[1].getArray();
                 Float[] gyroZ = gyroRecentMeasurements[2].getArray();
-                Log.e("Hm", Arrays.toString(gyroX));
+                //Log.e("Hm", Arrays.toString(gyroX));
                 return new Number[][]{times, gyroX, gyroY, gyroZ};
             case "Rotation":
                 Float[] rotX = rotRecentMeasurements[0].getArray();
-                //rotX= new Float[]{20F, 21F, 22F, 23F, 24F, 25F, 16F, 7F, 8F, 9F, 10F, 11F, 12F, 10F, 14F, 15F, 16F, 17F, 18F, 19F};
                 Float[] rotY = rotRecentMeasurements[1].getArray();
                 Float[] rotZ = rotRecentMeasurements[2].getArray();
-                Log.e("Hm", Arrays.toString(rotX));
+                //Log.e("Hm", Arrays.toString(rotX));
                 return new Number[][]{times, rotX, rotY, rotZ};
         }
 
