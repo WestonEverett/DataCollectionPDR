@@ -92,9 +92,9 @@ public class GraphsFragment extends Fragment {
         Number[] series2Numbers=PlotData[2];
         Number[] series3Numbers=PlotData[3];
 
-        Log.d("plt", "Value: " + Float.toString((Float) series1Numbers[0]));
-        Log.d("plt", "Current Display Sensor: " + currentDisplaySensor);
-        Log.d("plt","should be showing a value");
+        //Log.d("plt", "Value: " + Float.toString((Float) series1Numbers[0]));
+        //Log.d("plt", "Current Display Sensor: " + currentDisplaySensor);
+        //Log.d("plt","should be showing a value");
 
         // turn the above arrays into XYSeries':
         // (Y_VALS_ONLY means use the element index as the x value)
