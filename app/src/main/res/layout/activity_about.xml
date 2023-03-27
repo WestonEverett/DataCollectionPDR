@@ -43,9 +43,10 @@
                 android:layout_height="65dp">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/serverId_input"
                     android:layout_width="267dp"
                     android:layout_height="65dp"
-                    android:hint="enter your server ID" />
+                    android:hint="enter your server ID"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -58,7 +59,8 @@
                 android:insetBottom="0dp"
                 android:text="ENTER"
                 app:elevation="0dp"
-                app:iconPadding="0dp" />
+                app:iconPadding="0dp"
+                android:onClick="ServerIDentered"/>
 
         </LinearLayout>
 

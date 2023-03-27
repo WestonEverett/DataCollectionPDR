@@ -9,6 +9,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.datacollectionpdr.nativedata.SensorDetails;
@@ -65,5 +67,13 @@ public class About extends AppCompatActivity {
                 return false;
             }
         });
+    }
+    public static final String EXTRA_MESSAGE = "com.example.datacollectionPDR.MESSAGE";
+    public void ServerIDentered(View view){
+        Intent intent = new Intent(this, ServerIDentered.class);
+        EditText editText = (EditText) findViewById(R.id.serverId_input);
+        String message = editText.getText().toString();
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
     }
 }
