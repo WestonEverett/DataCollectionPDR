@@ -1,5 +1,7 @@
 package com.example.datacollectionpdr.nativedata;
 
+import android.os.Build;
+
 import com.example.datacollectionpdr.serializationandserver.TrajectoryBuilder;
 import com.example.datacollectionpdr.data.Trajectory;
 
@@ -41,7 +43,7 @@ public class TrajectoryNative {
 
     public TrajectoryNative(long initTime, String androidVersion, String dataID){
         this(initTime);
-        this.androidVersion = androidVersion;
+        this.androidVersion = String.valueOf(Build.VERSION.SDK_INT);
         this.dataID = dataID;
     }
 
