@@ -5,12 +5,14 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.example.datacollectionpdr.nativedata.MotionSample;
@@ -18,8 +20,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.tabs.TabLayout;
 
 
-public class duringRecordingFragment extends Fragment {
+public class duringRecordingFragment extends Fragment implements View.OnClickListener {
 
+    View view;
 
     private ViewPagerAdapter viewPagerAdapter;
     private ViewPager viewPager;
@@ -30,13 +33,12 @@ public class duringRecordingFragment extends Fragment {
     }
 
 
-    public static duringRecordingFragment newInstance(String param1, String param2) {
+    public static duringRecordingFragment newInstance() {
         duringRecordingFragment fragment = new duringRecordingFragment();
 
 
         return fragment;
     }
-
 
 
     @Override
@@ -66,17 +68,23 @@ public class duringRecordingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        ViewPager viewPager= (ViewPager) getView().findViewById(R.id.viewpager);
+        ViewPager viewPager = (ViewPager) getView().findViewById(R.id.viewpager);
         TabLayout tabLayout = (TabLayout) getView().findViewById(R.id.tab_layout);
 
+        view = inflater.inflate(R.layout.fragment_during_recording, container, false);
+        Button sendButton = (Button) view.findViewById(R.id.button_endRecording);
+        sendButton.setOnClickListener(this);
+
         return inflater.inflate(R.layout.fragment_during_recording, container, false);
-
-
     }
 
-    /** method linking to the help view triggered by a button */
-    //public void stopRecording(View view){
-      //  Intent intent = new Intent(this, MainActivity.class);
-        //startActivity(intent); //Go to the Show Help activity and its view
-    //}
+
+    @Override
+    public void onClick(View v) {
+        //do what you want to do when button is clicked
+        FragmentTransaction fragmentTransaction = getActivity()
+                .getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainerView_recording_activity, new EndRecordingFragment());
+        fragmentTransaction.commit();
+    }
 }

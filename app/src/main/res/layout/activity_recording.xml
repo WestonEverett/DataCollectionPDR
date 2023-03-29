@@ -7,7 +7,7 @@
     tools:context=".RecordingActivity">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView"
+        android:id="@+id/fragmentContainerView_recording_activity"
         android:name="com.example.datacollectionpdr.duringRecordingFragment"
         android:layout_width="411dp"
         android:layout_height="733dp"

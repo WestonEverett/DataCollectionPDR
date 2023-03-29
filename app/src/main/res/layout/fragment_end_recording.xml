@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RecordingReview">
+    tools:context=".EndRecordingFragment">
 
     <TextView
         android:id="@+id/textView12"
@@ -20,11 +20,11 @@
         android:id="@+id/textView13"
         android:layout_width="360dp"
         android:layout_height="55dp"
+        android:layout_marginTop="168dp"
         android:layout_marginBottom="32dp"
         android:text="Duration: xxxx ..."
-        app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.84" />
@@ -33,33 +33,38 @@
         android:id="@+id/button_addEndPoint"
         android:layout_width="362dp"
         android:layout_height="66dp"
+        android:layout_marginTop="16dp"
         android:text="Add Start and finish poins"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.326"
+        app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/button_send" />
 
     <Button
         android:id="@+id/button_send"
         android:layout_width="144dp"
         android:layout_height="63dp"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="52dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="172dp"
+        android:onClick="saveRecording"
         android:text="Send"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        android:onClick="saveRecording"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView13"
+        app:layout_constraintVertical_bias="0.322" />
 
     <Button
         android:id="@+id/button_discard"
         android:layout_width="145dp"
         android:layout_height="60dp"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="64dp"
+        android:onClick="discardRecording"
         android:text="Discard"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:onClick="discardRecording"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView13"
+        app:layout_constraintVertical_bias="0.192" />
 </androidx.constraintlayout.widget.ConstraintLayout>
