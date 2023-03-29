@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -29,7 +30,7 @@
         app:layout_constraintVertical_bias="0.84" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_addEndPoint"
         android:layout_width="362dp"
         android:layout_height="66dp"
         android:text="Add Start and finish poins"
@@ -40,21 +41,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/button_send"
         android:layout_width="144dp"
         android:layout_height="63dp"
         android:layout_marginTop="84dp"
         android:layout_marginEnd="52dp"
-        android:text="Save"
+        android:text="Send"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button3"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button"
         android:onClick="saveRecording"/>
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/button_discard"
         android:layout_width="145dp"
         android:layout_height="60dp"
         android:layout_marginTop="84dp"
@@ -62,6 +61,5 @@
         android:text="Discard"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button"
         android:onClick="discardRecording"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
