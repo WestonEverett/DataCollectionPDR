@@ -2,6 +2,7 @@ package com.example.datacollectionpdr.datacollectionandpreparation;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.datacollectionpdr.nativedata.APData;
 import com.example.datacollectionpdr.nativedata.GNSSData;
 import com.example.datacollectionpdr.nativedata.LightData;
 import com.example.datacollectionpdr.nativedata.MotionSample;
@@ -16,10 +17,12 @@ import java.util.HashMap;
 
 public class DataManager extends PermissionsManager implements DataCollection.OnMotionSensorManagerListener{
     private int stepcountDM;
+    private int curStepcount;
     private MotionSample motionSample;
     private com.example.datacollectionpdr.datacollectionandpreparation.DataCollection mMotionSensorManager;
     private TrajectoryNative trajectoryNative;
     private boolean isRecording;
+    HashMap<String, WifiObject> WifiData;
 
     private float[] curGravity;
     private float[] curMagnetic;
@@ -29,7 +32,10 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         super.onCreate(savedInstanceState);
         mMotionSensorManager = new com.example.datacollectionpdr.datacollectionandpreparation.DataCollection(this);
         mMotionSensorManager.setOnMotionSensorManagerListener(this);
+        WifiData = new HashMap<>();
         isRecording = false;
+        stepcountDM = 0;
+        curStepcount = 0;
     }
     @Override
     protected void onResume() {
@@ -102,11 +108,16 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         dealWithMotionSample(motionSample);
     }
     @Override
-    public void onWifiValueUpdated(HashMap map){
+    public void onWifiValueUpdated(HashMap<String, WifiObject> map){
        Log.i("DataM", "WiFi data updated");
        WifiSample wifiSample = new WifiSample(System.currentTimeMillis());
        wifiSample.addMacSampleDict(map);
        trajectoryNative.addWifi(wifiSample);
+
+       for(String mac : map.keySet()){
+           WifiData.put(mac, map.get(mac));
+       }
+
     }
 
     @Override
@@ -124,17 +135,23 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     @Override
     public void onStepCountValueUpdated(int stepcount){
         //Log.i("DataM", "StpC data updated");
-        motionSample.steps = stepcount-stepcountDM; //Step delta between new and old data
-        stepcountDM = stepcount;
+        //motionSample.steps = stepcount-step countDM; //Step delta between new and old data
+        if(stepcountDM == 0){
+            stepcountDM = stepcount;
+        }
+
+        curStepcount = stepcount;
     }
     private void dealWithMotionSample(MotionSample motionSample){
         // Check if all flags are set
         if(motionSample.isComplete()){
             // Create new motionsample
             //Log.i("Motion sample", String.valueOf(System.currentTimeMillis()));
+            motionSample.steps = curStepcount - stepcountDM;
+            motionSample.initTime = System.currentTimeMillis();
             trajectoryNative.addMotion(motionSample);
             this.newCompleteMotionSample(motionSample);
-            this.motionSample = new MotionSample(System.currentTimeMillis(),stepcountDM);
+            this.motionSample = new MotionSample();
         }
     }
     @Override
@@ -155,13 +172,18 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     public TrajectoryNative endRecording(){
         mMotionSensorManager.unregisterMotionSensors();
         isRecording = false;
+        for(WifiObject wifiObject : WifiData.values()){
+            APData apdata = new APData(wifiObject);
+            trajectoryNative.addAPData(apdata);
+        }
         return trajectoryNative;
     }
 
     public void startRecording(){
-        motionSample = new MotionSample(System.currentTimeMillis(),stepcountDM);
+        motionSample = new MotionSample();
         trajectoryNative = new TrajectoryNative(System.currentTimeMillis());
         trajectoryNative.setDataID("hmmmmm");
+        stepcountDM = curStepcount;
         isRecording = true;
         mMotionSensorManager.registerMotionSensors();
     }

@@ -29,8 +29,8 @@ import java.util.List;
 
 public class DataCollection implements SensorEventListener {
 
-    private static final int WIFI_UPDATE_INTERVAL = 5000; // 5s update interval for WiFi
-    private static final int UPDATES_BEFORE_WIFI_PURGE = 5; // 5 data aggregations before list purge
+    private static final int WIFI_UPDATE_INTERVAL = 300; // .3s update interval for WiFi
+    private static final int UPDATES_BEFORE_WIFI_PURGE = 5; // 15 data aggregations before list purge
 
     // Function returns sensor info object
     public SensorDetails sensorDetails(int type){
@@ -72,7 +72,7 @@ public class DataCollection implements SensorEventListener {
 
     // WiFi data works differently to all other sensors
     // Stored as hashmap of BSSID and maximum observed signal level in dBm
-    HashMap<String, Integer> WifiData = new HashMap<>();
+    HashMap<String, WifiObject> WifiData = new HashMap<>();
     BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
         public void onReceive(Context c, Intent intent) {
 
@@ -216,19 +216,24 @@ public class DataCollection implements SensorEventListener {
                     // Temporary ID and signal level variables
                     int power = wifiScanList.get(i).level;
                     String id = wifiScanList.get(i).BSSID;
+                    String ssid = wifiScanList.get(i).SSID;
+                    long freq = wifiScanList.get(i).frequency;
+
+                    WifiObject curWifiData = new WifiObject(power, id, ssid, freq);
+
+
                     //Log.i(id, String.valueOf(power));
                     // If the entry doesn't exist, add it to the hashmap.
                     if(!WifiData.containsKey(id)){
-                        WifiData.put(id, power);
+                        WifiData.put(id, curWifiData);
                     }
                     // Else update entry with the maximum power value
-                    else{
-                        int chosenIntensity = (WifiData.get(id) > power) ? WifiData.get(id): power;
-                        WifiData.put(id,chosenIntensity);
-                        WifiData.put(id,wifiScanList.get(i).level);
+                    else if(WifiData.get(id).power < power){
+                        WifiData.put(id,curWifiData);
                     }
                 }
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
+                wifiManager.startScan();
             }
             //////////////////////
 
@@ -321,7 +326,7 @@ public class DataCollection implements SensorEventListener {
         void onRotationVectorValueUpdated(float[] rotationvector);
         void onStepDetectorUpdated();
         void onStepCountValueUpdated(int stepcount);
-        void onWifiValueUpdated(HashMap map);
+        void onWifiValueUpdated(HashMap<String, WifiObject> map);
         void onLocationValueUpdated(String provider, float acc, float alt, long initTime, float lon, float lat, float speed);
         void onSensorInfoCollected(SensorDetails AccInfo, SensorDetails GyrInfo,
                                    SensorDetails MagInfo, SensorDetails BarInfo,

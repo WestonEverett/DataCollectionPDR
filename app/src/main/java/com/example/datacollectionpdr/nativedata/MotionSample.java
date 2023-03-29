@@ -16,9 +16,7 @@ public class MotionSample {
     public int steps;
 
 
-    public MotionSample(long initTime, int steps) {
-        this.initTime = initTime;
-        this.steps = steps;
+    public MotionSample() {
         this.accFlag = false;
         this.gyroFlag = false;
         this.rotVectorFlag = false;
