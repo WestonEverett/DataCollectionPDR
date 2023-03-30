@@ -59,6 +59,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     public void onMagnetometerUncalibratedValueUpdated(float[] magneticfield, float h){
         //Log.i("DataM", "MagU data updated");
         PositionData positionData = new PositionData(System.currentTimeMillis(), magneticfield);
+        madgwickAHRS.updatePositionData(positionData);
         trajectoryNative.addPosition(positionData);
     }
     @Override
@@ -160,13 +161,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
             motionSample.initTime = System.currentTimeMillis();
             trajectoryNative.addMotion(motionSample);
             this.newCompleteMotionSample(motionSample);
-           /* float[] acc = motionSample.getAcc();
-            Log.e("AccLength",acc.length+"");
-            float[] gyr = motionSample.getGyro();
-            Log.e("GyrLength",gyr.length+"");
-            Log.e("MagLength",magneticFieldValues.length+"");
-            madgwickAHRS.update(gyr[0],gyr[1],gyr[2],acc[0],acc[1],acc[2],magneticFieldValues[0],magneticFieldValues[1], magneticFieldValues[2]);
-            float heading = madgwickAHRS.findHeading();*/
+            madgwickAHRS.updateMotionSample(motionSample);
             lastMotionSample = this.motionSample;
             this.motionSample = new MotionSample();
         }

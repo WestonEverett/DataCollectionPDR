@@ -90,7 +90,7 @@ public class MadgwickAHRS {
     public MadgwickAHRS(float samplePeriod, float beta) {
         this.samplePeriod = samplePeriod;
         this.beta = beta;
-        this.quaternion = new float[] { 1f, 0f, 0f, 0f };
+        this.quaternion = new float[] { 0f, 0f, 1f, 0f };
     }
 
     public void updateMotionSample(MotionSample motionSample) {
@@ -370,7 +370,7 @@ public class MadgwickAHRS {
     }
 
     public float findHeading(){
-        float heading = (float) Math.atan2(quaternion[1] * quaternion[2] + quaternion[0] * quaternion[3], 0.5f - quaternion[2] * quaternion[2] - quaternion[3] * quaternion[3]);
+        float heading = (float) Math.toDegrees(Math.atan2(quaternion[1] * quaternion[2] + quaternion[0] * quaternion[3], 0.5f - quaternion[2] * quaternion[2] - quaternion[3] * quaternion[3]));
         return heading;
     }
 }
