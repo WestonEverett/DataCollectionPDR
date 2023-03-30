@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,8 @@ import android.view.View;
 import com.example.datacollectionpdr.datacollectionandpreparation.DataManager;
 import com.example.datacollectionpdr.nativedata.MotionSample;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
+import com.example.datacollectionpdr.serializationandserver.FileManager;
+import com.example.datacollectionpdr.serializationandserver.ServerManager;
 import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
@@ -37,6 +40,11 @@ public class RecordingActivity extends DataManager {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
+
         setContentView(R.layout.activity_recording);
 
         viewModel = new ViewModelProvider(this).get(DataViewModel.class);
@@ -76,27 +84,23 @@ public class RecordingActivity extends DataManager {
     public void stopRecording(View view){
         Intent intent = new Intent(this, RecordingReview.class);
         TrajectoryNative trajectoryNative = this.endRecording();
+        /*
         try {
-            createDataFile(trajectoryNative);
+            FileManager.createDataFile(getApplicationContext(), trajectoryNative);
         } catch (IOException e) {
             Log.e("hm", "FAILEDFAILEDFAILEDFAILEDFAILEDFAEILDFAILEDFAILFEFAIELDA");
         }
+        */
 
-        startActivity(intent); //Go to the Show Help activity and its view
-    }
+        ServerManager serverManager = new ServerManager("temp");
 
-    private void createDataFile(TrajectoryNative trajectoryNative) throws IOException {
-        Context context = getApplicationContext();
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String dataFileName = "Trajectory_" + timeStamp + ".pkt";
-        File file = new File(context.getFilesDir(), dataFileName);
-
-        try (FileOutputStream fos = context.openFileOutput(dataFileName, Context.MODE_PRIVATE)) {
-            fos.write(trajectoryNative.generateSerialized().toByteArray());
+        try {
+            serverManager.sendData(trajectoryNative);
+        } catch (Exception e){
+            Log.e("server error", "Server error: " + String.valueOf(e));
         }
 
-        Log.e("hm",dataFileName);
+        startActivity(intent); //Go to the Show Help activity and its view
     }
 
 }
