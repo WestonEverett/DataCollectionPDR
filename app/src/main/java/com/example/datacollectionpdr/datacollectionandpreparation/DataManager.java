@@ -27,7 +27,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     private boolean isRecording;
     HashMap<String, WifiObject> WifiData;
 
-    private float[] curGravity;
+    private float[] curGravity = new float[]{0f, 9.8f, 0f};
     private float[] curMagnetic;
     private ArrayList<float[]> accelerations = new ArrayList<>();
 
@@ -59,13 +59,13 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     public void onMagnetometerUncalibratedValueUpdated(float[] magneticfield, float h){
         //Log.i("DataM", "MagU data updated");
         PositionData positionData = new PositionData(System.currentTimeMillis(), magneticfield);
-        madgwickAHRS.updatePositionData(positionData);
         trajectoryNative.addPosition(positionData);
     }
     @Override
     public void onMagnetometerValueUpdated(float[] magneticfield, float h){
         //Log.i("DataM", "Mag data updated");
         curMagnetic = magneticfield;
+        madgwickAHRS.updateMagnetometer(magneticfield);
     }
     @Override
     public void onAccelerometerUncalibratedValueUpdated(float[] acceleration){
@@ -76,6 +76,8 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     @Override
     public void onAccelerometerValueUpdated(float[] acceleration){
         accelerations.add(acceleration);
+        //float[] linearAcc = new float[]{acceleration[0] - curGravity[0], acceleration[1] - curGravity[1], acceleration[2] - curGravity[2]};
+        //madgwickAHRS.updateAccelerometer(linearAcc);
         //Log.i("DataM", "Acc data updated");
     }
     @Override
@@ -86,6 +88,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     }
     @Override
     public void onGyroscopeValueUpdated(float[] gyroscope){
+        madgwickAHRS.updateGyroscope(gyroscope);
         //Log.i("DataM", "Gyr data updated");
     }
     @Override
@@ -108,6 +111,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     public void onGravityValueUpdated(float[] gravity){
         //Log.i("DataM", "Grav data updated");
         curGravity = gravity;
+        madgwickAHRS.updateAccelerometer(gravity);
     }
     @Override
     public void onRotationVectorValueUpdated(float[] rotationvector){
@@ -161,7 +165,6 @@ public class DataManager extends PermissionsManager implements DataCollection.On
             motionSample.initTime = System.currentTimeMillis();
             trajectoryNative.addMotion(motionSample);
             this.newCompleteMotionSample(motionSample);
-            madgwickAHRS.updateMotionSample(motionSample);
             lastMotionSample = this.motionSample;
             this.motionSample = new MotionSample();
         }
