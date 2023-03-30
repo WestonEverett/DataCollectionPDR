@@ -26,7 +26,7 @@ public class duringRecordingFragment extends Fragment implements View.OnClickLis
     View view;
 
     private ViewPagerAdapter viewPagerAdapter;
-    private ViewPager viewPager;
+    private ViewPager adapter;
     private TabLayout tabLayout;
 
     public duringRecordingFragment() {
@@ -43,34 +43,39 @@ public class duringRecordingFragment extends Fragment implements View.OnClickLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // setting up the adapter
-        viewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_during_recording, container, false);
-        return view;
+        View fragmentView = inflater.inflate(R.layout.fragment_during_recording, container, false);
+        return fragmentView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         // find views by id
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager11);
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
-        Button sendButton = (Button) view.findViewById(R.id.button_endRecording);
+        Button endRecordingButton = (Button) view.findViewById(R.id.button_endRecording);
 
-        sendButton.setOnClickListener(this);
+        endRecordingButton.setOnClickListener(this);
+
+        // attach tablayout with viewpager
         tabLayout.setupWithViewPager(viewPager);
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
-        // add the fragments
-        viewPagerAdapter.add(new MapFragment(), "MAP");
-        viewPagerAdapter.add(new GraphsFragment(), "SENSOR DATA");
-        viewPagerAdapter.add(new PathFragment(), "TRAJECTORY");
+
+// add the fragments
+        adapter.add(new MapFragment(), "MAP");
+        adapter.add(new GraphsFragment(), "SENSOR DATA");
+        adapter.add(new PathFragment(), "TRAJECTORY");
 
         // set adapter on viewpager
         viewPager.setAdapter(adapter);
+
     }
 
 

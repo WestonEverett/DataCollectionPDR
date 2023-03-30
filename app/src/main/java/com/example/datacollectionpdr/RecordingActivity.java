@@ -41,7 +41,6 @@ public class RecordingActivity extends DataManager {
     }
 
     private void showProperFragment() {
-
         Fragment fragmentToShow = new StartRecFragment();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

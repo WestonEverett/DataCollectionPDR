@@ -63,7 +63,6 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.enter_server_api:
 
-
                 break;
         }
     }
