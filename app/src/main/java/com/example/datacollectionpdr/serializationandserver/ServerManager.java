@@ -23,15 +23,22 @@ public class ServerManager {
 
     public void sendData(TrajectoryNative trajectoryNative) throws Exception {
         // URL of the server
-        String url = "https://openpositioning.org/api/dummy/trajectory/upload/";
+        String url = "https://openpositioning.org/api/live/trajectory/upload/6xJi8iwetoU6miQZyduemQ/?key=ewireless";
 
         Trajectory serializedTraj = trajectoryNative.generateSerialized();
         byte[] trajBytes = serializedTraj.toByteArray();
 
+        Log.e("serverManager", "Bytes serialized");
+
 
         // Create a URL object and open a connection
         URL obj = new URL(url);
+
+        Log.e("serverManager", "URL Created");
+
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+        Log.e("serverManager", "Connection Opened");
 
         // Set the request method to POST
         con.setRequestMethod("POST");
@@ -39,6 +46,7 @@ public class ServerManager {
         // Set the content type and content length headers
         con.setRequestProperty("accept", "application/json");
         con.setRequestProperty("Content-Type", "multipart/form-data");
+        con.setRequestProperty("file", "TrajectoryNewewewewewewe.pkt");
 
         // Enable output and disable caching
         con.setDoOutput(true);
@@ -46,17 +54,30 @@ public class ServerManager {
 
         serializedTraj.writeTo(con.getOutputStream());
 
+        /*
+        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+
+        Log.e("serverManager", "Output Stream created");
+
+        wr.write(trajBytes);
+        wr.flush();
+        wr.close();
+
+         */
+
+        Log.e("serverManager", "Bytes Written");
+
         // Read the response from the server
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
+        //BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        //String inputLine;
+        //StringBuffer response = new StringBuffer();
+        //while ((inputLine = in.readLine()) != null) {
+        //    response.append(inputLine);
+        //}
+        //in.close();
 
         // Print the response from the server
-        Log.e("Server Response", "server Response: " + response.toString());
+        //Log.e("serverManager", "server Response: " + response.toString());
     }
 
 }
