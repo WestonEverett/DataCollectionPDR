@@ -61,16 +61,13 @@ public class RecordingActivity extends DataManager {
         transaction.commit();
     }
 
-    public void stopRecording(View view){
-        Intent intent = new Intent(this, RecordingReview.class);
+    public void stopRecording(){
         TrajectoryNative trajectoryNative = this.endRecording();
         try {
             createDataFile(trajectoryNative);
         } catch (IOException e) {
             Log.e("hm", "FAILEDFAILEDFAILEDFAILEDFAILEDFAEILDFAILEDFAILFEFAIELDA");
         }
-
-        startActivity(intent); //Go to the Show Help activity and its view
     }
 
     private void createDataFile(TrajectoryNative trajectoryNative) throws IOException {

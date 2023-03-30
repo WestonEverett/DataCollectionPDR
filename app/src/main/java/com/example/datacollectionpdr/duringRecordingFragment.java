@@ -85,6 +85,7 @@ public class duringRecordingFragment extends Fragment implements View.OnClickLis
         FragmentTransaction fragmentTransaction = getActivity()
                 .getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainerView_recording_activity, new EndRecordingFragment());
+        ((RecordingActivity) getActivity()).stopRecording();
         fragmentTransaction.commit();
     }
 }

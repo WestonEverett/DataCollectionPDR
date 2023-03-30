@@ -59,6 +59,7 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
                 FragmentTransaction fragmentTransaction = getActivity()
                         .getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentContainerView_recording_activity, new duringRecordingFragment());
+                ((RecordingActivity) getActivity()).startRecording();
                 fragmentTransaction.commit();
                 break;
             case R.id.enter_server_api:
