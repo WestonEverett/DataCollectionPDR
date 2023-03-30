@@ -97,18 +97,12 @@ public class MadgwickAHRS {
         if(this.positionData != null){
             this.update(motionSample, this.positionData);
         }
-
-        this.positionData = null;
-        this.motionSample = null;
     }
 
     public void update(PositionData positionData) {
         if(this.motionSample != null){
             this.update(this.motionSample, positionData);
         }
-
-        this.positionData = null;
-        this.motionSample = null;
     }
 
     public void update(MotionSample motionSample, PositionData positionData) {
@@ -116,6 +110,9 @@ public class MadgwickAHRS {
         float[] gyro = motionSample.getGyro();
         float[] mag = positionData.mag;
         this.update(gyro[0], gyro[1], gyro[2], acc[0], acc[1], acc[2], mag[0], mag[1], mag[2]);
+
+        this.positionData = null;
+        this.motionSample = null;
     }
 
     /**
