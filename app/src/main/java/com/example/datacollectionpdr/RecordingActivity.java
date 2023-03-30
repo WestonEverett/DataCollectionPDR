@@ -92,10 +92,11 @@ public class RecordingActivity extends DataManager {
         }
         */
 
-        ServerManager serverManager = new ServerManager("temp");
+        ServerManager serverManager = new ServerManager("6xJi8iwetoU6miQZyduemQ");
 
         try {
-            serverManager.sendData(trajectoryNative);
+            String response = serverManager.sendData(trajectoryNative);
+            Log.e("Server Response", response);
         } catch (Exception e){
             Log.e("server error", "Server error: " + String.valueOf(e));
         }
