@@ -3,6 +3,7 @@ package com.example.datacollectionpdr;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -32,11 +33,8 @@ public class duringRecordingFragment extends Fragment implements View.OnClickLis
         // Required empty public constructor
     }
 
-
     public static duringRecordingFragment newInstance() {
         duringRecordingFragment fragment = new duringRecordingFragment();
-
-
         return fragment;
     }
 
@@ -44,38 +42,35 @@ public class duringRecordingFragment extends Fragment implements View.OnClickLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         // setting up the adapter
         viewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_during_recording, container, false);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        // find views by id
+        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager11);
+        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
+        Button sendButton = (Button) view.findViewById(R.id.button_endRecording);
+
+        sendButton.setOnClickListener(this);
+        tabLayout.setupWithViewPager(viewPager);
+
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getChildFragmentManager());
         // add the fragments
         viewPagerAdapter.add(new MapFragment(), "MAP");
         viewPagerAdapter.add(new GraphsFragment(), "SENSOR DATA");
         viewPagerAdapter.add(new PathFragment(), "TRAJECTORY");
 
-        // Set the adapter
-        viewPager.setAdapter(viewPagerAdapter);
-
-        // The Page (fragment) titles will be displayed in the
-        // tabLayout hence we need to  set the page viewer
-        // we use the setupWithViewPager().
-        tabLayout.setupWithViewPager(viewPager);
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        ViewPager viewPager = (ViewPager) getView().findViewById(R.id.viewpager);
-        TabLayout tabLayout = (TabLayout) getView().findViewById(R.id.tab_layout);
-
-        view = inflater.inflate(R.layout.fragment_during_recording, container, false);
-        Button sendButton = (Button) view.findViewById(R.id.button_endRecording);
-        sendButton.setOnClickListener(this);
-
-        return inflater.inflate(R.layout.fragment_during_recording, container, false);
+        // set adapter on viewpager
+        viewPager.setAdapter(adapter);
     }
 
 

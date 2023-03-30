@@ -3,6 +3,7 @@ package com.example.datacollectionpdr;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
@@ -20,9 +21,8 @@ import java.util.Arrays;
 
 public class RecordingActivity extends DataManager {
     private DataViewModel viewModel;
-    private ViewPagerAdapter viewPagerAdapter;
-    // Initialize view
 
+    // Initialize view
 
 
     @Override
@@ -30,10 +30,7 @@ public class RecordingActivity extends DataManager {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recording);
         viewModel = new ViewModelProvider(this).get(DataViewModel.class);
-
-        // setting up the adapter
-        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-
+        showProperFragment();
     }
 
     @Override
@@ -43,5 +40,13 @@ public class RecordingActivity extends DataManager {
         viewModel.updateSample(motionSample);
     }
 
+    private void showProperFragment() {
 
+        Fragment fragmentToShow = new StartRecFragment();
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragmentContainerView_recording_activity, fragmentToShow);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 }
