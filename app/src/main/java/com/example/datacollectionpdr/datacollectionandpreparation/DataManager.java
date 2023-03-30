@@ -12,6 +12,7 @@ import com.example.datacollectionpdr.nativedata.PressureData;
 import com.example.datacollectionpdr.nativedata.SensorDetails;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
 import com.example.datacollectionpdr.nativedata.WifiSample;
+import com.example.datacollectionpdr.pdrcalculation.MadgwickAHRS;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     private int stepcountDM;
     private int curStepcount;
     private MotionSample motionSample;
+    private MotionSample lastMotionSample = new MotionSample();
     private com.example.datacollectionpdr.datacollectionandpreparation.DataCollection mMotionSensorManager;
     private TrajectoryNative trajectoryNative;
     private boolean isRecording;
@@ -28,6 +30,8 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     private float[] curGravity;
     private float[] curMagnetic;
     private ArrayList<float[]> accelerations = new ArrayList<>();
+
+    private MadgwickAHRS madgwickAHRS = new MadgwickAHRS(0.1f);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +126,6 @@ public class DataManager extends PermissionsManager implements DataCollection.On
        }
 
     }
-
     @Override
     public void onLocationValueUpdated(String provider, float acc, float alt, long initTime, float lon, float lat, float speed){
         Log.i("DataM", "GNSS data updated");
@@ -133,7 +136,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     @Override
     public void onStepDetectorUpdated(){
         Log.i("DataM", "StpD data updated");
-        PDRStep pdrStep = new PDRStep(accelerations, curGravity, curMagnetic, System.currentTimeMillis());
+        PDRStep pdrStep = new PDRStep(accelerations, madgwickAHRS.findHeading(), curGravity, curMagnetic, System.currentTimeMillis());
         accelerations = new ArrayList<>();
         trajectoryNative.addPDRStep(pdrStep);
     }
@@ -157,6 +160,14 @@ public class DataManager extends PermissionsManager implements DataCollection.On
             motionSample.initTime = System.currentTimeMillis();
             trajectoryNative.addMotion(motionSample);
             this.newCompleteMotionSample(motionSample);
+           /* float[] acc = motionSample.getAcc();
+            Log.e("AccLength",acc.length+"");
+            float[] gyr = motionSample.getGyro();
+            Log.e("GyrLength",gyr.length+"");
+            Log.e("MagLength",magneticFieldValues.length+"");
+            madgwickAHRS.update(gyr[0],gyr[1],gyr[2],acc[0],acc[1],acc[2],magneticFieldValues[0],magneticFieldValues[1], magneticFieldValues[2]);
+            float heading = madgwickAHRS.findHeading();*/
+            lastMotionSample = this.motionSample;
             this.motionSample = new MotionSample();
         }
     }
