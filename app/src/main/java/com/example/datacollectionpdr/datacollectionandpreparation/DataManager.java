@@ -13,6 +13,7 @@ import com.example.datacollectionpdr.nativedata.SensorDetails;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
 import com.example.datacollectionpdr.nativedata.WifiSample;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DataManager extends PermissionsManager implements DataCollection.OnMotionSensorManagerListener{
@@ -26,6 +27,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
 
     private float[] curGravity;
     private float[] curMagnetic;
+    private ArrayList<float[]> accelerations = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +64,14 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     }
     @Override
     public void onAccelerometerUncalibratedValueUpdated(float[] acceleration){
-        //Log.i("DataM", "Mag data updated");
+        //Log.i("DataM", "AccU data updated");
         motionSample.setAcc(acceleration);
         dealWithMotionSample(motionSample);
     }
     @Override
     public void onAccelerometerValueUpdated(float[] acceleration){
-        //Log.i("DataM", "Acc data updated");
+        accelerations.add(acceleration);
+        Log.i("DataM", "Acc data updated");
     }
     @Override
     public void onGyroscopeUncalibratedValueUpdated(float[] gyroscope){
@@ -129,7 +132,8 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     @Override
     public void onStepDetectorUpdated(){
         Log.i("DataM", "StpD data updated");
-        PDRStep pdrStep = new PDRStep(curGravity, curMagnetic, System.currentTimeMillis());
+        PDRStep pdrStep = new PDRStep(accelerations, curGravity, curMagnetic, System.currentTimeMillis());
+        accelerations = new ArrayList<>();
         trajectoryNative.addPDRStep(pdrStep);
     }
     @Override
@@ -146,6 +150,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         // Check if all flags are set
         if(motionSample.isComplete()){
             // Create new motionsample
+            newCompleteMotionSample(motionSample);
             //Log.i("Motion sample", String.valueOf(System.currentTimeMillis()));
             motionSample.steps = curStepcount - stepcountDM;
             motionSample.initTime = System.currentTimeMillis();
@@ -167,6 +172,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     }
 
     protected void newCompleteMotionSample(MotionSample motionSample){
+
     }
 
     public TrajectoryNative endRecording(){
