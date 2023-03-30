@@ -17,6 +17,7 @@ import com.example.datacollectionpdr.nativedata.PositionData;
 public class MadgwickAHRS {
 
     private float samplePeriod;
+    private Long lastTime = null;
     private float beta;
     private float[] quaternion;
     private MotionSample motionSample = null;
@@ -90,7 +91,7 @@ public class MadgwickAHRS {
     public MadgwickAHRS(float samplePeriod, float beta) {
         this.samplePeriod = samplePeriod;
         this.beta = beta;
-        this.quaternion = new float[] { 0f, 0f, 1f, 0f };
+        this.quaternion = new float[] { 1f, 0f, 0f, 0f };
     }
 
     public void updateMotionSample(MotionSample motionSample) {
@@ -150,6 +151,14 @@ public class MadgwickAHRS {
      */
     public void update(float gx, float gy, float gz, float ax, float ay,
                        float az, float mx, float my, float mz) {
+
+        if(this.lastTime == null){
+            this.samplePeriod = .01f;
+        } else {
+            this.samplePeriod = (System.currentTimeMillis() - lastTime) / 1000f;
+        }
+        this.lastTime = System.currentTimeMillis();
+
         float q1 = quaternion[0], q2 = quaternion[1], q3 = quaternion[2], q4 = quaternion[3]; // short
         // name
         // local
