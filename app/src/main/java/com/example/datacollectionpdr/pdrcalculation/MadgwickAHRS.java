@@ -368,4 +368,8 @@ public class MadgwickAHRS {
         quaternion[3] = q4 * norm;
     }
 
+    public float findHeading(){
+        float heading = (float) Math.atan2(quaternion[1] * quaternion[2] + quaternion[0] * quaternion[3], 0.5f - quaternion[2] * quaternion[2] - quaternion[3] * quaternion[3]);
+        return heading;
+    }
 }
