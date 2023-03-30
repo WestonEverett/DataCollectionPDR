@@ -6,24 +6,34 @@
     android:layout_height="match_parent"
     tools:context=".StartRecFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/button_startRec"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:layout_marginBottom="288dp"
+            android:layout_marginBottom="52dp"
             android:layout_weight="1"
             android:elevation="0dp"
-            app:iconPadding="0dp"
             android:text="STARTRECORDING"
+            app:iconPadding="0dp" />
+
+
+        <fragment
+            android:id="@+id/google_map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_marginTop="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
 
 </FrameLayout>
