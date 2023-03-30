@@ -35,6 +35,8 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
         sendButton.setOnClickListener(this);
         Button server_apiButton = (Button) view.findViewById(R.id.enter_server_api);
         server_apiButton.setOnClickListener(this);
+        TextInputLayout textInputLayout = view.findViewById(R.id.textInput_serverid);
+        textInputLayout.setHint("Current ID: "+ MainActivity.serverKeyString);
         return view;
     }
 
@@ -56,6 +58,7 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
                 TextInputLayout textInputLayout = view.findViewById(R.id.textInput_serverid);
                 String text = textInputLayout.getEditText().getText().toString();
                 MainActivity.serverKeyString=text;
+                textInputLayout.setHint("Current ID: "+ MainActivity.serverKeyString);
                 break;
         }
     }
