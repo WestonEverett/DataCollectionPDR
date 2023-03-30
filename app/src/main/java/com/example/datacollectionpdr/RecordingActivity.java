@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +21,8 @@ import android.view.View;
 import com.example.datacollectionpdr.datacollectionandpreparation.DataManager;
 import com.example.datacollectionpdr.nativedata.MotionSample;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
+import com.example.datacollectionpdr.serializationandserver.FileManager;
+import com.example.datacollectionpdr.serializationandserver.ServerManager;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.tabs.TabLayout;
 
@@ -39,6 +42,11 @@ public class RecordingActivity extends DataManager {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
+
         setContentView(R.layout.activity_recording);
         viewModel = new ViewModelProvider(this).get(DataViewModel.class);
         showProperFragment();
@@ -63,24 +71,14 @@ public class RecordingActivity extends DataManager {
 
     public void stopRecording(){
         TrajectoryNative trajectoryNative = this.endRecording();
+
+        ServerManager serverManager = new ServerManager("6xJi8iwetoU6miQZyduemQ");
+
         try {
-            createDataFile(trajectoryNative);
-        } catch (IOException e) {
-            Log.e("hm", "FAILEDFAILEDFAILEDFAILEDFAILEDFAEILDFAILEDFAILFEFAIELDA");
+            String response = serverManager.sendData(trajectoryNative);
+            Log.e("Server Response", response);
+        } catch (Exception e){
+            Log.e("server error", "Server error: " + String.valueOf(e));
         }
-    }
-
-    private void createDataFile(TrajectoryNative trajectoryNative) throws IOException {
-        Context context = getApplicationContext();
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String dataFileName = "Trajectory_" + timeStamp + ".pkt";
-        File file = new File(context.getFilesDir(), dataFileName);
-
-        try (FileOutputStream fos = context.openFileOutput(dataFileName, Context.MODE_PRIVATE)) {
-            fos.write(trajectoryNative.generateSerialized().toByteArray());
-        }
-
-        Log.e("hm",dataFileName);
     }
 }

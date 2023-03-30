@@ -72,7 +72,7 @@ public class DataCollection implements SensorEventListener {
 
     // WiFi data works differently to all other sensors
     // Stored as hashmap of BSSID and maximum observed signal level in dBm
-    HashMap<String, WifiObject> WifiData = new HashMap<>();
+    HashMap<String, WifiObject> wifiData = new HashMap<>();
     BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
         public void onReceive(Context c, Intent intent) {
 
@@ -210,7 +210,7 @@ public class DataCollection implements SensorEventListener {
                     ActivityCompat.checkSelfPermission(context, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED){
 
                 wifiScanList = wifiManager.getScanResults(); //Get WiFi scan results
-                Log.i("Number of WiFi networks:", String.valueOf(wifiScanList.size())); //Log the number of wifi networks detected
+                //Log.i("Number of WiFi networks:", String.valueOf(wifiScanList.size())); //Log the number of wifi networks detected
                 //For all networks in the scan
                 for(int i = 0; i<wifiScanList.size(); i++){
                     // Temporary ID and signal level variables
@@ -224,12 +224,12 @@ public class DataCollection implements SensorEventListener {
 
                     //Log.i(id, String.valueOf(power));
                     // If the entry doesn't exist, add it to the hashmap.
-                    if(!WifiData.containsKey(id)){
-                        WifiData.put(id, curWifiData);
+                    if(!wifiData.containsKey(id)){
+                        wifiData.put(id, curWifiData);
                     }
                     // Else update entry with the maximum power value
-                    else if(WifiData.get(id).power < power){
-                        WifiData.put(id,curWifiData);
+                    else if(wifiData.get(id).power < power){
+                        wifiData.put(id,curWifiData);
                     }
                 }
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
@@ -240,15 +240,14 @@ public class DataCollection implements SensorEventListener {
             /////////////////////////
             lastTimestamp = currentTimestamp;
             purgeWifiDataCount++;
-            Log.i("Timestamp", String.valueOf(currentTimestamp));
+            //Log.i("Timestamp", String.valueOf(currentTimestamp));
         }
         //When count reaches max number of aggregated samples, send data to DataManager and clear data
         if(purgeWifiDataCount == UPDATES_BEFORE_WIFI_PURGE){
-            motionSensorManagerListener.onWifiValueUpdated(WifiData); // Once we have an aggregate of wifi samples, send it to DataManager
-            WifiData = new HashMap<>(); // Clear wifi data
+            motionSensorManagerListener.onWifiValueUpdated(wifiData); // Once we have an aggregate of wifi samples, send it to DataManager
+            Log.i("Wifi", "Wifis in scan: " + wifiData.size());
+            wifiData = new HashMap<>(); // Clear wifi data
             purgeWifiDataCount = 0;
-            List<String> keys = new ArrayList<>(WifiData.keySet());
-            Log.i("Map cleared", String.valueOf(keys));
         }
 
         switch (sensorEvent.sensor.getType()){
