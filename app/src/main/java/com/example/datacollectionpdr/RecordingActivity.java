@@ -72,7 +72,7 @@ public class RecordingActivity extends DataManager {
     public void stopRecording(){
         TrajectoryNative trajectoryNative = this.endRecording();
 
-        ServerManager serverManager = new ServerManager("6xJi8iwetoU6miQZyduemQ");
+        ServerManager serverManager = new ServerManager(MainActivity.serverKeyString);
 
         try {
             String response = serverManager.sendData(trajectoryNative);

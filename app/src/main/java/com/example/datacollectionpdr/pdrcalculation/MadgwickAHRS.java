@@ -1,6 +1,9 @@
 package com.example.datacollectionpdr.pdrcalculation;
 
 
+import com.example.datacollectionpdr.nativedata.MotionSample;
+import com.example.datacollectionpdr.nativedata.PositionData;
+
 /**
  * MadgwickAHRS class. Implementation of Madgwick's IMU and AHRS algorithms in
  * Java.
@@ -9,11 +12,15 @@ package com.example.datacollectionpdr.pdrcalculation;
  *      href="http://www.x-io.co.uk/open-source-imu-and-ahrs-algorithms">http://www.x-io.co.uk/open-source-imu-and-ahrs-algorithms/</a>
  */
 
+
+
 public class MadgwickAHRS {
 
     private float samplePeriod;
     private float beta;
     private float[] quaternion;
+    private MotionSample motionSample = null;
+    private PositionData positionData = null;
 
     /**
      * Gets the sample period.
@@ -84,6 +91,31 @@ public class MadgwickAHRS {
         this.samplePeriod = samplePeriod;
         this.beta = beta;
         this.quaternion = new float[] { 1f, 0f, 0f, 0f };
+    }
+
+    public void update(MotionSample motionSample) {
+        if(this.positionData != null){
+            this.update(motionSample, this.positionData);
+        }
+
+        this.positionData = null;
+        this.motionSample = null;
+    }
+
+    public void update(PositionData positionData) {
+        if(this.motionSample != null){
+            this.update(this.motionSample, positionData);
+        }
+
+        this.positionData = null;
+        this.motionSample = null;
+    }
+
+    public void update(MotionSample motionSample, PositionData positionData) {
+        float[] acc = motionSample.getAcc();
+        float[] gyro = motionSample.getGyro();
+        float[] mag = positionData.mag;
+        this.update(gyro[0], gyro[1], gyro[2], acc[0], acc[1], acc[2], mag[0], mag[1], mag[2]);
     }
 
     /**
