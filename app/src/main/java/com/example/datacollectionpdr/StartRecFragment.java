@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.textfield.TextInputLayout;
 
 
 public class StartRecFragment extends Fragment implements View.OnClickListener {
@@ -46,9 +47,7 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         // find views by id
         Button sendButton = (Button) view.findViewById(R.id.button_startRec);
-        Button server_apiButton = (Button) view.findViewById(R.id.enter_server_api);
         sendButton.setOnClickListener(this);
-        server_apiButton.setOnClickListener(this);
     }
 
     @Override
@@ -61,9 +60,6 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
                 fragmentTransaction.replace(R.id.fragmentContainerView_recording_activity, new duringRecordingFragment());
                 ((RecordingActivity) getActivity()).startRecording();
                 fragmentTransaction.commit();
-                break;
-            case R.id.enter_server_api:
-
                 break;
         }
     }
