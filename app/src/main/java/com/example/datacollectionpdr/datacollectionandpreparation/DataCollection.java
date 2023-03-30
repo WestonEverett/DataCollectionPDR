@@ -69,6 +69,7 @@ public class DataCollection implements SensorEventListener {
     private Context context;
 
     private List<ScanResult> wifiScanList = null; // Initialise WiFi scan list
+    private float startingAltitude = 0.0f;
 
     // WiFi data works differently to all other sensors
     // Stored as hashmap of BSSID and maximum observed signal level in dBm
@@ -120,7 +121,6 @@ public class DataCollection implements SensorEventListener {
         StepDetector = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         StepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-
         //Initialise location manager and listener, prompt the user to enable GPS if disabled
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new dcLocationListener();
