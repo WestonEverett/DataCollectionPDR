@@ -96,12 +96,16 @@ public class MadgwickAHRS {
     public void updateMotionSample(MotionSample motionSample) {
         if(this.positionData != null){
             this.update(motionSample, this.positionData);
+        } else {
+            this.motionSample = motionSample;
         }
     }
 
     public void updatePositionData(PositionData positionData) {
         if(this.motionSample != null){
             this.update(this.motionSample, positionData);
+        } else {
+            this.positionData = positionData;
         }
     }
 
