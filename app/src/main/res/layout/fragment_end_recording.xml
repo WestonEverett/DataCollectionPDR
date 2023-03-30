@@ -20,14 +20,43 @@
         android:id="@+id/textView13"
         android:layout_width="360dp"
         android:layout_height="55dp"
-        android:layout_marginTop="168dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="112dp"
         android:text="Duration: xxxx ..."
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintHorizontal_bias="0.686"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.84" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="69dp"
+        android:orientation="horizontal"
+
+        app:layout_constraintBottom_toTopOf="@+id/button_discard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView13">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInput_serverid"
+            android:layout_width="282dp"
+            android:layout_height="65dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="267dp"
+                android:layout_height="65dp"
+                android:hint="enter your server ID" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/enter_server_api"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Button" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/button_addEndPoint"
@@ -45,7 +74,7 @@
         android:id="@+id/button_send"
         android:layout_width="144dp"
         android:layout_height="63dp"
-        android:layout_marginStart="44dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="172dp"
         android:onClick="saveRecording"
@@ -53,18 +82,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView13"
-        app:layout_constraintVertical_bias="0.322" />
+        app:layout_constraintVertical_bias="0.335" />
 
     <Button
         android:id="@+id/button_discard"
         android:layout_width="145dp"
         android:layout_height="60dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="64dp"
+        android:layout_marginEnd="72dp"
         android:onClick="discardRecording"
         android:text="Discard"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView13"
-        app:layout_constraintVertical_bias="0.192" />
+        app:layout_constraintVertical_bias="0.215" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 
 public class EndRecordingFragment extends Fragment implements View.OnClickListener{
 
@@ -31,6 +33,8 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
         view = inflater.inflate(R.layout.fragment_end_recording, container, false);
         Button sendButton = (Button) view.findViewById(R.id.button_send);
         sendButton.setOnClickListener(this);
+        Button server_apiButton = (Button) view.findViewById(R.id.enter_server_api);
+        server_apiButton.setOnClickListener(this);
         return view;
     }
 
@@ -47,6 +51,10 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
                 Intent intent_send = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent_send); //Go to the Show Help activity and its view
                 ((Activity) getActivity()).overridePendingTransition(0, 0);
+                break;
+            case R.id.enter_server_api:
+                TextInputLayout textInputLayout = view.findViewById(R.id.textInput_serverid);
+                String text = textInputLayout.getEditText().getText().toString();
                 break;
         }
     }
