@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int REQUEST_ID_READ_WRITE_PERMISSION = 99;
     BottomNavigationView bottomNavigationView;
-
+    public static String serverKeyString= "f34";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

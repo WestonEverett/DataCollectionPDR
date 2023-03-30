@@ -47,9 +47,7 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         // find views by id
         Button sendButton = (Button) view.findViewById(R.id.button_startRec);
-        Button server_apiButton = (Button) view.findViewById(R.id.enter_server_api);
         sendButton.setOnClickListener(this);
-        server_apiButton.setOnClickListener(this);
     }
 
     @Override

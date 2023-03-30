@@ -55,6 +55,7 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
             case R.id.enter_server_api:
                 TextInputLayout textInputLayout = view.findViewById(R.id.textInput_serverid);
                 String text = textInputLayout.getEditText().getText().toString();
+                MainActivity.serverKeyString=text;
                 break;
         }
     }
