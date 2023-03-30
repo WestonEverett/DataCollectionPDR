@@ -1,4 +1,5 @@
 package com.example.datacollectionpdr.datacollectionandpreparation;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -12,6 +13,7 @@ import com.example.datacollectionpdr.nativedata.PressureData;
 import com.example.datacollectionpdr.nativedata.SensorDetails;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
 import com.example.datacollectionpdr.nativedata.WifiSample;
+import com.example.datacollectionpdr.pdrcalculation.AltitudeEstimation;
 import com.example.datacollectionpdr.pdrcalculation.MadgwickAHRS;
 
 import java.util.ArrayList;
@@ -32,6 +34,9 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     private ArrayList<float[]> accelerations = new ArrayList<>();
 
     private MadgwickAHRS madgwickAHRS = new MadgwickAHRS(0.1f);
+    private float startingAltitude;
+    private boolean hasStartingAltitude;
+    AltitudeEstimation altitudeEstimation = new AltitudeEstimation();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +98,13 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         //Log.i("DataM", "Bar data updated");
         PressureData pressureData = new PressureData(System.currentTimeMillis(), pressure);
         trajectoryNative.addPressure(pressureData);
+        if(!hasStartingAltitude) {
+            altitudeEstimation.setStartingAltitude(SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, pressure));
+            hasStartingAltitude = true;
+        }
+        //Altitude change from the first barometer measurement
+        float currentRelativeAltitude = SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, pressure) - startingAltitude;
+        altitudeEstimation.setAltitude(currentRelativeAltitude);
     }
     @Override
     public void onAmbientLightValueChanged(float luminance){
