@@ -93,13 +93,13 @@ public class MadgwickAHRS {
         this.quaternion = new float[] { 1f, 0f, 0f, 0f };
     }
 
-    public void update(MotionSample motionSample) {
+    public void updateMotionSample(MotionSample motionSample) {
         if(this.positionData != null){
             this.update(motionSample, this.positionData);
         }
     }
 
-    public void update(PositionData positionData) {
+    public void updatePositionData(PositionData positionData) {
         if(this.motionSample != null){
             this.update(this.motionSample, positionData);
         }
