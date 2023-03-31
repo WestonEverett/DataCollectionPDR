@@ -2,6 +2,7 @@ package com.example.datacollectionpdr.nativedata;
 
 import android.os.Build;
 
+import com.example.datacollectionpdr.pdrcalculation.GNSSCalculations;
 import com.example.datacollectionpdr.serializationandserver.TrajectoryBuilder;
 import com.example.datacollectionpdr.data.Trajectory;
 
@@ -106,22 +107,6 @@ public class TrajectoryNative {
 
     public void setDataID(String dataID) { this.dataID = dataID; }
 
-    public static class DistanceCalculator {
-
-        private static final double EARTH_RADIUS = 6371000;
-
-        public static double calculateDistance(float startLon, float startLat, float endLon, float endLat) {
-            double dLat = Math.toRadians(endLat - startLat);
-            double dLon = Math.toRadians(endLon - startLon);
-            double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                    Math.cos(Math.toRadians(startLat)) * Math.cos(Math.toRadians(endLat)) *
-                            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-            double distance = EARTH_RADIUS * c;
-            return distance;
-        }
-    }
-
     /* Trajectory correction function
        Takes two map points (latitudes and longitudes) provided by the user and computes the
        displacement of the user, and multiplies all the PDR step coordinates by the ratio of
@@ -129,6 +114,12 @@ public class TrajectoryNative {
        - Convert LatLon points to displacement magnitude
        - Multiply all PDR step points' x and y coordinates by userDistance/appDistance
      */
+    public double userHeadingDelta(UserPositionData userPositionData){
+        double startBearing = GNSSCalculations.calculateBearingDeg(userPositionData.getStartLon(),userPositionData.getStartLat(),userPositionData.getStartRefLon(),userPositionData.getStartRefLat());
+        double endBearing = GNSSCalculations.calculateBearingDeg(userPositionData.getEndLon(),userPositionData.getEndLat(),userPositionData.getEndRefLon(),userPositionData.getEndRefLat());
+        return endBearing-startBearing;
+    }
+
     public ArrayList<PDRStep> trajectoryCorrection(float startLon, float startLat, float endLon, float endLat, ArrayList<PDRStep> pdrs){
         ArrayList<PDRStep> newPDRs;
         newPDRs = pdrs;
@@ -144,7 +135,7 @@ public class TrajectoryNative {
             appDistance = (float) Math.sqrt((endPointX-startPointX)*(endPointX-startPointX)+(endPointY-startPointY)*(endPointY-startPointY));
         }
         // Magnitude of PDR displacement using user provided location pins
-        float userDistance = (float) DistanceCalculator.calculateDistance(startLat,startLon,endLat,endLon);
+        float userDistance = (float) GNSSCalculations.calculateDistance(startLat,startLon,endLat,endLon);
         float ratio = userDistance/ appDistance;
         newPDRs.forEach(pdrStep -> pdrStep.x = pdrStep.x*ratio);
         newPDRs.forEach(pdrStep -> pdrStep.y = pdrStep.y*ratio);
