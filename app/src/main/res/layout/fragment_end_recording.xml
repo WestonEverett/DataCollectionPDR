@@ -3,95 +3,112 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".EndRecordingFragment">
-
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="362dp"
-        android:layout_height="26dp"
-        android:text="Recording Stopped"
-        app:layout_constraintBottom_toTopOf="@+id/textView13"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="360dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="112dp"
-        android:text="Duration: xxxx ..."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.686"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="69dp"
-        android:orientation="horizontal"
-
-        app:layout_constraintBottom_toTopOf="@+id/button_discard"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInput_serverid"
-            android:layout_width="282dp"
-            android:layout_height="65dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="267dp"
-                android:layout_height="65dp"
-                android:hint="enter your server ID" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/enter_server_api"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Button" />
+            android:text="Recording Stopped" />
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:text="Duration: xxxx ..." />
+
+        <fragment
+            android:id="@+id/google_map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginTop="5dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_addEndPoint"
+                android:layout_width="194dp"
+                android:layout_height="62dp"
+                android:layout_marginTop="16dp"
+                android:text="I am Here" />
+
+            <Button
+                android:id="@+id/button_addEndDirection"
+                android:layout_width="194dp"
+                android:layout_height="62dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="1"
+                android:text="I am facing this way" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="69dp"
+            android:orientation="horizontal"
+
+            >
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInput_serverid"
+                android:layout_width="282dp"
+                android:layout_height="65dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="267dp"
+                    android:layout_height="65dp"
+                    android:hint="enter your server ID" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/enter_server_api"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Button" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_send"
+                android:layout_width="196dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="0dp"
+                android:onClick="saveRecording"
+                android:text="Send" />
+
+            <Button
+                android:id="@+id/button_discard"
+                android:layout_width="216dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="72dp"
+                android:onClick="discardRecording"
+                android:text="Discard" />
+        </LinearLayout>
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button_addEndPoint"
-        android:layout_width="362dp"
-        android:layout_height="66dp"
-        android:layout_marginTop="16dp"
-        android:text="Add Start and finish poins"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.489"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_send" />
-
-    <Button
-        android:id="@+id/button_send"
-        android:layout_width="144dp"
-        android:layout_height="63dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="172dp"
-        android:text="Send"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13"
-        app:layout_constraintVertical_bias="0.335" />
-
-    <Button
-        android:id="@+id/button_discard"
-        android:layout_width="145dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="72dp"
-        android:text="Discard"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13"
-        app:layout_constraintVertical_bias="0.215" />
 </androidx.constraintlayout.widget.ConstraintLayout>

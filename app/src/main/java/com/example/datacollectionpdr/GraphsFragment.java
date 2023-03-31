@@ -69,7 +69,7 @@ public class GraphsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
-        viewModel.getSample().observe(getViewLifecycleOwner(), item -> {
+        viewModel.getMotionSample().observe(getViewLifecycleOwner(), item -> {
             recentMeasurements.updateMeasurements(item);
             PlotThePlot(recentMeasurements.getData(currentDisplaySensor));
         });
@@ -85,12 +85,12 @@ public class GraphsFragment extends Fragment {
         PixelUtils.init(getActivity());
     }
 
-    public void PlotThePlot(Number[][] PlotData){
+    public void PlotThePlot(Number[][] plotData){
 
-        Number[] domainLabels=PlotData[0];
-        Number[] series1Numbers=PlotData[1];
-        Number[] series2Numbers=PlotData[2];
-        Number[] series3Numbers=PlotData[3];
+        Number[] domainLabels=plotData[0];
+        Number[] series1Numbers=plotData[1];
+        Number[] series2Numbers=plotData[2];
+        Number[] series3Numbers=plotData[3];
 
         //Log.d("plt", "Value: " + Float.toString((Float) series1Numbers[0]));
         //Log.d("plt", "Current Display Sensor: " + currentDisplaySensor);

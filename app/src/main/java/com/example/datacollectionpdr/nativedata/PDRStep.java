@@ -12,9 +12,11 @@ import java.util.Arrays;
 
 public class PDRStep {
 
-    public float x;
-    public float y;
-    public double heading;
+    private float x;
+    private float y;
+    private double heading;
+    private int estFloor;
+    private float magnitude;
     public long initTime;
 
     public PDRStep(float x, float y, long initTime){
@@ -43,8 +45,9 @@ public class PDRStep {
         stepLengthEstimate.setGravities(gravities);
         float stepSize = stepLengthEstimate.findStepLength();
         ////// Finding x and y lengths //////
-        this.x = stepSize * (float) Math.sin(heading);
-        this.y = stepSize * (float) Math.cos(heading);
+
+        this.x = stepSize * (float) Math.sin(Math.toRadians(heading));
+        this.y = stepSize * (float) Math.cos(Math.toRadians(heading));
         Log.i("PDRSTEP", "Heading" + this.heading);
         this.initTime = initTime;
     }
@@ -65,5 +68,49 @@ public class PDRStep {
         SensorManager.getOrientation(R, values);
 
         return values[0];
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public float getMagnitude() {
+        return y;
+    }
+
+    public void setMagnitude(float magnitude) {
+        this.magnitude = magnitude;
+    }
+
+    public void scaleMagnitude(float ratio) {
+        this.setMagnitude(ratio * this.magnitude);
+    }
+
+    public double getHeading() {
+        return heading;
+    }
+
+    public void setHeading(double heading) {
+        this.heading = heading;
+    }
+
+    public int getEstFloor() {
+        return estFloor;
+    }
+
+    public void setEstFloor(int estFloor) {
+        this.estFloor = estFloor;
     }
 }

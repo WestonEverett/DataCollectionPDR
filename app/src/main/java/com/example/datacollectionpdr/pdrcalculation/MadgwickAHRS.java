@@ -17,10 +17,15 @@ import com.example.datacollectionpdr.nativedata.PositionData;
 public class MadgwickAHRS {
 
     private float samplePeriod;
+    private Long lastTime = null;
     private float beta;
     private float[] quaternion;
     private MotionSample motionSample = null;
     private PositionData positionData = null;
+
+    private float[] magnetometer = null;
+    private float[] accelerometer = null;
+    private float[] gyroscope = null;
 
     /**
      * Gets the sample period.
@@ -90,7 +95,7 @@ public class MadgwickAHRS {
     public MadgwickAHRS(float samplePeriod, float beta) {
         this.samplePeriod = samplePeriod;
         this.beta = beta;
-        this.quaternion = new float[] { 0f, 0f, 1f, 0f };
+        this.quaternion = new float[] { 1f, 0f, 0f, 0f };
     }
 
     public void updateMotionSample(MotionSample motionSample) {
@@ -109,11 +114,39 @@ public class MadgwickAHRS {
         }
     }
 
+    public void updateMagnetometer(float[] magnetometer){
+        this.magnetometer = magnetometer;
+        checkIfUpdateReady();
+    }
+
+    public void updateAccelerometer(float[] accelerometer){
+        this.accelerometer = accelerometer;
+        checkIfUpdateReady();
+    }
+
+    public void updateGyroscope(float[] gyroscope){
+        this.gyroscope = gyroscope;
+        checkIfUpdateReady();
+    }
+
+    private void checkIfUpdateReady(){
+        if(this.magnetometer != null &&
+        this.gyroscope != null &&
+        this.accelerometer != null){
+            //this.update(gyroscope[0], gyroscope[1], gyroscope[2], accelerometer[0], accelerometer[1], accelerometer[2], magnetometer[0], magnetometer[1], magnetometer[2]);
+            this.update(gyroscope[0], gyroscope[1], gyroscope[2], accelerometer[0], accelerometer[1], accelerometer[2]);
+            this.magnetometer = null;
+            this.gyroscope = null;
+            this.accelerometer = null;
+        }
+    }
+
     public void update(MotionSample motionSample, PositionData positionData) {
         float[] acc = motionSample.getAcc();
         float[] gyro = motionSample.getGyro();
         float[] mag = positionData.mag;
-        this.update(gyro[0], gyro[1], gyro[2], acc[0], acc[1], acc[2], mag[0], mag[1], mag[2]);
+        //this.update(gyro[0], gyro[1], gyro[2], acc[0], acc[1], acc[2], mag[0], mag[1], mag[2]);
+        this.update(gyro[0], gyro[1], gyro[2], acc[0], acc[1], acc[2]);
 
         this.positionData = null;
         this.motionSample = null;
@@ -150,6 +183,14 @@ public class MadgwickAHRS {
      */
     public void update(float gx, float gy, float gz, float ax, float ay,
                        float az, float mx, float my, float mz) {
+
+        if(this.lastTime == null){
+            this.samplePeriod = .01f;
+        } else {
+            this.samplePeriod = (System.currentTimeMillis() - lastTime) / 1000f;
+        }
+        this.lastTime = System.currentTimeMillis();
+
         float q1 = quaternion[0], q2 = quaternion[1], q3 = quaternion[2], q4 = quaternion[3]; // short
         // name
         // local
@@ -301,6 +342,14 @@ public class MadgwickAHRS {
      */
     public void update(float gx, float gy, float gz, float ax, float ay,
                        float az) {
+
+        if(this.lastTime == null){
+            this.samplePeriod = .01f;
+        } else {
+            this.samplePeriod = (System.currentTimeMillis() - lastTime) / 1000f;
+        }
+        this.lastTime = System.currentTimeMillis();
+
         float q1 = quaternion[0], q2 = quaternion[1], q3 = quaternion[2], q4 = quaternion[3]; // short
         // name
         // local
@@ -370,7 +419,7 @@ public class MadgwickAHRS {
     }
 
     public float findHeading(){
-        float heading = (float) Math.toDegrees(Math.atan2(quaternion[1] * quaternion[2] + quaternion[0] * quaternion[3], 0.5f - quaternion[2] * quaternion[2] - quaternion[3] * quaternion[3]));
+        float heading = (float) Math.toDegrees(Math.atan2(2f * (quaternion[1] * quaternion[2] + quaternion[0] * quaternion[3]), 0.5f - quaternion[2] * quaternion[2] - quaternion[3] * quaternion[3]));
         return heading;
     }
 }

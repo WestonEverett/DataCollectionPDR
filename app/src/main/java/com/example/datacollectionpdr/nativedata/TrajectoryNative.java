@@ -49,6 +49,10 @@ public class TrajectoryNative {
         this.dataID = dataID;
     }
 
+    public ArrayList<PDRStep> getPdrs() {
+        return pdrs;
+    }
+
     public void addPDRStep(PDRStep pdrStep){
         pdrs.add(pdrStep);
     }
@@ -115,26 +119,32 @@ public class TrajectoryNative {
        - Multiply all PDR step points' x and y coordinates by userDistance/appDistance
      */
 
-    public ArrayList<PDRStep> trajectoryCorrection(float startLon, float startLat, float endLon, float endLat, ArrayList<PDRStep> pdrs){
-        ArrayList<PDRStep> newPDRs;
-        newPDRs = pdrs;
+    public void applyTrajectoryScaling(float startLon, float startLat, float endLon, float endLat){
+
+        //TODO Add Bounds, if each step is going to be changed by more than +- 25 (ish) make no change as we are in a boundary condition
+
+
+        ArrayList<PDRStep> newPDRs = this.pdrs;
         float startPointX, startPointY, endPointX, endPointY;
         float appDistance = 1;
         // Check to make sure PDR ArrayList is not empty or null
+
         if(pdrs != null && !pdrs.isEmpty()) {
-            startPointX = pdrs.get(0).x;
-            startPointY = pdrs.get(0).y;
-            endPointX = pdrs.get(pdrs.size()-1).x;
-            endPointY = pdrs.get(pdrs.size()-1).y;
+            float totalX = 0;
+            float totalY = 0;
+
+            for(PDRStep pdrStep : pdrs){
+                totalX = totalX + pdrStep.getX();
+                totalY = totalY + pdrStep.getY();
+            }
             // Magnitude of PDR displacement using phone sensor data
-            appDistance = (float) Math.sqrt((endPointX-startPointX)*(endPointX-startPointX)+(endPointY-startPointY)*(endPointY-startPointY));
+            appDistance = (float) Math.sqrt((totalX*totalX)+(totalY*totalY));
         }
         // Magnitude of PDR displacement using user provided location pins
         float userDistance = (float) GNSSCalculations.calculateDistance(startLat,startLon,endLat,endLon);
         float ratio = userDistance/ appDistance;
-        newPDRs.forEach(pdrStep -> pdrStep.x = pdrStep.x*ratio);
-        newPDRs.forEach(pdrStep -> pdrStep.y = pdrStep.y*ratio);
-        return newPDRs;
+        newPDRs.forEach(pdrStep -> pdrStep.scaleMagnitude(ratio));
+        this.pdrs = newPDRs;
     }
 
     public Trajectory generateSerialized()

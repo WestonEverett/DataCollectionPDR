@@ -23,16 +23,17 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     private int stepcountDM;
     private int curStepcount;
     private MotionSample motionSample;
-    private MotionSample lastMotionSample = new MotionSample();
     private com.example.datacollectionpdr.datacollectionandpreparation.DataCollection mMotionSensorManager;
-    private TrajectoryNative trajectoryNative;
+    protected TrajectoryNative trajectoryNative;
     private boolean isRecording;
     HashMap<String, WifiObject> WifiData;
 
-    private float[] curGravity;
+    private float[] curGravity = new float[]{0f, 9.8f, 0f};
     private float[] curMagnetic;
+    protected GNSSData curGNSSData;
     private ArrayList<float[]> accelerations = new ArrayList<>();
     private ArrayList<float[]> gravities = new ArrayList<>();
+
 
     private MadgwickAHRS madgwickAHRS = new MadgwickAHRS(0.1f);
     private float startingAltitude;
@@ -65,13 +66,13 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     public void onMagnetometerUncalibratedValueUpdated(float[] magneticfield, float h){
         //Log.i("DataM", "MagU data updated");
         PositionData positionData = new PositionData(System.currentTimeMillis(), magneticfield);
-        madgwickAHRS.updatePositionData(positionData);
         trajectoryNative.addPosition(positionData);
     }
     @Override
     public void onMagnetometerValueUpdated(float[] magneticfield, float h){
         //Log.i("DataM", "Mag data updated");
         curMagnetic = magneticfield;
+        madgwickAHRS.updateMagnetometer(magneticfield);
     }
     @Override
     public void onAccelerometerUncalibratedValueUpdated(float[] acceleration){
@@ -82,6 +83,8 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     @Override
     public void onAccelerometerValueUpdated(float[] acceleration){
         accelerations.add(acceleration);
+        //float[] linearAcc = new float[]{acceleration[0] - curGravity[0], acceleration[1] - curGravity[1], acceleration[2] - curGravity[2]};
+        //madgwickAHRS.updateAccelerometer(linearAcc);
         //Log.i("DataM", "Acc data updated");
     }
     @Override
@@ -92,6 +95,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     }
     @Override
     public void onGyroscopeValueUpdated(float[] gyroscope){
+        madgwickAHRS.updateGyroscope(gyroscope);
         //Log.i("DataM", "Gyr data updated");
     }
     @Override
@@ -123,6 +127,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         //Log.i("DataM", "Grav data updated");
         curGravity = gravity;
         gravities.add(curGravity);
+        madgwickAHRS.updateAccelerometer(gravity);
     }
     @Override
     public void onRotationVectorValueUpdated(float[] rotationvector){
@@ -147,15 +152,18 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         Log.i("DataM", "GNSS data updated");
         //Log.i(provider, lon +" "+ lat);
         GNSSData gnssData = new GNSSData(provider,acc,alt,initTime,lon,lat,speed);
+        curGNSSData = gnssData;
         trajectoryNative.addGNSS(gnssData);
     }
     @Override
     public void onStepDetectorUpdated(){
         Log.i("DataM", "StpD data updated");
         PDRStep pdrStep = new PDRStep(accelerations, madgwickAHRS.findHeading(), gravities, curMagnetic, System.currentTimeMillis());
+        pdrStep.setEstFloor(altitudeEstimation.floorsChanged());
         accelerations = new ArrayList<>();
         gravities = new ArrayList<>();
         trajectoryNative.addPDRStep(pdrStep);
+        this.newPDRStep(pdrStep);
     }
     @Override
     public void onStepCountValueUpdated(int stepcount){
@@ -177,8 +185,6 @@ public class DataManager extends PermissionsManager implements DataCollection.On
             motionSample.initTime = System.currentTimeMillis();
             trajectoryNative.addMotion(motionSample);
             this.newCompleteMotionSample(motionSample);
-            madgwickAHRS.updateMotionSample(motionSample);
-            lastMotionSample = this.motionSample;
             this.motionSample = new MotionSample();
         }
     }
@@ -195,7 +201,11 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     }
 
     protected void newCompleteMotionSample(MotionSample motionSample){
+        //overwritten to trigger behavior in UI
+    }
 
+    protected void newPDRStep(PDRStep pdrStep){
+        //overwritten to trigger behavior in UI
     }
 
     public TrajectoryNative endRecording(){

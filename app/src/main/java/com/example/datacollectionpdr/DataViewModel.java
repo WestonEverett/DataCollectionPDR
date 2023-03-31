@@ -5,15 +5,27 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.datacollectionpdr.nativedata.MotionSample;
+import com.example.datacollectionpdr.nativedata.PDRStep;
+
+import java.util.ArrayList;
 
 public class DataViewModel extends ViewModel {
-    private final MutableLiveData<MotionSample> selectedItem = new MutableLiveData<>();
+    private final MutableLiveData<MotionSample> motionSampleLiveData = new MutableLiveData<>();
+    private final MutableLiveData<PDRStep> pdrStepLiveData = new MutableLiveData<>();
 
-    public void updateSample(MotionSample motionSample) {
-        selectedItem.setValue(motionSample);
+    public void updateMotionSample(MotionSample motionSample) {
+        motionSampleLiveData.setValue(motionSample);
     }
 
-    public LiveData<MotionSample> getSample() {
-        return selectedItem;
+    public void updatePDRSample(PDRStep pdrStep) {
+        pdrStepLiveData.setValue(pdrStep);
+    }
+
+    public LiveData<MotionSample> getMotionSample() {
+        return motionSampleLiveData;
+    }
+
+    public LiveData<PDRStep> getPDRStep() {
+        return pdrStepLiveData;
     }
 }
