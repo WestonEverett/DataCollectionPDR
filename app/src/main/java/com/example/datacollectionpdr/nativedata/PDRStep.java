@@ -16,6 +16,7 @@ public class PDRStep {
     private float y;
     private double heading;
     private int estFloor;
+    private float magnitude;
     public long initTime;
 
     public PDRStep(float x, float y, long initTime){
@@ -83,6 +84,18 @@ public class PDRStep {
 
     public void setY(float y) {
         this.y = y;
+    }
+
+    public float getMagnitude() {
+        return y;
+    }
+
+    public void setMagnitude(float magnitude) {
+        this.magnitude = magnitude;
+    }
+
+    public void scaleMagnitude(float ratio) {
+        this.setMagnitude(ratio * this.magnitude);
     }
 
     public double getHeading() {

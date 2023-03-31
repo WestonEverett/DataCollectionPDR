@@ -125,26 +125,30 @@ public class TrajectoryNative {
     }
 
     public void applyTrajectoryScaling(float startLon, float startLat, float endLon, float endLat){
+
+        //TODO Add Bounds, if each step is going to be changed by more than +- 25 (ish) make no change as we are in a boundary condition
+
+
         ArrayList<PDRStep> newPDRs = this.pdrs;
         float startPointX, startPointY, endPointX, endPointY;
         float appDistance = 1;
         // Check to make sure PDR ArrayList is not empty or null
-        if(pdrs != null && !pdrs.isEmpty()) {
-            for(PDRStep pdrStep : pdrs){
 
+        if(pdrs != null && !pdrs.isEmpty()) {
+            float totalX = 0;
+            float totalY = 0;
+
+            for(PDRStep pdrStep : pdrs){
+                totalX = totalX + pdrStep.getX();
+                totalY = totalY + pdrStep.getY();
             }
-            startPointX = pdrs.get(0).getX();
-            startPointY = pdrs.get(0).getY();
-            endPointX = pdrs.get(pdrs.size()-1).getX();
-            endPointY = pdrs.get(pdrs.size()-1).getY();
             // Magnitude of PDR displacement using phone sensor data
-            appDistance = (float) Math.sqrt(((endPointX-startPointX)*(endPointX-startPointX))+((endPointY-startPointY)*(endPointY-startPointY)));
+            appDistance = (float) Math.sqrt((totalX*totalX)+(totalY*totalY));
         }
         // Magnitude of PDR displacement using user provided location pins
         float userDistance = (float) GNSSCalculations.calculateDistance(startLat,startLon,endLat,endLon);
         float ratio = userDistance/ appDistance;
-        newPDRs.forEach(pdrStep -> pdrStep.x = pdrStep.x*ratio);
-        newPDRs.forEach(pdrStep -> pdrStep.y = pdrStep.y*ratio);
+        newPDRs.forEach(pdrStep -> pdrStep.scaleMagnitude(ratio));
         this.pdrs = newPDRs;
     }
 

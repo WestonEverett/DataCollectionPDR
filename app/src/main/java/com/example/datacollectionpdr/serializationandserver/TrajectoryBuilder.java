@@ -62,7 +62,7 @@ public class TrajectoryBuilder {
     }
 
     public void addPDR(PDRStep pdrStep){
-        addPDR(pdrStep.x, pdrStep.y, pdrStep.initTime);
+        addPDR(pdrStep.getX(), pdrStep.getY(), pdrStep.initTime);
     }
 
     public void addAP(long mac, String ssid, long freq){

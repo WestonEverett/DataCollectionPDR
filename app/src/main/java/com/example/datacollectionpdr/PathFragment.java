@@ -64,9 +64,9 @@ public class PathFragment extends Fragment {
 
         viewModel.getPDRStep().observe(getViewLifecycleOwner(), item -> {
 
-            if(item.estFloor != curFloor){
+            if(item.getEstFloor() != curFloor){
                 curSteps = new ArrayList<>();
-                curFloor = item.estFloor;
+                curFloor = item.getEstFloor();
             }
 
             curSteps.add(item);
@@ -88,8 +88,8 @@ public class PathFragment extends Fragment {
         yVals.add(curY);
 
         for(PDRStep step : steps){
-            curX = curX + step.x;
-            curY = curY + step.y;
+            curX = curX + step.getX();
+            curY = curY + step.getY();
 
             xVals.add(curX);
             yVals.add(curY);
@@ -102,7 +102,7 @@ public class PathFragment extends Fragment {
 
         // turn the above arrays into XYSeries':
         // (Y_VALS_ONLY means use the element index as the x value)
-        SimpleXYSeries series = new SimpleXYSeries(xVals, yVals, "PDR Steps on Floor: " + String.valueOf(steps.get(0).estFloor));
+        SimpleXYSeries series = new SimpleXYSeries(xVals, yVals, "PDR Steps on Floor: " + String.valueOf(steps.get(0).getEstFloor()));
 
         // create formatters to use for drawing a series using LineAndPointRenderer
         // and configure them from xml:
