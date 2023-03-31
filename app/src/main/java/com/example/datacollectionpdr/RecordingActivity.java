@@ -67,7 +67,7 @@ public static double[] currPointCoordinates= {0,0};
     protected void newPDRStep(PDRStep pdrStep){
         super.newPDRStep(pdrStep);
 
-        viewModel.updatePDRSample(this.trajectoryNative.getPdrs());
+        viewModel.updatePDRSample(pdrStep);
     }
 
     private void showProperFragment() {

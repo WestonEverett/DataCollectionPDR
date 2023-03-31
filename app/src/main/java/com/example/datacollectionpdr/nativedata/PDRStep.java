@@ -16,7 +16,7 @@ public class PDRStep {
     public float y;
     public double heading;
     public long initTime;
-    public float estRelativeAltitude;
+    public int estFloor;
 
     public PDRStep(float x, float y, long initTime){
         this.x = x;
