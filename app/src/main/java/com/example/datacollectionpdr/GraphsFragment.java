@@ -69,7 +69,7 @@ public class GraphsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
-        viewModel.getSample().observe(getViewLifecycleOwner(), item -> {
+        viewModel.getMotionSample().observe(getViewLifecycleOwner(), item -> {
             recentMeasurements.updateMeasurements(item);
             PlotThePlot(recentMeasurements.getData(currentDisplaySensor));
         });

@@ -20,6 +20,7 @@ import android.view.View;
 
 import com.example.datacollectionpdr.datacollectionandpreparation.DataManager;
 import com.example.datacollectionpdr.nativedata.MotionSample;
+import com.example.datacollectionpdr.nativedata.PDRStep;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
 import com.example.datacollectionpdr.serializationandserver.FileManager;
 import com.example.datacollectionpdr.serializationandserver.ServerManager;
@@ -57,7 +58,14 @@ public static double[] currPosCoordinates;
     protected void newCompleteMotionSample(MotionSample motionSample){
         super.newCompleteMotionSample(motionSample);
 
-        viewModel.updateSample(motionSample);
+        viewModel.updateMotionSample(motionSample);
+    }
+
+    @Override
+    protected void newPDRStep(PDRStep pdrStep){
+        super.newPDRStep(pdrStep);
+
+        viewModel.updatePDRSample(pdrStep);
     }
 
     private void showProperFragment() {

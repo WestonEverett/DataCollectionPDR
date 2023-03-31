@@ -158,6 +158,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         PDRStep pdrStep = new PDRStep(accelerations, madgwickAHRS.findHeading(), curGravity, curMagnetic, System.currentTimeMillis());
         accelerations = new ArrayList<>();
         trajectoryNative.addPDRStep(pdrStep);
+        this.newPDRStep(pdrStep);
     }
     @Override
     public void onStepCountValueUpdated(int stepcount){
@@ -195,7 +196,11 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     }
 
     protected void newCompleteMotionSample(MotionSample motionSample){
+        //overwritten to trigger behavior in UI
+    }
 
+    protected void newPDRStep(PDRStep pdrStep){
+        //overwritten to trigger behavior in UI
     }
 
     public TrajectoryNative endRecording(){
