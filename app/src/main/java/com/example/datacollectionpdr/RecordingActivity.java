@@ -35,7 +35,9 @@ import java.util.Date;
 
 public class RecordingActivity extends DataManager {
     private DataViewModel viewModel;
-public static double[] currPosCoordinates;
+public static double[] endCoordinates= {55.988740420441346,-3.241165615618229,0,0};
+public static double[] startCoordinates= {55.988740420441346,-3.241165615618229,0,0};
+public static double[] currPointCoordinates= {0,0};
     // Initialize view
 
 

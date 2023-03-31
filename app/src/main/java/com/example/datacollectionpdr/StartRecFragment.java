@@ -69,8 +69,8 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
                     public void onMapClick(LatLng point) {
                         MarkerOptions marker = new MarkerOptions().position(new LatLng(point.latitude, point.longitude)).title("New Marker");
                         googleMap.addMarker(marker);
-                        //RecordingActivity.currPosCoordinates[1] = point.latitude;
-                        //RecordingActivity.currPosCoordinates[2] = point.longitude;
+                        RecordingActivity.currPointCoordinates[0] = point.latitude;
+                        RecordingActivity.currPointCoordinates[1] = point.longitude;
                     }
                 });
             }
@@ -98,6 +98,14 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
                 fragmentTransaction.replace(R.id.fragmentContainerView_recording_activity, new duringRecordingFragment());
                 ((RecordingActivity) getActivity()).startRecording();
                 fragmentTransaction.commit();
+                break;
+            case R.id.button_addEndPoint:
+                RecordingActivity.startCoordinates[0] = RecordingActivity.currPointCoordinates[0];
+                RecordingActivity.startCoordinates[1] = RecordingActivity.currPointCoordinates[1];
+                break;
+            case R.id.button_addEndDirection:
+                RecordingActivity.startCoordinates[2] = RecordingActivity.currPointCoordinates[0];
+                RecordingActivity.startCoordinates[3] = RecordingActivity.currPointCoordinates[1];
                 break;
         }
     }

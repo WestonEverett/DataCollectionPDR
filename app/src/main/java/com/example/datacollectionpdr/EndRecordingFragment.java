@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +32,6 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -41,6 +42,10 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
         sendButton.setOnClickListener(this);
         Button server_apiButton = (Button) view.findViewById(R.id.enter_server_api);
         server_apiButton.setOnClickListener(this);
+        Button endPosButton = (Button) view.findViewById(R.id.button_addEndPoint);
+        endPosButton.setOnClickListener(this);
+        Button endPosFacing = (Button) view.findViewById(R.id.button_addEndDirection);
+        endPosFacing.setOnClickListener(this);
         TextInputLayout textInputLayout = view.findViewById(R.id.textInput_serverid);
         textInputLayout.setHint("Current ID: "+ MainActivity.serverKeyString);
 
@@ -68,8 +73,10 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
                     public void onMapClick(LatLng point) {
                         MarkerOptions marker = new MarkerOptions().position(new LatLng(point.latitude, point.longitude)).title("New Marker");
                         googleMap.addMarker(marker);
-                        //RecordingActivity.currPosCoordinates[1] = point.latitude;
-                        //RecordingActivity.currPosCoordinates[2] = point.longitude;
+                        Log.d("point", "onMapClick() returned: " + point.latitude);
+                        Log.d("point", "onMapClick() returned: " + point.longitude);
+                        RecordingActivity.currPointCoordinates[0] = point.latitude;
+                        RecordingActivity.currPointCoordinates[1] = point.longitude;
                     }
                 });
             }
@@ -96,6 +103,14 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
                 String text = textInputLayout.getEditText().getText().toString();
                 MainActivity.serverKeyString=text;
                 textInputLayout.setHint("Current ID: "+ MainActivity.serverKeyString);
+                break;
+            case R.id.button_addEndPoint:
+                RecordingActivity.endCoordinates[0] = RecordingActivity.currPointCoordinates[0];
+                RecordingActivity.endCoordinates[1] = RecordingActivity.currPointCoordinates[1];
+                break;
+            case R.id.button_addEndDirection:
+                RecordingActivity.endCoordinates[2] = RecordingActivity.currPointCoordinates[0];
+                RecordingActivity.endCoordinates[3] = RecordingActivity.currPointCoordinates[1];
                 break;
         }
     }
