@@ -110,6 +110,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         //Altitude change from the first barometer measurement
         float currentRelativeAltitude = SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, pressure) - startingAltitude;
         altitudeEstimation.setAltitude(currentRelativeAltitude);
+        altitudeEstimation.floorsChanged();
     }
     @Override
     public void onAmbientLightValueChanged(float luminance){

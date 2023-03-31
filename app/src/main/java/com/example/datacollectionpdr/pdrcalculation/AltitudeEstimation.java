@@ -1,7 +1,9 @@
 package com.example.datacollectionpdr.pdrcalculation;
 
+import android.util.Log;
+
 public class AltitudeEstimation {
-    private static int FLOOR_HEIGHT = 4; // In metres
+    private static float FLOOR_HEIGHT = 4f; // In metres
     private float altitude = 0.0f;
     private float startingAltitude;
 
@@ -22,8 +24,8 @@ public class AltitudeEstimation {
     }
 
     public int floorsChanged(){
-        int numOfFloorsChanged = Math.floorDiv((int) (this.altitude - this.startingAltitude), FLOOR_HEIGHT);
-
+        int numOfFloorsChanged = (int) Math.floor((this.altitude - this.startingAltitude)/FLOOR_HEIGHT);
+        Log.i("Floors changed", numOfFloorsChanged + ";;" + this.altitude + ";;" + this.startingAltitude);
         return numOfFloorsChanged;
     }
 
