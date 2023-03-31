@@ -140,7 +140,7 @@ public class TrajectoryNative {
             endPointX = pdrs.get(pdrs.size()-1).x;
             endPointY = pdrs.get(pdrs.size()-1).y;
             // Magnitude of PDR displacement using phone sensor data
-            appDistance = (float) Math.sqrt((endPointX-startPointX)*(endPointX-startPointX)+(endPointY-startPointY)*(endPointY-startPointY));
+            appDistance = (float) Math.sqrt(((endPointX-startPointX)*(endPointX-startPointX))+((endPointY-startPointY)*(endPointY-startPointY)));
         }
         // Magnitude of PDR displacement using user provided location pins
         float userDistance = (float) DistanceCalculator.calculateDistance(startLat,startLon,endLat,endLon);
