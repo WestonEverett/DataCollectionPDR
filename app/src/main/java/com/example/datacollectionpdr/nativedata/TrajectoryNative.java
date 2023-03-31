@@ -129,9 +129,8 @@ public class TrajectoryNative {
        - Convert LatLon points to displacement magnitude
        - Multiply all PDR step points' x and y coordinates by userDistance/appDistance
      */
-    public ArrayList<PDRStep> trajectoryCorrection(float startLon, float startLat, float endLon, float endLat, ArrayList<PDRStep> pdrs){
-        ArrayList<PDRStep> newPDRs;
-        newPDRs = pdrs;
+    public void applyTrajectoryScaling(float startLon, float startLat, float endLon, float endLat){
+        ArrayList<PDRStep> newPDRs = this.pdrs;
         float startPointX, startPointY, endPointX, endPointY;
         float appDistance = 1;
         // Check to make sure PDR ArrayList is not empty or null
@@ -148,7 +147,7 @@ public class TrajectoryNative {
         float ratio = userDistance/ appDistance;
         newPDRs.forEach(pdrStep -> pdrStep.x = pdrStep.x*ratio);
         newPDRs.forEach(pdrStep -> pdrStep.y = pdrStep.y*ratio);
-        return newPDRs;
+        this.pdrs = newPDRs;
     }
 
     public Trajectory generateSerialized()
