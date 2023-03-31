@@ -1,7 +1,7 @@
 package com.example.datacollectionpdr.pdrcalculation;
 
 public class AltitudeEstimation {
-    private static int FLOOR_HEIGHT;
+    private static int FLOOR_HEIGHT = 4; // In metres
     private float altitude = 0.0f;
     private float startingAltitude;
 

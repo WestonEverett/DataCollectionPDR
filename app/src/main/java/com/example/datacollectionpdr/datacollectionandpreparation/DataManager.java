@@ -32,6 +32,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     private float[] curGravity;
     private float[] curMagnetic;
     private ArrayList<float[]> accelerations = new ArrayList<>();
+    private ArrayList<float[]> gravities = new ArrayList<>();
 
     private MadgwickAHRS madgwickAHRS = new MadgwickAHRS(0.1f);
     private float startingAltitude;
@@ -120,6 +121,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     public void onGravityValueUpdated(float[] gravity){
         //Log.i("DataM", "Grav data updated");
         curGravity = gravity;
+        gravities.add(curGravity);
     }
     @Override
     public void onRotationVectorValueUpdated(float[] rotationvector){
@@ -149,8 +151,9 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     @Override
     public void onStepDetectorUpdated(){
         Log.i("DataM", "StpD data updated");
-        PDRStep pdrStep = new PDRStep(accelerations, madgwickAHRS.findHeading(), curGravity, curMagnetic, System.currentTimeMillis());
+        PDRStep pdrStep = new PDRStep(accelerations, madgwickAHRS.findHeading(), gravities, curMagnetic, System.currentTimeMillis());
         accelerations = new ArrayList<>();
+        gravities = new ArrayList<>();
         trajectoryNative.addPDRStep(pdrStep);
     }
     @Override
