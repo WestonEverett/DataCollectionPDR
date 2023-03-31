@@ -81,9 +81,18 @@ public class PathFragment extends Fragment {
         ArrayList<Number> xVals = new ArrayList<>();
         ArrayList<Number> yVals = new ArrayList<>();
 
+        float curX = 0;
+        float curY = 0;
+
+        xVals.add(curX);
+        yVals.add(curY);
+
         for(PDRStep step : steps){
-            xVals.add(step.x);
-            yVals.add(step.y);
+            curX = curX + step.x;
+            curY = curY + step.y;
+
+            xVals.add(curX);
+            yVals.add(curY);
         }
 
 

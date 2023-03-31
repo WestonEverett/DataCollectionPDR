@@ -139,10 +139,13 @@ public class TrajectoryNative {
         float appDistance = 1;
         // Check to make sure PDR ArrayList is not empty or null
         if(pdrs != null && !pdrs.isEmpty()) {
-            startPointX = pdrs.get(0).x;
-            startPointY = pdrs.get(0).y;
-            endPointX = pdrs.get(pdrs.size()-1).x;
-            endPointY = pdrs.get(pdrs.size()-1).y;
+            for(PDRStep pdrStep : pdrs){
+
+            }
+            startPointX = pdrs.get(0).getX();
+            startPointY = pdrs.get(0).getY();
+            endPointX = pdrs.get(pdrs.size()-1).getX();
+            endPointY = pdrs.get(pdrs.size()-1).getY();
             // Magnitude of PDR displacement using phone sensor data
             appDistance = (float) Math.sqrt(((endPointX-startPointX)*(endPointX-startPointX))+((endPointY-startPointY)*(endPointY-startPointY)));
         }
