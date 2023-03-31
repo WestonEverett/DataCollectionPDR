@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.datacollectionpdr.pdrcalculation.DotProduct;
 import com.example.datacollectionpdr.pdrcalculation.MadgwickAHRS;
+import com.example.datacollectionpdr.pdrcalculation.StepLengthEstimation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,30 +34,18 @@ public class PDRStep {
         this.initTime = initTime;
     }
 
-    public PDRStep(ArrayList<float[]> accelerations, float heading, float[] gravity, float[] magneticFieldValues, long initTime){
+    public PDRStep(ArrayList<float[]> accelerations, float heading, ArrayList<float[]> gravities, float[] magneticFieldValues, long initTime){
 
         ////// Finding heading //////
         //this.heading = calculateOrientation(gravity, magneticFieldValues);
         this.heading = heading;
-
-        ////// Finding step length //////
-        final float CONSTANT_K = 7/48f; //From Analog Devices paper "Using the ADXL202 in Pedometer and Personal Navigation Applications"
-        float stepLengthEstimate = 1;
-
-        //Finds dot product of each acc vector with respect to gravity
-        float[] zAxisAcceleration = DotProduct.zAxisAcceleration(accelerations,gravity);
-        //Sorts array for easy max and min values
-        Arrays.sort(zAxisAcceleration);
-        Log.i("AccLength", String.valueOf(accelerations.size()));
-        // (Max acc value - min acc value)^(-4)
-        if(zAxisAcceleration.length != 0) {
-            stepLengthEstimate = (float) Math.sqrt(Math.sqrt(zAxisAcceleration[zAxisAcceleration.length - 1] - zAxisAcceleration[0])) * CONSTANT_K;
-        }
-        Log.i("StepLength", String.valueOf(stepLengthEstimate));
-
+        StepLengthEstimation stepLengthEstimate = new StepLengthEstimation();
+        stepLengthEstimate.setAccelerations(accelerations);
+        stepLengthEstimate.setGravities(gravities);
+        float stepSize = stepLengthEstimate.findStepLength();
         ////// Finding x and y lengths //////
-        this.x = stepLengthEstimate * (float) Math.sin(heading);
-        this.y = stepLengthEstimate * (float) Math.cos(heading);
+        this.x = stepSize * (float) Math.sin(heading);
+        this.y = stepSize * (float) Math.cos(heading);
         Log.i("PDRSTEP", "Heading" + this.heading);
         this.initTime = initTime;
     }

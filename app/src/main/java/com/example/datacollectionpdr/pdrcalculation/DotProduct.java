@@ -11,18 +11,20 @@ public class DotProduct {
         float sum = 0;
         for (int i = 0; i < x.length; i++)
             sum += x[i] * y[i];/*from  w ww.  j  a  va2 s  .c  o m*/
-        Log.e("DotProdSum", String.valueOf(sum));
+        //Log.e("DotProdSum", String.valueOf(sum));
         return sum;
     }
 
-    public static float[] zAxisAcceleration(ArrayList<float[]> accelerations, float[] gravity){
-        float[] processedArray = new float[accelerations.size()];
-        float[] normalizedGravity = normalize(gravity);
-        for(int i = 0; i< accelerations.size(); i++){
+    public static float[] zAxisAcceleration(ArrayList<float[]> accelerations, ArrayList<float[]> gravities){
+        int minArraySize = Math.min(accelerations.size(), gravities.size());
+        float[] processedArray = new float[minArraySize];
+
+        for(int i = 0; i< minArraySize; i++){
             float[] filteredAcc = accelerations.get(i);
-            filteredAcc[0] = filteredAcc[0] - gravity[0];
-            filteredAcc[1] = filteredAcc[1] - gravity[1];
-            filteredAcc[2] = filteredAcc[2] - gravity[2];
+            float[] normalizedGravity = normalize(gravities.get(i));
+            filteredAcc[0] = filteredAcc[0] - gravities.get(i)[0];
+            filteredAcc[1] = filteredAcc[1] - gravities.get(i)[1];
+            filteredAcc[2] = filteredAcc[2] - gravities.get(i)[2];
             processedArray[i] = dotProd(filteredAcc,normalizedGravity);
         }
         return processedArray;
