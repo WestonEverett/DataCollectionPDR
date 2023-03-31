@@ -23,15 +23,16 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     private int stepcountDM;
     private int curStepcount;
     private MotionSample motionSample;
-    private MotionSample lastMotionSample = new MotionSample();
     private com.example.datacollectionpdr.datacollectionandpreparation.DataCollection mMotionSensorManager;
-    private TrajectoryNative trajectoryNative;
+    protected TrajectoryNative trajectoryNative;
     private boolean isRecording;
     HashMap<String, WifiObject> WifiData;
 
     private float[] curGravity = new float[]{0f, 9.8f, 0f};
     private float[] curMagnetic;
+    protected GNSSData curGNSSData;
     private ArrayList<float[]> accelerations = new ArrayList<>();
+
 
     private MadgwickAHRS madgwickAHRS = new MadgwickAHRS(0.1f);
     private float startingAltitude;
@@ -148,6 +149,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         Log.i("DataM", "GNSS data updated");
         //Log.i(provider, lon +" "+ lat);
         GNSSData gnssData = new GNSSData(provider,acc,alt,initTime,lon,lat,speed);
+        curGNSSData = gnssData;
         trajectoryNative.addGNSS(gnssData);
     }
     @Override
@@ -177,7 +179,6 @@ public class DataManager extends PermissionsManager implements DataCollection.On
             motionSample.initTime = System.currentTimeMillis();
             trajectoryNative.addMotion(motionSample);
             this.newCompleteMotionSample(motionSample);
-            lastMotionSample = this.motionSample;
             this.motionSample = new MotionSample();
         }
     }
