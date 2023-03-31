@@ -48,6 +48,10 @@ public class TrajectoryNative {
         this.dataID = dataID;
     }
 
+    public ArrayList<PDRStep> getPdrs() {
+        return pdrs;
+    }
+
     public void addPDRStep(PDRStep pdrStep){
         pdrs.add(pdrStep);
     }

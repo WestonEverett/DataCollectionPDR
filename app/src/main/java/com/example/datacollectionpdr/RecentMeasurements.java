@@ -3,7 +3,9 @@ package com.example.datacollectionpdr;
 import android.util.Log;
 
 import com.example.datacollectionpdr.nativedata.MotionSample;
+import com.example.datacollectionpdr.nativedata.PDRStep;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class RecentMeasurements {

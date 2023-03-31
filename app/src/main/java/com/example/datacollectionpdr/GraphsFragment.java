@@ -73,6 +73,11 @@ public class GraphsFragment extends Fragment {
             recentMeasurements.updateMeasurements(item);
             PlotThePlot(recentMeasurements.getData(currentDisplaySensor));
         });
+
+        viewModel.getPDRStep().observe(getViewLifecycleOwner(), item -> {
+
+            //TODO GRAPH
+        });
     }
 
     @Override
