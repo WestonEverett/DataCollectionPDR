@@ -1,11 +1,14 @@
 package com.example.datacollectionpdr;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
@@ -28,6 +31,9 @@ import com.google.android.material.textfield.TextInputLayout;
 public class StartRecFragment extends Fragment implements View.OnClickListener {
 
     View view;
+
+    private double currLon;
+    private double currLat;
 
     public StartRecFragment() {
         // Required empty public constructor
@@ -54,15 +60,29 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onMapReady(GoogleMap googleMap) {
 
-                // Add a marker in Sydney and move the camera
-                LatLng currPos = new LatLng(-3.188267, -55.953251);
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(currPos ));
+                if (((RecordingActivity) getActivity()).curGNSSData != null) {
+                    //Get current location
+                    currLon = ((RecordingActivity) getActivity()).curGNSSData.lon;
+                    currLat = ((RecordingActivity) getActivity()).curGNSSData.lat;
+                    // move the camera to the current position
+                    LatLng currPos = new LatLng(currLat, currLon);
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(currPos));
+                }
 
-                googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
                 googleMap.getUiSettings().setCompassEnabled(true);
                 googleMap.getUiSettings().setRotateGesturesEnabled(true);
                 googleMap.getUiSettings().setScrollGesturesEnabled(true);
                 googleMap.getUiSettings().setTiltGesturesEnabled(true);
+
+
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    return;
+                }
+                else {
+                    googleMap.setMyLocationEnabled(true);
+                }
 
                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
@@ -95,11 +115,11 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
             case R.id.button_startRec:
                 FragmentTransaction fragmentTransaction = getActivity()
                         .getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.fragmentContainerView_recording_activity, new duringRecordingFragment());
+                fragmentTransaction.replace(R.id.fragmentContainerView_recording_activity, new DuringRecordingFragment());
                 ((RecordingActivity) getActivity()).startRecording();
                 fragmentTransaction.commit();
                 break;
-            case R.id.button_addEndPoint:
+            case R.id.button_addStartPoint:
                 RecordingActivity.startCoordinates[0] = RecordingActivity.currPointCoordinates[0];
                 RecordingActivity.startCoordinates[1] = RecordingActivity.currPointCoordinates[1];
                 break;

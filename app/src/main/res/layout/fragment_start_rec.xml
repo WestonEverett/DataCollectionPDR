@@ -45,6 +45,8 @@
 
         <fragment
             android:id="@+id/google_map"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            map:mapId="@string/map_id"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="400dp"

@@ -13,10 +13,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 
 import com.example.datacollectionpdr.datacollectionandpreparation.DataManager;
 import com.example.datacollectionpdr.nativedata.MotionSample;
@@ -32,6 +34,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 
 public class RecordingActivity extends DataManager {
     private DataViewModel viewModel;
@@ -39,7 +42,6 @@ public static double[] endCoordinates= {55.988740420441346,-3.241165615618229,0,
 public static double[] startCoordinates= {55.988740420441346,-3.241165615618229,0,0};
 public static double[] currPointCoordinates= {0,0};
     // Initialize view
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public static double[] currPointCoordinates= {0,0};
         viewModel = new ViewModelProvider(this).get(DataViewModel.class);
         showProperFragment();
         this.startRecording();
+
     }
 
     @Override
@@ -73,14 +76,13 @@ public static double[] currPointCoordinates= {0,0};
 
     public void stopRecording(){
         TrajectoryNative trajectoryNative = this.endRecording();
-
         ServerManager serverManager = new ServerManager(MainActivity.serverKeyString);
 
         try {
             String response = serverManager.sendData(trajectoryNative);
-            Log.e("Server Response", response);
+            //Log.e("Server Response", response);
         } catch (Exception e){
-            Log.e("server error", "Server error: " + String.valueOf(e));
+           // Log.e("server error", "Server error: " + String.valueOf(e));
         }
     }
 }

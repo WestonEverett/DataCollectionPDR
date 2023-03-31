@@ -6,10 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="500dp"
     android:background="#FF929C9E"
-    tools:context=".MapFragment">
+    tools:context=".MapFragment" >
 
 
     <fragment
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        map:mapId="@string/map_id"
         android:id="@+id/google_map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"

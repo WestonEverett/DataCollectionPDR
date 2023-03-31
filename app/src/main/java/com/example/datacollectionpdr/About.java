@@ -69,11 +69,5 @@ public class About extends AppCompatActivity {
         });
     }
     public static final String EXTRA_MESSAGE = "com.example.datacollectionPDR.MESSAGE";
-    public void ServerIDentered(View view){
-        Intent intent = new Intent(this, ServerIDentered.class);
-        EditText editText = (EditText) findViewById(R.id.serverId_input);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
-    }
+
 }
