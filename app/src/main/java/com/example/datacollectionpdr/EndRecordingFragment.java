@@ -1,9 +1,12 @@
 package com.example.datacollectionpdr;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -33,6 +36,9 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
     Button sendButton;          //Send Button
     Button locationButton;      //Button to set Users start Location
     Button orientationButton;   //Button to set users start orientation
+
+    double currLon;
+    double currLat;
 
     public EndRecordingFragment() {
         // Required empty public constructor
@@ -64,6 +70,7 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
+
                 if (((RecordingActivity) getActivity()).curGNSSData != null) {
                     //Get current location
                     currLon = ((RecordingActivity) getActivity()).curGNSSData.lon;
@@ -71,6 +78,7 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
                     // move the camera to the current position
                     LatLng currPos = new LatLng(currLat, currLon);
                     googleMap.moveCamera(CameraUpdateFactory.newLatLng(currPos));
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currLat, currLon) , 14.0f));
                 }
 
 

@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
@@ -73,9 +74,9 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
                     // move the camera to the current position
                     LatLng currPos = new LatLng(currLat, currLon);
                     googleMap.moveCamera(CameraUpdateFactory.newLatLng(currPos));
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currLat, currLon) , 14.0f));
                 }
 
-                googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
                 googleMap.getUiSettings().setCompassEnabled(true);
                 googleMap.getUiSettings().setRotateGesturesEnabled(true);
                 googleMap.getUiSettings().setScrollGesturesEnabled(true);
@@ -87,7 +88,6 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
                                 .title("New Marker")
                                 .draggable(true).visible(false)
                                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-
 
 
                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -128,8 +128,17 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Button sendButton = (Button) view.findViewById(R.id.button_startRec);
+        super.onViewCreated(view, savedInstanceState);
+        sendButton = (Button) view.findViewById(R.id.button_startRec);
         sendButton.setOnClickListener(this);
+        sendButton.setEnabled(false);
+
+        locationButton = (Button) view.findViewById(R.id.button_addStartPoint);
+        locationButton.setOnClickListener(this);
+
+        orientationButton = (Button) view.findViewById(R.id.button_addStartDirection);
+        orientationButton.setOnClickListener(this);
+        orientationButton.setEnabled(false);
     }
 
     @Override

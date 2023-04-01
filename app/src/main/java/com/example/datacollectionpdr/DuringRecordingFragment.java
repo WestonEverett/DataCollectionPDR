@@ -10,11 +10,14 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.datacollectionpdr.nativedata.MotionSample;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -79,6 +82,8 @@ public class DuringRecordingFragment extends Fragment implements View.OnClickLis
 
         // set adapter on viewpager
         viewPager.setAdapter(adapter);
+        runTimer(view);
+        running= true;
 
     }
 
@@ -86,6 +91,7 @@ public class DuringRecordingFragment extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         //do what you want to do when button is clicked
+        running= false;
         FragmentTransaction fragmentTransaction = getActivity()
                 .getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainerView_recording_activity, new EndRecordingFragment());

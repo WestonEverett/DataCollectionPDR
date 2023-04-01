@@ -43,14 +43,6 @@ public class MapFragment extends Fragment {
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                if (((RecordingActivity) getActivity()).curGNSSData != null) {
-                    //Get current location
-                    currLon = ((RecordingActivity) getActivity()).curGNSSData.lon;
-                    currLat = ((RecordingActivity) getActivity()).curGNSSData.lat;
-                    // move the camera to the current position
-                    LatLng currPos = new LatLng(currLat, currLon);
-                    // Zoom in, animating the camera.
-                }
 
                 if (((RecordingActivity) getActivity()).curGNSSData != null) {
                     //Get current location
