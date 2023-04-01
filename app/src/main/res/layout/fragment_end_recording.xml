@@ -96,7 +96,6 @@
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
-                android:onClick="saveRecording"
                 android:text="Send" />
 
             <Button
@@ -105,7 +104,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
                 android:layout_marginEnd="72dp"
-                android:onClick="discardRecording"
                 android:text="Discard" />
         </LinearLayout>
 
