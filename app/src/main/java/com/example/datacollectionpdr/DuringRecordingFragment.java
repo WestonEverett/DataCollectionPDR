@@ -10,21 +10,17 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.datacollectionpdr.nativedata.MotionSample;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Locale;
-
 
 public class DuringRecordingFragment extends Fragment implements View.OnClickListener {
 
@@ -51,12 +47,13 @@ public class DuringRecordingFragment extends Fragment implements View.OnClickLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // setting up the adapter
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_during_recording, container, false);
-        return view;
+        View fragmentView = inflater.inflate(R.layout.fragment_during_recording, container, false);
+        return fragmentView;
     }
 
     @Override
@@ -82,17 +79,13 @@ public class DuringRecordingFragment extends Fragment implements View.OnClickLis
 
         // set adapter on viewpager
         viewPager.setAdapter(adapter);
-        // Get the text view for timer
-        runTimer(view);
-        running= true;
 
     }
+
 
     @Override
     public void onClick(View v) {
         //do what you want to do when button is clicked
-        running = false;
-        seconds = 0;
         FragmentTransaction fragmentTransaction = getActivity()
                 .getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainerView_recording_activity, new EndRecordingFragment());

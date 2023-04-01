@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,16 +64,29 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
+                if (((RecordingActivity) getActivity()).curGNSSData != null) {
+                    //Get current location
+                    currLon = ((RecordingActivity) getActivity()).curGNSSData.lon;
+                    currLat = ((RecordingActivity) getActivity()).curGNSSData.lat;
+                    // move the camera to the current position
+                    LatLng currPos = new LatLng(currLat, currLon);
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(currPos));
+                }
 
-                // Add a marker in Sydney and move the camera
-                LatLng currPos = new LatLng(-3.188267, -55.953251);
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(currPos));
 
                 googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
                 googleMap.getUiSettings().setCompassEnabled(true);
                 googleMap.getUiSettings().setRotateGesturesEnabled(true);
                 googleMap.getUiSettings().setScrollGesturesEnabled(true);
                 googleMap.getUiSettings().setTiltGesturesEnabled(true);
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    return;
+                }
+                else {
+                    googleMap.setMyLocationEnabled(true);
+                }
 
                 startMarker = googleMap.addMarker(
                         new MarkerOptions()
