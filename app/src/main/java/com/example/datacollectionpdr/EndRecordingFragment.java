@@ -36,9 +36,8 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
     Button sendButton;          //Send Button
     Button locationButton;      //Button to set Users start Location
     Button orientationButton;   //Button to set users start orientation
-
-    double currLon;
-    double currLat;
+    double currLon;             //longitude from gps
+    double currLat;             //lattitude from gps
 
     public EndRecordingFragment() {
         // Required empty public constructor
