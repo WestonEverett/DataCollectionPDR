@@ -1,21 +1,16 @@
 package com.example.datacollectionpdr;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
 
+import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager.widget.ViewPager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -24,46 +19,42 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.textfield.TextInputLayout;
 
 
 public class StartRecFragment extends Fragment implements View.OnClickListener {
 
-    View view;
-    Button sendButton;
-    Button locationButton;
-    Button orientationButton;
-    Marker currMarker;
-    Marker startMarker;
+    View view;                  //View of the fragment
+    Button sendButton;          //Send Button
+    Button locationButton;      //Button to set Users start Location
+    Button orientationButton;   //Button to set users start orientation
+    Marker currMarker;          //Marker showing the latest click on the map
+    Marker startMarker;         //Marker showing selected position
 
-    public StartRecFragment() {
-        // Required empty public constructor
+    public StartRecFragment() {// Required empty public constructor
     }
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) { //activity created
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_start_rec, container, false);
+        view = inflater.inflate(R.layout.fragment_start_rec, container, false); // Inflate the layout for this fragment
 
         // Initialize map fragment
         SupportMapFragment supportMapFragment = (SupportMapFragment)
                 getChildFragmentManager().findFragmentById(R.id.google_map);
 
-        // Async map
-        supportMapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
 
-                LatLng currPos = new LatLng(-3.188267, -55.953251);
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(currPos ));
+        supportMapFragment.getMapAsync(new OnMapReadyCallback() { // Async map
+            @Override
+            public void onMapReady(GoogleMap googleMap) {         //Display Google Map
+
+                LatLng currPos = new LatLng(-3.188267, -55.953251); //Initialise current position
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(currPos )); //Move camera on the map
 
                 googleMap.getUiSettings().setCompassEnabled(true);
                 googleMap.getUiSettings().setRotateGesturesEnabled(true);
@@ -82,7 +73,7 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onMapClick(LatLng point) {
 
-                            if (currMarker != null) {
+                            if (currMarker != null) { //Remove old marker when new one selected
                                 currMarker.remove();
                             }
 
@@ -98,10 +89,7 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
                 });
             }
         });
-
-        // Inflate the layout for this fragment
         return  view;
-
     }
 
     @Override

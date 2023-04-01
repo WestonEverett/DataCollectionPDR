@@ -18,8 +18,9 @@
         <TextView
             android:id="@+id/textView12"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Recording Stopped" />
+            android:layout_height="60dp"
+            android:text="Recording Stopped"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <TextView
             android:id="@+id/textView13"
@@ -61,28 +62,7 @@
             android:layout_height="69dp"
             android:orientation="horizontal"
 
-            >
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInput_serverid"
-                android:layout_width="282dp"
-                android:layout_height="65dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="267dp"
-                    android:layout_height="65dp"
-                    android:hint="enter your server ID" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/enter_server_api"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Button" />
-
-        </LinearLayout>
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -90,13 +70,13 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button_send"
+                android:id="@+id/button_review"
                 android:layout_width="196dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginBottom="0dp"
-                android:text="Send" />
+                android:text="REVIEW DATA" />
 
             <Button
                 android:id="@+id/button_discard"
