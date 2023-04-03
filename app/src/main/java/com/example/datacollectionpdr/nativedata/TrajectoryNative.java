@@ -118,11 +118,6 @@ public class TrajectoryNative {
        - Convert LatLon points to displacement magnitude
        - Multiply all PDR step points' x and y coordinates by userDistance/appDistance
      */
-    public double userHeadingDelta(UserPositionData userPositionData){
-        double startBearing = GNSSCalculations.calculateBearingDeg(userPositionData.getStartLon(),userPositionData.getStartLat(),userPositionData.getStartRefLon(),userPositionData.getStartRefLat());
-        double endBearing = GNSSCalculations.calculateBearingDeg(userPositionData.getEndLon(),userPositionData.getEndLat(),userPositionData.getEndRefLon(),userPositionData.getEndRefLat());
-        return endBearing-startBearing;
-    }
 
     public void applyTrajectoryScaling(float startLon, float startLat, float endLon, float endLat){
 

@@ -1,5 +1,7 @@
 package com.example.datacollectionpdr.pdrcalculation;
 
+import com.example.datacollectionpdr.nativedata.UserPositionData;
+
 public class GNSSCalculations {
     private static final double EARTH_RADIUS = 6371000;
 
@@ -30,5 +32,11 @@ public class GNSSCalculations {
         bearing = Math.toDegrees(Math.atan2(X,Y)); // β = atan2(X,Y)
 
         return bearing;
+    }
+
+    public static double userHeadingDeltaDeg(UserPositionData userPositionData){
+        double startBearing = calculateBearingDeg(userPositionData.getStartLon(),userPositionData.getStartLat(),userPositionData.getStartRefLon(),userPositionData.getStartRefLat());
+        double endBearing = calculateBearingDeg(userPositionData.getEndLon(),userPositionData.getEndLat(),userPositionData.getEndRefLon(),userPositionData.getEndRefLat());
+        return endBearing-startBearing;
     }
 }
