@@ -55,10 +55,15 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
         sendButton = (Button) view.findViewById(R.id.button_review);
         sendButton.setOnClickListener(this);
         sendButton.setEnabled(false);
+        sendButton.setTextColor(getResources().getColor(R.color.blue_light));
+
         locationButton = (Button) view.findViewById(R.id.button_addEndPoint);
         locationButton.setOnClickListener(this);
+
         orientationButton = (Button) view.findViewById(R.id.button_addEndDirection);
         orientationButton.setOnClickListener(this);
+        orientationButton.setEnabled(false);
+        orientationButton.setTextColor(getResources().getColor(R.color.blue_light));
 
 
         // Initialize map fragment
@@ -147,11 +152,13 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
                     RecordingActivity.endCoordinates[0] = RecordingActivity.currPointCoordinates[0];
                     RecordingActivity.endCoordinates[1] = RecordingActivity.currPointCoordinates[1];
                     orientationButton.setEnabled(true);
+                    orientationButton.setTextColor(getResources().getColor(R.color.black));
                     locationButton.setEnabled(false);
+                    locationButton.setTextColor(getResources().getColor(R.color.blue_light));
                     startMarker.setPosition(currMarker.getPosition());
                     startMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                     startMarker.setVisible(true);
-                    currMarker.remove();
+                    currMarker=null;
                 }
                 break;
             case R.id.button_addEndDirection:
@@ -162,7 +169,10 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
                     RecordingActivity.endCoordinates[2] = RecordingActivity.currPointCoordinates[0];
                     RecordingActivity.endCoordinates[3] = RecordingActivity.currPointCoordinates[1];
                     sendButton.setEnabled(true);
+                    sendButton.setTextColor(getResources().getColor(R.color.black));
                     currMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    orientationButton.setTextColor(getResources().getColor(R.color.blue_light));
+                    orientationButton.setEnabled(false);
                 }
                 break;
         }

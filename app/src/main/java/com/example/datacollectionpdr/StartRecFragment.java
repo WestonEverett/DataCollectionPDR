@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -132,6 +133,7 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
         sendButton = (Button) view.findViewById(R.id.button_startRec);
         sendButton.setOnClickListener(this);
         sendButton.setEnabled(false);
+        sendButton.setTextColor(getResources().getColor(R.color.blue_light));
 
         locationButton = (Button) view.findViewById(R.id.button_addStartPoint);
         locationButton.setOnClickListener(this);
@@ -139,6 +141,7 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
         orientationButton = (Button) view.findViewById(R.id.button_addStartDirection);
         orientationButton.setOnClickListener(this);
         orientationButton.setEnabled(false);
+        orientationButton.setTextColor(getResources().getColor(R.color.blue_light));
     }
 
     @Override
@@ -160,11 +163,17 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
                     RecordingActivity.startCoordinates[0] = RecordingActivity.currPointCoordinates[0];
                 RecordingActivity.startCoordinates[1] = RecordingActivity.currPointCoordinates[1];
                 orientationButton.setEnabled(true);
+                orientationButton.setTextColor(getResources().getColor(R.color.black));
                 locationButton.setEnabled(false);
+                locationButton.setTextColor(getResources().getColor(R.color.blue_light));
+                sendButton.setTextColor(Color.parseColor("#5C6168"));
                 startMarker.setPosition(currMarker.getPosition());
                 startMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                 startMarker.setVisible(true);
-                currMarker.remove();
+                currMarker=null;
+                if (currMarker != null) { //Remove old marker when new one selected
+                        currMarker.remove();
+                    }
                  }
 
                 break;
@@ -176,6 +185,9 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
                     RecordingActivity.startCoordinates[2] = RecordingActivity.currPointCoordinates[0];
                     RecordingActivity.startCoordinates[3] = RecordingActivity.currPointCoordinates[1];
                     sendButton.setEnabled(true);
+                    sendButton.setTextColor(getResources().getColor(R.color.black));
+                    orientationButton.setEnabled(false);
+                    orientationButton.setTextColor(getResources().getColor(R.color.blue_light));
                     currMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                 }
                 break;

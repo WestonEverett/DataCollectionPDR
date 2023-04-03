@@ -15,55 +15,66 @@
 
         <TextView
             android:id="@+id/textView"
+            android:textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
             android:text="RECORDING...."
+            android:gravity="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="165dp"
-            android:layout_height="31dp"
-            android:layout_marginTop="32dp"
-            android:text="RECORDING DURATION:"
-            app:layout_constraintStart_toStartOf="@+id/textView"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-        <TextView
-            android:id="@+id/time_view"
-            android:layout_width="163dp"
-            android:layout_height="34dp"
+        <FrameLayout
+            android:id="@+id/frameLayout2"
+            android:padding="8dp"
+            android:background="@drawable/text_background"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
-            android:layout_weight="1"
-            android:text=" XXX"
-            app:layout_constraintStart_toStartOf="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView">
+
+            <TextView
+                android:id="@+id/time_view"
+                android:layout_width="163dp"
+                android:layout_height="34dp"
+                android:text=" XXX" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="165dp"
+                android:layout_height="31dp"
+                android:layout_marginTop="32dp"
+                android:text="RECORDING DURATION:" />
+
+        </FrameLayout>
 
         <Button
             android:id="@+id/button_endRecording"
             android:layout_width="150dp"
             android:layout_height="0dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/rounded_corner"
             android:text="STOP RECORDING"
-            app:layout_constraintBottom_toBottomOf="@+id/time_view"
+            app:layout_constraintBottom_toBottomOf="@+id/frameLayout2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView2" />
+            app:layout_constraintTop_toTopOf="@+id/frameLayout2" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="500dp"
             android:layout_marginTop="32dp"
+            android:layout_marginBottom="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/time_view">
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appbar"
@@ -74,8 +85,8 @@
                     android:id="@+id/tab_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    app:itemBackground="@color/blue_dark"
                     app:tabGravity="fill"
-                    app:itemBackground="@color/bue_dark"
                     app:tabIndicatorColor="@color/orange_light"
                     app:tabIndicatorHeight="264dp"
                     app:tabMode="fixed"
@@ -91,6 +102,7 @@
                 tools:ignore="SpeakableTextPresentCheck" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
