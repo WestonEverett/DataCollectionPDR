@@ -26,6 +26,14 @@ public class SetLengthFloatArray {
         }
     }
 
+    public float sumArray(){
+        float sum = 0f;
+        for(int i = 0; i < internalArray.size(); ++i){
+            sum+=internalArray.get(i);
+        }
+        return sum;
+    }
+
     public Float[] getArray(){
 
         /*

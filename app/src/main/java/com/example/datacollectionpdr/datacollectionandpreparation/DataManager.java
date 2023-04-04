@@ -3,6 +3,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.example.datacollectionpdr.SetLengthFloatArray;
 import com.example.datacollectionpdr.nativedata.APData;
 import com.example.datacollectionpdr.nativedata.GNSSData;
 import com.example.datacollectionpdr.nativedata.LightData;
@@ -37,11 +38,9 @@ public class DataManager extends PermissionsManager implements DataCollection.On
 
 
     private MadgwickAHRS madgwickAHRS = new MadgwickAHRS(0.1f);
-    private float startingAltitude;
     private boolean hasStartingAltitude;
     AltitudeEstimation altitudeEstimation = new AltitudeEstimation();
-    private float lpfPressure;
-    private float hpfPressure;
+    private float lpfPressure = 1013.25f;
     private static final float ALPHA = 0.8f;
 
     @Override
@@ -108,16 +107,12 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         PressureData pressureData = new PressureData(System.currentTimeMillis(), pressure);
         trajectoryNative.addPressure(pressureData);
         if(!hasStartingAltitude) {
-            altitudeEstimation.setStartingAltitude(SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, pressure));
             hasStartingAltitude = true;
-            //Altitude change from the first barometer measurement
-            float currentRelativeAltitude = SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, pressure) - startingAltitude;
-            altitudeEstimation.setAltitude(currentRelativeAltitude);
-            altitudeEstimation.floorsChanged();
+            altitudeEstimation.setStartingAltitude(altitudeEstimation.findAltitude(pressure));
         }
-        lpfPressure = ALPHA*lpfPressure + (1-ALPHA)*pressure;
-        hpfPressure = pressure - lpfPressure;
-        altitudeEstimation.changeAltitude(hpfPressure);
+        lpfPressure = ALPHA*lpfPressure + (1f-ALPHA)*pressure;
+        altitudeEstimation.setAltitude(altitudeEstimation.findAltitude(lpfPressure));
+        Log.i("Barometer", "AltChange: " + altitudeEstimation.altitudeDelta() + "; FloorsChanged: " + altitudeEstimation.floorsChanged());
     }
     @Override
     public void onAmbientLightValueChanged(float luminance){

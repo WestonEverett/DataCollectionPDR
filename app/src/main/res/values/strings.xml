@@ -20,10 +20,12 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
     <string name="settings_description">If you wish to save recorded trajectories to your files select  Save to Files option. To send data to the server enter your id below. Wait for WiFi option allows you to choose to only send data when connected to WiFi.</string>
-    <string name="about_app">This app is your new tool for indoor positioning data collection.......</string>
+    <string name="about_app">Pathfinder is a tool meant to aid research in indoor positioning. The app collects data from the following sensors: Accelerometer, Gyroscope, Magnetometer, Barometer, Location, WiFi, Ambient Light, Proximity, Rotation and Activity data.\nThese data are used to trace your position as you walk around a building. The raw data and the path estimation are submitted to an online database. The path estimation is adjusted when starting and ending points are provided.</string>
+    <!-- TODO: Increase the size of the above textview -->
     <string name="title_activity_maps">MapsActivity</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="description_startRec">Before you start recording, tell the app where you are and which way you are facing. Do that by first placing a marker on the map and then when you are happy with your marker accept it with a button.</string>
+    <string name="description_startRec"> Set your location by placing a pin on the map.\nOnce set, add a pin in the direction you are facing. </string>
+    <!--Before you start recording, tell the app where you are and which way you are facing. Do that by first placing a marker on the map and then when you are happy with your marker accept it with a button. -->
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
