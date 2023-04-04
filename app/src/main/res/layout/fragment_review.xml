@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ap="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -34,15 +35,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView15">
 
-        <TextView
-            android:id="@+id/textView7"
-            style="@style/Widget.MaterialComponents.TextView"
+        <com.androidplot.xy.XYPlot
+            android:id="@+id/plot2"
+            style="@style/APDefacto.Light"
+            ap:domainTitle="domain"
+            ap:lineLabelRotationBottom="-45"
+            ap:lineLabels="left|bottom"
+            ap:rangeTitle="range"
+            ap:title="Corrected PDR Trajectory Plot"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="PLACE HOLDER for TRAJECTORY REVIEW"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_below="@+id/spinner2"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerHorizontal="true" />
     </FrameLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout

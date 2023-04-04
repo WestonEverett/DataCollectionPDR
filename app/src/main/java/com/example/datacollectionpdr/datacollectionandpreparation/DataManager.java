@@ -157,7 +157,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     }
     @Override
     public void onStepDetectorUpdated(){
-        Log.i("DataM", "StpD data updated");
+        Log.i("Heading", String.valueOf(madgwickAHRS.findHeading()));
         PDRStep pdrStep = new PDRStep(accelerations, madgwickAHRS.findHeading(), gravities, curMagnetic, System.currentTimeMillis());
         pdrStep.setEstFloor(altitudeEstimation.floorsChanged());
         accelerations = new ArrayList<>();

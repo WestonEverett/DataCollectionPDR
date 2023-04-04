@@ -70,57 +70,8 @@ public class PathFragment extends Fragment {
             }
 
             curSteps.add(item);
-            plotPDRTrajectory(curSteps);
+            UITools.plotPDRTrajectory(curSteps, plot);
             //TODO GRAPH
         });
-    }
-
-
-    public void plotPDRTrajectory(ArrayList<PDRStep> steps){
-
-        ArrayList<Number> xVals = new ArrayList<>();
-        ArrayList<Number> yVals = new ArrayList<>();
-
-        float curX = 0;
-        float curY = 0;
-
-        xVals.add(curX);
-        yVals.add(curY);
-
-        for(PDRStep step : steps){
-            curX = curX + step.getX();
-            curY = curY + step.getY();
-
-            xVals.add(curX);
-            yVals.add(curY);
-        }
-
-
-        //Log.d("plt", "Value: " + Float.toString((Float) series1Numbers[0]));
-        //Log.d("plt", "Current Display Sensor: " + currentDisplaySensor);
-        //Log.d("plt","should be showing a value");
-
-        // turn the above arrays into XYSeries':
-        // (Y_VALS_ONLY means use the element index as the x value)
-        SimpleXYSeries series = new SimpleXYSeries(xVals, yVals, "PDR Steps on Floor: " + String.valueOf(steps.get(0).getEstFloor()));
-
-        // create formatters to use for drawing a series using LineAndPointRenderer
-        // and configure them from xml:
-        LineAndPointFormatter series1Format = new LineAndPointFormatter(Color.RED, Color.RED, null, null);
-        LineAndPointFormatter series2Format = new LineAndPointFormatter(Color.BLUE, Color.BLUE, null, null);
-        LineAndPointFormatter series3Format = new LineAndPointFormatter(Color.GREEN, Color.GREEN, null, null);
-
-
-        if (plot !=null){
-            plot.clear();
-
-
-            plot.addSeries(series, new LineAndPointFormatter(Color.BLUE, null, null, null));
-
-            // add a new series' to the xyplot:
-            plot.addSeries(series, series1Format);
-
-            plot.redraw();
-        }
     }
 }

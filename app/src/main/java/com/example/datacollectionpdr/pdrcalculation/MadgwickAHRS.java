@@ -130,12 +130,10 @@ public class MadgwickAHRS {
     }
 
     private void checkIfUpdateReady(){
-        if(this.magnetometer != null &&
-        this.gyroscope != null &&
+        if(this.gyroscope != null &&
         this.accelerometer != null){
             //this.update(gyroscope[0], gyroscope[1], gyroscope[2], accelerometer[0], accelerometer[1], accelerometer[2], magnetometer[0], magnetometer[1], magnetometer[2]);
             this.update(gyroscope[0], gyroscope[1], gyroscope[2], accelerometer[0], accelerometer[1], accelerometer[2]);
-            this.magnetometer = null;
             this.gyroscope = null;
             this.accelerometer = null;
         }

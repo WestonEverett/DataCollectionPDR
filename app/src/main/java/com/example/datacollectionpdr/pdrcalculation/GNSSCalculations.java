@@ -34,9 +34,7 @@ public class GNSSCalculations {
         return bearing;
     }
 
-    public static double userHeadingDeltaDeg(UserPositionData userPositionData){
-        double startBearing = calculateBearingDeg(userPositionData.getStartLon(),userPositionData.getStartLat(),userPositionData.getStartRefLon(),userPositionData.getStartRefLat());
-        double endBearing = calculateBearingDeg(userPositionData.getEndLon(),userPositionData.getEndLat(),userPositionData.getEndRefLon(),userPositionData.getEndRefLat());
-        return endBearing-startBearing;
+    public static double userHeadingDeltaDeg(UserPositionData startPositionData, UserPositionData endPositionData){
+        return endPositionData.heading-startPositionData.heading;
     }
 }

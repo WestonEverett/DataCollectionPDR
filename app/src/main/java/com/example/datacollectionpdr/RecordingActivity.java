@@ -39,9 +39,11 @@ import java.util.Locale;
 
 public class RecordingActivity extends DataManager {
     private DataViewModel viewModel;
-public static double[] endCoordinates= {55.988740420441346,-3.241165615618229,0,0};
-public static double[] startCoordinates= {55.988740420441346,-3.241165615618229,0,0};
-public static double[] currPointCoordinates= {0,0};
+    public static double[] endCoordinates= {55.988740420441346,-3.241165615618229,0,0};
+    public static double[] startCoordinates= {55.988740420441346,-3.241165615618229,0,0};
+    public static double[] currPointCoordinates= {0,0};
+
+    public TrajectoryNative trajectoryNative;
     // Initialize view
 
     @Override
@@ -83,14 +85,6 @@ public static double[] currPointCoordinates= {0,0};
     }
 
     public void stopRecording(){
-        TrajectoryNative trajectoryNative = this.endRecording();
-        ServerManager serverManager = new ServerManager(MainActivity.serverKeyString);
-
-        try {
-            String response = serverManager.sendData(trajectoryNative);
-            //Log.e("Server Response", response);
-        } catch (Exception e){
-           // Log.e("server error", "Server error: " + String.valueOf(e));
-        }
+        trajectoryNative = this.endRecording();
     }
 }

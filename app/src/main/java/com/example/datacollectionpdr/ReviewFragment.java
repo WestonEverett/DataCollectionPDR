@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.androidplot.xy.XYPlot;
 import com.google.android.material.textfield.TextInputLayout;
 
 /**
@@ -22,7 +23,7 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
     Button sendButton;          //Send Button
     Button discardButton;      //Button to set Users start Location
     Button enterTextButton;      //Button to set Users start Location
-
+    XYPlot plot;
 
     public ReviewFragment() {
         // Required empty public constructor
@@ -31,7 +32,6 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -50,6 +50,9 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
 
         discardButton = (Button) view.findViewById(R.id.button_discard);
         discardButton.setOnClickListener(this);
+
+        plot = (XYPlot) view.findViewById(R.id.plot2);
+        UITools.plotPDRTrajectory(((RecordingActivity) getActivity()).trajectoryNative.getPdrs(), plot);
 
         // Inflate the layout for this fragment
         return view;
