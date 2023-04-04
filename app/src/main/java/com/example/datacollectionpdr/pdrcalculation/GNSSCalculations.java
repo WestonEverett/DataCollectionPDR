@@ -5,6 +5,10 @@ import com.example.datacollectionpdr.nativedata.UserPositionData;
 public class GNSSCalculations {
     private static final double EARTH_RADIUS = 6371000;
 
+    public static double calculateDistance(UserPositionData startLoc, UserPositionData endLoc){
+        return calculateDistance((float) startLoc.startLon, (float) startLoc.startLat, (float) endLoc.startLon, (float) endLoc.startLat);
+    }
+
     public static double calculateDistance(float startLon, float startLat, float endLon, float endLat) {
         double dLat = Math.toRadians(endLat - startLat);
         double dLon = Math.toRadians(endLon - startLon);
@@ -35,6 +39,16 @@ public class GNSSCalculations {
     }
 
     public static double userHeadingDeltaDeg(UserPositionData startPositionData, UserPositionData endPositionData){
-        return endPositionData.heading-startPositionData.heading;
+        double baseHeading = endPositionData.heading - startPositionData.heading;
+
+        while(baseHeading < -180){
+            baseHeading += 360;
+        }
+
+        while(baseHeading >= 180){
+            baseHeading -= 360;
+        }
+
+        return baseHeading;
     }
 }

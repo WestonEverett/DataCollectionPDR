@@ -70,7 +70,7 @@ public class PathFragment extends Fragment {
             //}
 
             curSteps.add(item);
-            UITools.plotPDRTrajectory(curSteps, plot);
+            UITools.plotPDRTrajectory(curSteps, Color.RED, plot);
             //TODO GRAPH
         });
     }

@@ -121,14 +121,12 @@ public class TrajectoryNative {
        - Multiply all PDR step points' x and y coordinates by userDistance/appDistance
      */
 
-    public void applyTrajectoryScaling(float startLon, float startLat, float endLon, float endLat){
+    public void applyTrajectoryScaling(UserPositionData endPos){
 
         //TODO Add Bounds, if each step is going to be changed by more than +- 25 (ish) make no change as we are in a boundary condition
         //Should be done ^^
         final float RATIO_LIMIT = 0.25f;
 
-        ArrayList<PDRStep> newPDRs = this.pdrs;
-        float startPointX, startPointY, endPointX, endPointY;
         float appDistance = 1;
         // Check to make sure PDR ArrayList is not empty or null
 
@@ -144,12 +142,32 @@ public class TrajectoryNative {
             appDistance = (float) Math.sqrt((totalX*totalX)+(totalY*totalY));
         }
         // Magnitude of PDR displacement using user provided location pins
-        float userDistance = (float) GNSSCalculations.calculateDistance(startLat,startLon,endLat,endLon);
+        float userDistance = (float) GNSSCalculations.calculateDistance(this.initPos,endPos);
         float ratio = userDistance/ appDistance;
         if(ratio > (1+RATIO_LIMIT)*ratio || ratio < (1-RATIO_LIMIT)*ratio) {
-            newPDRs.forEach(pdrStep -> pdrStep.scaleMagnitude(ratio));
+            pdrs.forEach(pdrStep -> pdrStep.scaleMagnitude(ratio));
         }
-        this.pdrs = newPDRs;
+    }
+
+    public void applyGyroCorrection(UserPositionData endPos){
+
+        double trueChangeInHeading = GNSSCalculations.userHeadingDeltaDeg(this.initPos, endPos);
+
+        double estimatedChangeInHeading = 0;
+        long totalTime = 1;
+
+        if(this.pdrs.size() > 0){
+            estimatedChangeInHeading = this.pdrs.get(pdrs.size()-1).getHeading() - this.pdrs.get(0).getHeading();
+            totalTime = this.pdrs.get(pdrs.size()-1).initTime - this.initTime;
+        }
+
+        double changeInHeadingDif = trueChangeInHeading - estimatedChangeInHeading;
+
+        for (PDRStep pdr: pdrs) {
+            float percentTimePassed = (pdr.initTime - this.initTime) / totalTime;
+            double pdrHeadingDif = percentTimePassed * changeInHeadingDif;
+            pdr.setHeading(pdr.getHeading() + pdrHeadingDif);
+        }
     }
 
     public Trajectory generateSerialized()
@@ -163,8 +181,12 @@ public class TrajectoryNative {
         trajectoryBuilder.addBaroInfo(baroInfo);
         trajectoryBuilder.addLightInfo(lightInfo);
 
+        PDRStep curPDR = new PDRStep(this.initTime, 0f, 0f);
+        trajectoryBuilder.addPDR(curPDR);
+
         for(PDRStep pdr : pdrs){
-            trajectoryBuilder.addPDR(pdr);
+            curPDR = new PDRStep(this.initTime, curPDR.getX() + pdr.getX(), curPDR.getY() + pdr.getY());
+            trajectoryBuilder.addPDR(curPDR);
         }
 
         for(APData apData : aps){

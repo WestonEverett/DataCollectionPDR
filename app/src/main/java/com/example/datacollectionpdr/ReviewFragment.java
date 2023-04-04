@@ -2,6 +2,7 @@ package com.example.datacollectionpdr;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -52,7 +53,7 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
         discardButton.setOnClickListener(this);
 
         plot = (XYPlot) view.findViewById(R.id.plot2);
-        UITools.plotPDRTrajectory(((RecordingActivity) getActivity()).trajectoryNative.getPdrs(), plot);
+        UITools.plotPDRTrajectory(((RecordingActivity) getActivity()).trajectoryNative.getPdrs(), Color.RED, plot);
 
         // Inflate the layout for this fragment
         return view;

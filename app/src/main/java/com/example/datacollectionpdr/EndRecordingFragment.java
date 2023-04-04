@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.datacollectionpdr.nativedata.TrajectoryNative;
+import com.example.datacollectionpdr.nativedata.UserPositionData;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -70,7 +72,6 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
         orientationButton.setEnabled(false);
         orientationButton.setTextColor(getResources().getColor(R.color.blue_light));
 
-        recordingTime=((RecordingActivity)getActivity()).trajectoryNative
 
 
         // Initialize map fragment
@@ -147,6 +148,12 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
                 ((Activity) getActivity()).overridePendingTransition(0, 0);
                 break;
             case R.id.button_review:
+                UserPositionData endPos = new UserPositionData(RecordingActivity.endCoordinates[0], RecordingActivity.endCoordinates[1], RecordingActivity.endCoordinates[2], RecordingActivity.endCoordinates[3]);
+
+                TrajectoryNative trajectoryNative = ((RecordingActivity) getActivity()).trajectoryNative;
+                trajectoryNative.applyGyroCorrection(endPos);
+                trajectoryNative.applyTrajectoryScaling(endPos);
+
                 FragmentTransaction fragmentTransaction = getActivity()
                         .getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentContainerView_recording_activity, new ReviewFragment());
