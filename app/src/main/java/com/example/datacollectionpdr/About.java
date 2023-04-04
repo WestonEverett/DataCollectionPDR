@@ -36,6 +36,8 @@ public class About extends AppCompatActivity {
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         setContentView(R.layout.activity_about);
 
+        getSupportActionBar().hide();
+
         //Simple TextView for accelerometer info, change into menu later
         TextView textView9 = findViewById(R.id.text_sensor_info1);
         SensorDetails Accelerometer = sensorDetails(Sensor.TYPE_ACCELEROMETER); // Instantiate SensorDetails object with the sensor type
