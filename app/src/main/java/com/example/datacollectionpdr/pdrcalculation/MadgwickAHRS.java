@@ -130,12 +130,10 @@ public class MadgwickAHRS {
     }
 
     private void checkIfUpdateReady(){
-        if(this.magnetometer != null &&
-        this.gyroscope != null &&
+        if(this.gyroscope != null &&
         this.accelerometer != null){
             //this.update(gyroscope[0], gyroscope[1], gyroscope[2], accelerometer[0], accelerometer[1], accelerometer[2], magnetometer[0], magnetometer[1], magnetometer[2]);
             this.update(gyroscope[0], gyroscope[1], gyroscope[2], accelerometer[0], accelerometer[1], accelerometer[2]);
-            this.magnetometer = null;
             this.gyroscope = null;
             this.accelerometer = null;
         }
@@ -419,7 +417,14 @@ public class MadgwickAHRS {
     }
 
     public float findHeading(){
-        float heading = (float) Math.toDegrees(Math.atan2(2f * (quaternion[1] * quaternion[2] + quaternion[0] * quaternion[3]), 0.5f - quaternion[2] * quaternion[2] - quaternion[3] * quaternion[3]));
-        return heading;
+        return (float) Math.toDegrees(Math.atan2(2f * (quaternion[1] * quaternion[2] + quaternion[0] * quaternion[3]), 0.5f - quaternion[2] * quaternion[2] - quaternion[3] * quaternion[3]));
+    }
+
+    public float findPitch(){
+        return (float) Math.asin(-2.0f * (quaternion[1] * quaternion[3] - quaternion[0] * quaternion[2]));
+    }
+
+    public float findRoll(){
+        return (float) Math.atan2(quaternion[0] * quaternion[1] + quaternion[2] * quaternion[3], 0.5f - quaternion[1] * quaternion[1] - quaternion[2] * quaternion[2]);
     }
 }

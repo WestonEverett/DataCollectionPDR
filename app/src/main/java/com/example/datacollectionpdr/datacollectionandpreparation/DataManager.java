@@ -15,6 +15,7 @@ import com.example.datacollectionpdr.nativedata.TrajectoryNative;
 import com.example.datacollectionpdr.nativedata.WifiSample;
 import com.example.datacollectionpdr.pdrcalculation.AltitudeEstimation;
 import com.example.datacollectionpdr.pdrcalculation.MadgwickAHRS;
+import com.example.datacollectionpdr.pdrcalculation.StepLengthEstimation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +40,9 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     private float startingAltitude;
     private boolean hasStartingAltitude;
     AltitudeEstimation altitudeEstimation = new AltitudeEstimation();
+    private float lpfPressure;
+    private float hpfPressure;
+    private static final float ALPHA = 0.8f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,11 +110,14 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         if(!hasStartingAltitude) {
             altitudeEstimation.setStartingAltitude(SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, pressure));
             hasStartingAltitude = true;
+            //Altitude change from the first barometer measurement
+            float currentRelativeAltitude = SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, pressure) - startingAltitude;
+            altitudeEstimation.setAltitude(currentRelativeAltitude);
+            altitudeEstimation.floorsChanged();
         }
-        //Altitude change from the first barometer measurement
-        float currentRelativeAltitude = SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, pressure) - startingAltitude;
-        altitudeEstimation.setAltitude(currentRelativeAltitude);
-        altitudeEstimation.floorsChanged();
+        lpfPressure = ALPHA*lpfPressure + (1-ALPHA)*pressure;
+        hpfPressure = pressure - lpfPressure;
+        altitudeEstimation.changeAltitude(hpfPressure);
     }
     @Override
     public void onAmbientLightValueChanged(float luminance){
@@ -158,12 +165,20 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     @Override
     public void onStepDetectorUpdated(){
         Log.i("DataM", "StpD data updated");
-        PDRStep pdrStep = new PDRStep(accelerations, madgwickAHRS.findHeading(), gravities, curMagnetic, System.currentTimeMillis());
+        //Estimate step length
+        StepLengthEstimation stepLengthEstimate = new StepLengthEstimation();
+        stepLengthEstimate.setAccelerations(accelerations);
+        stepLengthEstimate.setGravities(gravities);
+        float stepSize = stepLengthEstimate.findStepLength();
+
+        //Update PDR with estimated step length, heading, and floor level and add it to TrajectoryNative
+        PDRStep pdrStep = new PDRStep(stepSize, madgwickAHRS.findHeading(), System.currentTimeMillis());
         pdrStep.setEstFloor(altitudeEstimation.floorsChanged());
-        accelerations = new ArrayList<>();
-        gravities = new ArrayList<>();
         trajectoryNative.addPDRStep(pdrStep);
         this.newPDRStep(pdrStep);
+        //Reset arrays for step length estimation
+        accelerations = new ArrayList<>();
+        gravities = new ArrayList<>();
     }
     @Override
     public void onStepCountValueUpdated(int stepcount){

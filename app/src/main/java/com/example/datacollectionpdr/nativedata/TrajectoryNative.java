@@ -122,7 +122,8 @@ public class TrajectoryNative {
     public void applyTrajectoryScaling(float startLon, float startLat, float endLon, float endLat){
 
         //TODO Add Bounds, if each step is going to be changed by more than +- 25 (ish) make no change as we are in a boundary condition
-
+        //Should be done ^^
+        final float RATIO_LIMIT = 0.25f;
 
         ArrayList<PDRStep> newPDRs = this.pdrs;
         float startPointX, startPointY, endPointX, endPointY;
@@ -143,7 +144,9 @@ public class TrajectoryNative {
         // Magnitude of PDR displacement using user provided location pins
         float userDistance = (float) GNSSCalculations.calculateDistance(startLat,startLon,endLat,endLon);
         float ratio = userDistance/ appDistance;
-        newPDRs.forEach(pdrStep -> pdrStep.scaleMagnitude(ratio));
+        if(ratio > (1+RATIO_LIMIT)*ratio || ratio < (1-RATIO_LIMIT)*ratio) {
+            newPDRs.forEach(pdrStep -> pdrStep.scaleMagnitude(ratio));
+        }
         this.pdrs = newPDRs;
     }
 
