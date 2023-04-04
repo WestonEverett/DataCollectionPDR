@@ -30,7 +30,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
 
     private float[] curGravity = new float[]{0f, 9.8f, 0f};
     private float[] curMagnetic;
-    protected GNSSData curGNSSData;
+    public GNSSData curGNSSData;
     private ArrayList<float[]> accelerations = new ArrayList<>();
     private ArrayList<float[]> gravities = new ArrayList<>();
 

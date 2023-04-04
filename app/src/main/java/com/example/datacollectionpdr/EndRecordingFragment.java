@@ -1,22 +1,29 @@
 package com.example.datacollectionpdr;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -24,6 +31,13 @@ import com.google.android.material.textfield.TextInputLayout;
 public class EndRecordingFragment extends Fragment implements View.OnClickListener{
 
     View view;
+    Marker currMarker;          //Marker showing the latest click on the map
+    Marker startMarker;         //Marker showing selected position
+    Button sendButton;          //Send Button
+    Button locationButton;      //Button to set Users start Location
+    Button orientationButton;   //Button to set users start orientation
+    double currLon;             //longitude from gps
+    double currLat;             //lattitude from gps
 
     public EndRecordingFragment() {
         // Required empty public constructor
@@ -38,16 +52,19 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_end_recording, container, false);
-        Button sendButton = (Button) view.findViewById(R.id.button_send);
+        sendButton = (Button) view.findViewById(R.id.button_review);
         sendButton.setOnClickListener(this);
-        Button server_apiButton = (Button) view.findViewById(R.id.enter_server_api);
-        server_apiButton.setOnClickListener(this);
-        Button endPosButton = (Button) view.findViewById(R.id.button_addEndPoint);
-        endPosButton.setOnClickListener(this);
-        Button endPosFacing = (Button) view.findViewById(R.id.button_addEndDirection);
-        endPosFacing.setOnClickListener(this);
-        TextInputLayout textInputLayout = view.findViewById(R.id.textInput_serverid);
-        textInputLayout.setHint("Current ID: "+ MainActivity.serverKeyString);
+        sendButton.setEnabled(false);
+        sendButton.setTextColor(getResources().getColor(R.color.blue_light));
+
+        locationButton = (Button) view.findViewById(R.id.button_addEndPoint);
+        locationButton.setOnClickListener(this);
+
+        orientationButton = (Button) view.findViewById(R.id.button_addEndDirection);
+        orientationButton.setOnClickListener(this);
+        orientationButton.setEnabled(false);
+        orientationButton.setTextColor(getResources().getColor(R.color.blue_light));
+
 
         // Initialize map fragment
         SupportMapFragment supportMapFragment = (SupportMapFragment)
@@ -58,23 +75,52 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
             @Override
             public void onMapReady(GoogleMap googleMap) {
 
-                // Add a marker in Sydney and move the camera
-                LatLng currPos = new LatLng(-3.188267, -55.953251);
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(currPos));
+                if (((RecordingActivity) getActivity()).curGNSSData != null) {
+                    //Get current location
+                    currLon = ((RecordingActivity) getActivity()).curGNSSData.lon;
+                    currLat = ((RecordingActivity) getActivity()).curGNSSData.lat;
+                    // move the camera to the current position
+                    LatLng currPos = new LatLng(currLat, currLon);
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(currPos));
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currLat, currLon) , 14.0f));
+                }
+
 
                 googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
                 googleMap.getUiSettings().setCompassEnabled(true);
                 googleMap.getUiSettings().setRotateGesturesEnabled(true);
                 googleMap.getUiSettings().setScrollGesturesEnabled(true);
                 googleMap.getUiSettings().setTiltGesturesEnabled(true);
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    return;
+                }
+                else {
+                    googleMap.setMyLocationEnabled(true);
+                }
+
+                startMarker = googleMap.addMarker(
+                        new MarkerOptions()
+                                .position(new LatLng(0,0))
+                                .title("New Marker")
+                                .draggable(true).visible(false)
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+
 
                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(LatLng point) {
-                        MarkerOptions marker = new MarkerOptions().position(new LatLng(point.latitude, point.longitude)).title("New Marker");
-                        googleMap.addMarker(marker);
-                        Log.d("point", "onMapClick() returned: " + point.latitude);
-                        Log.d("point", "onMapClick() returned: " + point.longitude);
+
+                        if (currMarker != null) { //Remove old marker when new one selected
+                            currMarker.remove();
+                        }
+                        currMarker = googleMap.addMarker(
+                                new MarkerOptions()
+                                        .position(new LatLng(point.latitude, point.longitude))
+                                        .title("New Marker")
+                                        .draggable(true).visible(true)
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                         RecordingActivity.currPointCoordinates[0] = point.latitude;
                         RecordingActivity.currPointCoordinates[1] = point.longitude;
                     }
@@ -93,24 +139,41 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
                 startActivity(intent); //Go to the Show Help activity and its view
                 ((Activity) getActivity()).overridePendingTransition(0, 0);
                 break;
-            case R.id.button_send:
-                Intent intent_send = new Intent(getActivity(), MainActivity.class);
-                startActivity(intent_send); //Go to the Show Help activity and its view
-                ((Activity) getActivity()).overridePendingTransition(0, 0);
-                break;
-            case R.id.enter_server_api:
-                TextInputLayout textInputLayout = view.findViewById(R.id.textInput_serverid);
-                String text = textInputLayout.getEditText().getText().toString();
-                MainActivity.serverKeyString=text;
-                textInputLayout.setHint("Current ID: "+ MainActivity.serverKeyString);
+            case R.id.button_review:
+                FragmentTransaction fragmentTransaction = getActivity()
+                        .getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.fragmentContainerView_recording_activity, new ReviewFragment());
+                fragmentTransaction.commit();
                 break;
             case R.id.button_addEndPoint:
-                RecordingActivity.endCoordinates[0] = RecordingActivity.currPointCoordinates[0];
-                RecordingActivity.endCoordinates[1] = RecordingActivity.currPointCoordinates[1];
+                if (currMarker == null) { //Check if user put in a marker
+                    Toast.makeText(getContext(), "Place a marker on the map first", Toast.LENGTH_SHORT).show();
+                } else {
+                    RecordingActivity.endCoordinates[0] = RecordingActivity.currPointCoordinates[0];
+                    RecordingActivity.endCoordinates[1] = RecordingActivity.currPointCoordinates[1];
+                    orientationButton.setEnabled(true);
+                    orientationButton.setTextColor(getResources().getColor(R.color.black));
+                    locationButton.setEnabled(false);
+                    locationButton.setTextColor(getResources().getColor(R.color.blue_light));
+                    startMarker.setPosition(currMarker.getPosition());
+                    startMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    startMarker.setVisible(true);
+                    currMarker=null;
+                }
                 break;
             case R.id.button_addEndDirection:
-                RecordingActivity.endCoordinates[2] = RecordingActivity.currPointCoordinates[0];
-                RecordingActivity.endCoordinates[3] = RecordingActivity.currPointCoordinates[1];
+
+                if (currMarker == null) { //Check if user put in a marker
+                    Toast.makeText(getContext(), "Place a marker on the map first", Toast.LENGTH_SHORT).show();
+                } else {
+                    RecordingActivity.endCoordinates[2] = RecordingActivity.currPointCoordinates[0];
+                    RecordingActivity.endCoordinates[3] = RecordingActivity.currPointCoordinates[1];
+                    sendButton.setEnabled(true);
+                    sendButton.setTextColor(getResources().getColor(R.color.black));
+                    currMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    orientationButton.setTextColor(getResources().getColor(R.color.blue_light));
+                    orientationButton.setEnabled(false);
+                }
                 break;
         }
     }

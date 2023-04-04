@@ -2,6 +2,8 @@
     <string name="app_name">DataCollectionPDR</string>
     <string name="title_activity_settings">SettingsActivity</string>
 
+    <string name="map_id">33f20db2d06ca4f9</string>
+
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
@@ -21,5 +23,9 @@
     <string name="about_app">This app is your new tool for indoor positioning data collection.......</string>
     <string name="title_activity_maps">MapsActivity</string>
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="description_startRec">Before you start recording, tell the app where you are and which way you are facing. Do that by first placing a marker on the map and then when you are happy with your marker accept it with a button.</string>
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
 </resources>

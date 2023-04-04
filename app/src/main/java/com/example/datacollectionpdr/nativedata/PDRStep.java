@@ -19,22 +19,6 @@ public class PDRStep {
     private float magnitude;
     public long initTime;
 
-    public PDRStep(float x, float y, long initTime){
-        this.x = x;
-        this.y = y;
-        this.initTime = initTime;
-    }
-
-    public PDRStep(float[] gravity, float[] magneticFieldValues, long initTime){
-
-        this.heading = calculateOrientation(gravity, magneticFieldValues);
-        float stepLengthEstimate = 1;
-        this.x = stepLengthEstimate * (float) Math.sin(heading);
-        this.y = stepLengthEstimate * (float) Math.cos(heading);
-        Log.i("PDRSTEP", "Heading" + this.heading);
-        this.initTime = initTime;
-    }
-
     public PDRStep(ArrayList<float[]> accelerations, float heading, ArrayList<float[]> gravities, float[] magneticFieldValues, long initTime){
 
         ////// Finding heading //////
@@ -44,54 +28,28 @@ public class PDRStep {
         stepLengthEstimate.setAccelerations(accelerations);
         stepLengthEstimate.setGravities(gravities);
         float stepSize = stepLengthEstimate.findStepLength();
+        this.magnitude = stepSize;
+        this.updateXY();
         ////// Finding x and y lengths //////
-
-        this.x = stepSize * (float) Math.sin(Math.toRadians(heading));
-        this.y = stepSize * (float) Math.cos(Math.toRadians(heading));
         Log.i("PDRSTEP", "Heading" + this.heading);
         this.initTime = initTime;
-    }
-
-    private double calculateOrientation(float[] gravity, float[] magneticFieldValues) {
-        /*
-        Calculates the current orientation of the phone (relative to the world)
-         */
-
-        //variables for storing output of calculations
-        float[] values = new float[3];
-        float[] R = new float[9];
-
-        //calculates rotation matrix based on gravity and the current magnetic field
-        SensorManager.getRotationMatrix(R,
-                null, gravity, magneticFieldValues);
-
-        SensorManager.getOrientation(R, values);
-
-        return values[0];
     }
 
     public float getX() {
         return x;
     }
 
-    public void setX(float x) {
-        this.x = x;
-    }
-
     public float getY() {
         return y;
     }
 
-    public void setY(float y) {
-        this.y = y;
-    }
-
     public float getMagnitude() {
-        return y;
+        return magnitude;
     }
 
     public void setMagnitude(float magnitude) {
         this.magnitude = magnitude;
+        this.updateXY();
     }
 
     public void scaleMagnitude(float ratio) {
@@ -104,6 +62,7 @@ public class PDRStep {
 
     public void setHeading(double heading) {
         this.heading = heading;
+        this.updateXY();
     }
 
     public int getEstFloor() {
@@ -112,5 +71,10 @@ public class PDRStep {
 
     public void setEstFloor(int estFloor) {
         this.estFloor = estFloor;
+    }
+
+    private void updateXY(){
+        this.x = magnitude * (float) Math.sin(heading);
+        this.y = magnitude * (float) Math.cos(heading);
     }
 }
