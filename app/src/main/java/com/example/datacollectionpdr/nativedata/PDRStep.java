@@ -19,19 +19,17 @@ public class PDRStep {
     private float magnitude;
     public long initTime;
 
-    public PDRStep(ArrayList<float[]> accelerations, float heading, ArrayList<float[]> gravities, float[] magneticFieldValues, long initTime){
-
+    public PDRStep(float stepSize, float heading, long initTime){
         ////// Finding heading //////
-        //this.heading = calculateOrientation(gravity, magneticFieldValues);
         this.heading = heading;
-        StepLengthEstimation stepLengthEstimate = new StepLengthEstimation();
+        /*StepLengthEstimation stepLengthEstimate = new StepLengthEstimation();
         stepLengthEstimate.setAccelerations(accelerations);
         stepLengthEstimate.setGravities(gravities);
-        float stepSize = stepLengthEstimate.findStepLength();
+        float stepSize = stepLengthEstimate.findStepLength();*/
         this.magnitude = stepSize;
+        Log.i("PDRStep", "stepSize:" + this.magnitude + "; Heading" + this.heading);
         this.updateXY();
         ////// Finding x and y lengths //////
-        Log.i("PDRSTEP", "Heading" + this.heading);
         this.initTime = initTime;
     }
 

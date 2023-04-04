@@ -29,7 +29,7 @@ public class AltitudeEstimation {
         return numOfFloorsChanged;
     }
 
-    public void findAltitude(float pressure){
+    public void changeAltitude(float pressure){
         float altitudeChange = 0;
         altitudeChange = 44330*(float)Math.pow(1-(pressure/1013),-5.255);
         this.altitude += altitudeChange;
