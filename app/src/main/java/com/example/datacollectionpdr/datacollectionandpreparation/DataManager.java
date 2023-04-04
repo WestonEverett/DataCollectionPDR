@@ -41,7 +41,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     private boolean hasStartingAltitude;
     AltitudeEstimation altitudeEstimation = new AltitudeEstimation();
     private float lpfPressure = 1013.25f;
-    private static final float ALPHA = 0.8f;
+    private static final float ALPHA = 0.99f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +108,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         trajectoryNative.addPressure(pressureData);
         if(!hasStartingAltitude) {
             hasStartingAltitude = true;
+            lpfPressure = pressure;
             altitudeEstimation.setStartingAltitude(altitudeEstimation.findAltitude(pressure));
         }
         lpfPressure = ALPHA*lpfPressure + (1f-ALPHA)*pressure;
