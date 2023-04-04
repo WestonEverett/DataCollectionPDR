@@ -64,10 +64,10 @@ public class PathFragment extends Fragment {
 
         viewModel.getPDRStep().observe(getViewLifecycleOwner(), item -> {
 
-            if(item.getEstFloor() != curFloor){
-                curSteps = new ArrayList<>();
-                curFloor = item.getEstFloor();
-            }
+            //if(item.getEstFloor() != curFloor){
+            //    curSteps = new ArrayList<>();
+            //    curFloor = item.getEstFloor();
+            //}
 
             curSteps.add(item);
             UITools.plotPDRTrajectory(curSteps, plot);

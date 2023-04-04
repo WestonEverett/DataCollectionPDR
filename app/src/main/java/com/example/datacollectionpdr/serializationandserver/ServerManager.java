@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.datacollectionpdr.data.Trajectory;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
+import com.example.datacollectionpdr.nativedata.UserPositionData;
 
 import java.io.IOException;
 
@@ -53,6 +54,6 @@ public class ServerManager {
     }
 
     public TrajectoryNative getData(){
-        return new TrajectoryNative(12);
+        return new TrajectoryNative(0, new UserPositionData(0,0,0,0));
     }
 }

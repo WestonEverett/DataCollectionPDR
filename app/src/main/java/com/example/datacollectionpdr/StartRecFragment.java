@@ -19,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.example.datacollectionpdr.nativedata.UserPositionData;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -152,7 +154,7 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
                 FragmentTransaction fragmentTransaction = getActivity()
                         .getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentContainerView_recording_activity, new DuringRecordingFragment());
-                ((RecordingActivity) getActivity()).startRecording();
+                ((RecordingActivity) getActivity()).startRecording(new UserPositionData(RecordingActivity.startCoordinates[0], RecordingActivity.startCoordinates[1], RecordingActivity.startCoordinates[2], RecordingActivity.startCoordinates[3]));
                 fragmentTransaction.commit();
                 break;
             case R.id.button_addStartPoint:

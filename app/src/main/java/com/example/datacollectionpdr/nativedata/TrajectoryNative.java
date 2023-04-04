@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class TrajectoryNative {
 
+    UserPositionData initPos;
     long initTime;
     String androidVersion;
     String dataID;
@@ -29,9 +30,10 @@ public class TrajectoryNative {
     SensorDetails baroInfo;
     SensorDetails lightInfo;
 
-    public TrajectoryNative(long initTime)
+    public TrajectoryNative(long initTime, UserPositionData initPos)
     {
         this.initTime = initTime;
+        this.initPos = initPos;
         this.androidVersion = String.valueOf(Build.VERSION.SDK_INT);
         pdrs = new ArrayList<>();
         aps = new ArrayList<>();
@@ -43,8 +45,8 @@ public class TrajectoryNative {
         baros = new ArrayList<>();
     }
 
-    public TrajectoryNative(long initTime, String androidVersion, String dataID){
-        this(initTime);
+    public TrajectoryNative(long initTime, UserPositionData initPos, String androidVersion, String dataID){
+        this(initTime, initPos);
         this.androidVersion = androidVersion;
         this.dataID = dataID;
     }
