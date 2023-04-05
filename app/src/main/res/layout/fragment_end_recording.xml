@@ -38,16 +38,18 @@
 
         <TextView
             android:id="@+id/textViewEndInstruction"
-            android:text="@strings/description_startRec"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="0dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:gravity="center"
-            android:padding="8dp"
-            android:background="@drawable/text_background"/>
+            android:background="@drawable/text_background"
+            style="@style/Widget.MaterialComponents.TextView"
+            android:justificationMode="inter_word"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/description_startRec"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:textAllCaps="false" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
