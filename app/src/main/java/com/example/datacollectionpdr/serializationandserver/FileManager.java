@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.datacollectionpdr.data.Trajectory;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
+import com.example.datacollectionpdr.nativedata.UserPositionData;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -59,7 +60,7 @@ public class FileManager {
             String contents = stringBuilder.toString();
         }
 
-        return new TrajectoryNative(12);
+        return new TrajectoryNative(0, new UserPositionData(0,0,1,1));
     }
 
 }
