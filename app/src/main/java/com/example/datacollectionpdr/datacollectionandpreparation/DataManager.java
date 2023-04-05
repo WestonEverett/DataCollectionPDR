@@ -3,7 +3,6 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.datacollectionpdr.SetLengthFloatArray;
 import com.example.datacollectionpdr.nativedata.APData;
 import com.example.datacollectionpdr.nativedata.GNSSData;
 import com.example.datacollectionpdr.nativedata.LightData;
@@ -13,8 +12,10 @@ import com.example.datacollectionpdr.nativedata.PositionData;
 import com.example.datacollectionpdr.nativedata.PressureData;
 import com.example.datacollectionpdr.nativedata.SensorDetails;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
+import com.example.datacollectionpdr.nativedata.UserPositionData;
 import com.example.datacollectionpdr.nativedata.WifiSample;
 import com.example.datacollectionpdr.pdrcalculation.AltitudeEstimation;
+import com.example.datacollectionpdr.pdrcalculation.GNSSCalculations;
 import com.example.datacollectionpdr.pdrcalculation.MadgwickAHRS;
 import com.example.datacollectionpdr.pdrcalculation.StepLengthEstimation;
 
@@ -37,11 +38,13 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     private ArrayList<float[]> gravities = new ArrayList<>();
 
 
-    private MadgwickAHRS madgwickAHRS = new MadgwickAHRS(0.1f);
+    private MadgwickAHRS madgwickAHRS = new MadgwickAHRS(0.1f, 0);
+    private float startingAltitude;
     private boolean hasStartingAltitude;
     AltitudeEstimation altitudeEstimation = new AltitudeEstimation();
-    private float lpfPressure = 1013.25f;
-    private static final float ALPHA = 0.99f;
+    private float lpfPressure;
+    private float hpfPressure;
+    private static final float ALPHA = 0.8f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,13 +110,16 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         PressureData pressureData = new PressureData(System.currentTimeMillis(), pressure);
         trajectoryNative.addPressure(pressureData);
         if(!hasStartingAltitude) {
+            altitudeEstimation.setStartingAltitude(SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, pressure));
             hasStartingAltitude = true;
-            lpfPressure = pressure;
-            altitudeEstimation.setStartingAltitude(altitudeEstimation.findAltitude(pressure));
+            //Altitude change from the first barometer measurement
+            float currentRelativeAltitude = SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, pressure) - startingAltitude;
+            altitudeEstimation.setAltitude(currentRelativeAltitude);
+            altitudeEstimation.floorsChanged();
         }
-        lpfPressure = ALPHA*lpfPressure + (1f-ALPHA)*pressure;
-        altitudeEstimation.setAltitude(altitudeEstimation.findAltitude(lpfPressure));
-        Log.i("Barometer", "AltChange: " + altitudeEstimation.altitudeDelta() + "; FloorsChanged: " + altitudeEstimation.floorsChanged());
+        lpfPressure = ALPHA*lpfPressure + (1-ALPHA)*pressure;
+        hpfPressure = pressure - lpfPressure;
+        altitudeEstimation.changeAltitude(hpfPressure);
     }
     @Override
     public void onAmbientLightValueChanged(float luminance){
@@ -229,10 +235,11 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         return trajectoryNative;
     }
 
-    public void startRecording(){
+    public void startRecording(UserPositionData initPos){
         motionSample = new MotionSample();
-        trajectoryNative = new TrajectoryNative(System.currentTimeMillis());
-        trajectoryNative.setDataID("hmmmmm");
+        madgwickAHRS = new MadgwickAHRS(0.1f, initPos.heading);
+        trajectoryNative = new TrajectoryNative(System.currentTimeMillis(), initPos);
+        trajectoryNative.setDataID("no_id_entered");
         stepcountDM = curStepcount;
         isRecording = true;
         mMotionSensorManager.registerMotionSensors();

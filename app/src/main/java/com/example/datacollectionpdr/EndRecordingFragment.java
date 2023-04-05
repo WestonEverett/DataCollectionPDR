@@ -34,10 +34,12 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
     Marker currMarker;          //Marker showing the latest click on the map
     Marker startMarker;         //Marker showing selected position
     Button sendButton;          //Send Button
+    Button discardButton;          //Send Button
     Button locationButton;      //Button to set Users start Location
     Button orientationButton;   //Button to set users start orientation
     double currLon;             //longitude from gps
     double currLat;             //lattitude from gps
+    String recordingTime;
 
     public EndRecordingFragment() {
         // Required empty public constructor
@@ -60,10 +62,15 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
         locationButton = (Button) view.findViewById(R.id.button_addEndPoint);
         locationButton.setOnClickListener(this);
 
+        discardButton = (Button) view.findViewById(R.id.button_discard);
+        discardButton.setOnClickListener(this);
+
         orientationButton = (Button) view.findViewById(R.id.button_addEndDirection);
         orientationButton.setOnClickListener(this);
         orientationButton.setEnabled(false);
         orientationButton.setTextColor(getResources().getColor(R.color.blue_light));
+
+        recordingTime=((RecordingActivity)getActivity()).trajectoryNative
 
 
         // Initialize map fragment

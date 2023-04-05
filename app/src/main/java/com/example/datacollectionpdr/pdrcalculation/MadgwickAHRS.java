@@ -80,8 +80,8 @@ public class MadgwickAHRS {
      * @param samplePeriod
      *            Sample period.
      */
-    public MadgwickAHRS(float samplePeriod) {
-        this(samplePeriod, 1f);
+    public MadgwickAHRS(float samplePeriod, double initHeading) {
+        this(samplePeriod, 1f, initHeading);
     }
 
     /**
@@ -92,10 +92,13 @@ public class MadgwickAHRS {
      * @param beta
      *            Algorithm gain beta.
      */
-    public MadgwickAHRS(float samplePeriod, float beta) {
+    public MadgwickAHRS(float samplePeriod, float beta, double initHeading) {
         this.samplePeriod = samplePeriod;
         this.beta = beta;
-        this.quaternion = new float[] { 1f, 0f, 0f, 0f };
+
+        double headingRadians = Math.toRadians(initHeading);
+
+        this.quaternion = new float[] { 0f, 0f, (float) Math.sin(headingRadians / 2), (float) Math.cos(headingRadians / 2) };
     }
 
     public void updateMotionSample(MotionSample motionSample) {
@@ -130,12 +133,10 @@ public class MadgwickAHRS {
     }
 
     private void checkIfUpdateReady(){
-        if(this.magnetometer != null &&
-        this.gyroscope != null &&
+        if(this.gyroscope != null &&
         this.accelerometer != null){
             //this.update(gyroscope[0], gyroscope[1], gyroscope[2], accelerometer[0], accelerometer[1], accelerometer[2], magnetometer[0], magnetometer[1], magnetometer[2]);
             this.update(gyroscope[0], gyroscope[1], gyroscope[2], accelerometer[0], accelerometer[1], accelerometer[2]);
-            this.magnetometer = null;
             this.gyroscope = null;
             this.accelerometer = null;
         }

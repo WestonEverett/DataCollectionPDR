@@ -24,6 +24,7 @@ import com.example.datacollectionpdr.datacollectionandpreparation.DataManager;
 import com.example.datacollectionpdr.nativedata.MotionSample;
 import com.example.datacollectionpdr.nativedata.PDRStep;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
+import com.example.datacollectionpdr.nativedata.UserPositionData;
 import com.example.datacollectionpdr.serializationandserver.FileManager;
 import com.example.datacollectionpdr.serializationandserver.ServerManager;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -39,14 +40,18 @@ import java.util.Locale;
 
 public class RecordingActivity extends DataManager {
     private DataViewModel viewModel;
-public static double[] endCoordinates= {55.988740420441346,-3.241165615618229,0,0};
-public static double[] startCoordinates= {55.988740420441346,-3.241165615618229,0,0};
-public static double[] currPointCoordinates= {0,0};
+    public static double[] endCoordinates= {55.988740420441346,-3.241165615618229,0,0};
+    public static double[] startCoordinates= {55.988740420441346,-3.241165615618229,0,0};
+    public static double[] currPointCoordinates= {0,0};
+
+    public TrajectoryNative trajectoryNative;
     // Initialize view
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        getSupportActionBar().hide();
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
@@ -55,7 +60,7 @@ public static double[] currPointCoordinates= {0,0};
         setContentView(R.layout.activity_recording);
         viewModel = new ViewModelProvider(this).get(DataViewModel.class);
         showProperFragment();
-        this.startRecording();
+        this.startRecording(new UserPositionData(0,0,1,1));
 
     }
 
@@ -83,14 +88,6 @@ public static double[] currPointCoordinates= {0,0};
     }
 
     public void stopRecording(){
-        TrajectoryNative trajectoryNative = this.endRecording();
-        ServerManager serverManager = new ServerManager(MainActivity.serverKeyString);
-
-        try {
-            String response = serverManager.sendData(trajectoryNative);
-            //Log.e("Server Response", response);
-        } catch (Exception e){
-           // Log.e("server error", "Server error: " + String.valueOf(e));
-        }
+        trajectoryNative = this.endRecording();
     }
 }

@@ -72,7 +72,7 @@ public class PDRStep {
     }
 
     private void updateXY(){
-        this.x = magnitude * (float) Math.sin(heading);
-        this.y = magnitude * (float) Math.cos(heading);
+        this.x = magnitude * (float) Math.sin(Math.toRadians(heading));
+        this.y = magnitude * (float) Math.cos(Math.toRadians(heading));
     }
 }
