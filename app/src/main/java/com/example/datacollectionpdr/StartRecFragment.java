@@ -42,9 +42,12 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
     Button orientationButton;   //Button to set users start orientation
     Marker currMarker;          //Marker showing the latest click on the map
     Marker startMarker;         //Marker showing selected position
+    GoogleMap googleMap;
 
     private double currLon;
     private double currLat;
+
+    private boolean pointsSet;
 
     public StartRecFragment() {
         // Required empty public constructor
@@ -54,6 +57,7 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) { //activity created
         super.onCreate(savedInstanceState);
+        pointsSet=false;
     }
 
     @Override
@@ -88,10 +92,8 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
                 startMarker = googleMap.addMarker(
                         new MarkerOptions()
                                 .position(new LatLng(0,0))
-                                .title("New Marker")
-                                .draggable(true).visible(false)
-                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-
+                                .title(" ")
+                                .draggable(true).visible(false));
 
                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
@@ -105,19 +107,21 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(LatLng point) {
+                        if(pointsSet==false) {
 
                             if (currMarker != null) { //Remove old marker when new one selected
                                 currMarker.remove();
                             }
 
-                        currMarker = googleMap.addMarker(
-                            new MarkerOptions()
-                                    .position(new LatLng(point.latitude, point.longitude))
-                                    .title("New Marker")
-                                    .draggable(true).visible(true)
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                        RecordingActivity.currPointCoordinates[0] = point.latitude;
-                        RecordingActivity.currPointCoordinates[1] = point.longitude;
+                            currMarker = googleMap.addMarker(
+                                    new MarkerOptions()
+                                            .position(new LatLng(point.latitude, point.longitude))
+                                            .title("Selected Position")
+                                            .draggable(true).visible(true)
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                            RecordingActivity.currPointCoordinates[0] = point.latitude;
+                            RecordingActivity.currPointCoordinates[1] = point.longitude;
+                        }
                     }
                 });
             }
@@ -163,19 +167,20 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
                     Toast.makeText(getContext(), "Place a marker on the map first", Toast.LENGTH_SHORT).show();
                 } else{
                     RecordingActivity.startCoordinates[0] = RecordingActivity.currPointCoordinates[0];
-                RecordingActivity.startCoordinates[1] = RecordingActivity.currPointCoordinates[1];
-                orientationButton.setEnabled(true);
-                orientationButton.setTextColor(getResources().getColor(R.color.black));
-                locationButton.setEnabled(false);
-                locationButton.setTextColor(getResources().getColor(R.color.blue_light));
-                sendButton.setTextColor(Color.parseColor("#5C6168"));
-                startMarker.setPosition(currMarker.getPosition());
-                startMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-                startMarker.setVisible(true);
-                currMarker=null;
+                    RecordingActivity.startCoordinates[1] = RecordingActivity.currPointCoordinates[1];
+                    orientationButton.setEnabled(true);
+                    orientationButton.setTextColor(getResources().getColor(R.color.black));
+                    locationButton.setEnabled(false);
+                    locationButton.setTextColor(getResources().getColor(R.color.blue_light));
+                    sendButton.setTextColor(Color.parseColor("#5C6168"));
+                    startMarker.setPosition(currMarker.getPosition());
+                    startMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                    startMarker.setTitle("Start Position");
+                    startMarker.setVisible(true);
                 if (currMarker != null) { //Remove old marker when new one selected
                         currMarker.remove();
                     }
+                    currMarker=null;
                  }
 
                 break;
@@ -190,7 +195,8 @@ public class StartRecFragment extends Fragment implements View.OnClickListener {
                     sendButton.setTextColor(getResources().getColor(R.color.black));
                     orientationButton.setEnabled(false);
                     orientationButton.setTextColor(getResources().getColor(R.color.blue_light));
-                    currMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    currMarker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE));
+                    pointsSet=true;
                 }
                 break;
 

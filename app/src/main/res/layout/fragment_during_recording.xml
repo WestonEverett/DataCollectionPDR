@@ -15,66 +15,87 @@
 
         <TextView
             android:id="@+id/textView"
-            android:textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
-            android:text="RECORDING...."
             android:gravity="center"
+            android:text="RECORDING...."
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <FrameLayout
-            android:id="@+id/frameLayout2"
-            android:padding="8dp"
-            android:background="@drawable/text_background"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintBottom_toBottomOf="@+id/button_endRecording"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView">
+            app:layout_constraintTop_toTopOf="@+id/button_endRecording"
+            android:padding="8dp"
+            android:background="@drawable/text_background">
 
             <TextView
-                android:id="@+id/time_view"
-                android:layout_width="163dp"
-                android:layout_height="34dp"
-                android:text=" XXX" />
+                android:id="@+id/time_view_top"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:gravity="center"
+                android:text="Recording Time:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/black"/>
 
             <TextView
-                android:id="@+id/textView2"
-                android:layout_width="165dp"
-                android:layout_height="31dp"
-                android:layout_marginTop="32dp"
-                android:text="RECORDING DURATION:" />
+                android:id="@+id/time_view_bottom"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/time_view_top"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/black"/>
 
-        </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:guidelineUseRtl="false"
+            app:layout_constraintGuide_begin="205dp" />
 
         <Button
             android:id="@+id/button_endRecording"
             android:layout_width="150dp"
-            android:layout_height="0dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/rounded_corner"
             android:text="STOP RECORDING"
-            app:layout_constraintBottom_toBottomOf="@+id/frameLayout2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/frameLayout2" />
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:layout_width="match_parent"
-            android:layout_height="500dp"
-            android:layout_marginTop="32dp"
+            android:id="@+id/coordinatorLayout"
+            android:layout_width="412dp"
+            android:layout_height="416dp"
             android:layout_marginBottom="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
+            app:layout_constraintTop_toBottomOf="@+id/button_endRecording">
 
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appbar"
@@ -97,9 +118,11 @@
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/viewpager11"
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
+                android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                tools:ignore="SpeakableTextPresentCheck" />
+                tools:ignore="SpeakableTextPresentCheck">
+
+            </androidx.viewpager.widget.ViewPager>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

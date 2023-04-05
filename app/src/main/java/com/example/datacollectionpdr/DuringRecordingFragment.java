@@ -120,12 +120,8 @@ public class DuringRecordingFragment extends Fragment implements View.OnClickLis
                         "%d:%02d:%02d", hours, minutes, secs);
 
                 if(view != null) { // Set the text view text.
-                    TextView timeView = (TextView) view.findViewById(R.id.time_view);
+                    TextView timeView = (TextView) view.findViewById(R.id.time_view_bottom);
                     timeView.setText(time);
-                    Log.d("timer","textwiev not null");
-                }
-                else{
-                    Log.d("timer","textwiev NULL_1");
                 }
                 // If running is true, increment the seconds variable.
                 if (running) {
