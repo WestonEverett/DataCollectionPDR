@@ -80,8 +80,8 @@ public class MadgwickAHRS {
      * @param samplePeriod
      *            Sample period.
      */
-    public MadgwickAHRS(float samplePeriod) {
-        this(samplePeriod, 1f);
+    public MadgwickAHRS(float samplePeriod, double initHeading) {
+        this(samplePeriod, 1f, initHeading);
     }
 
     /**
@@ -92,10 +92,13 @@ public class MadgwickAHRS {
      * @param beta
      *            Algorithm gain beta.
      */
-    public MadgwickAHRS(float samplePeriod, float beta) {
+    public MadgwickAHRS(float samplePeriod, float beta, double initHeading) {
         this.samplePeriod = samplePeriod;
         this.beta = beta;
-        this.quaternion = new float[] { 1f, 0f, 0f, 0f };
+
+        double headingRadians = Math.toRadians(initHeading);
+
+        this.quaternion = new float[] { 0f, 0f, (float) Math.sin(headingRadians / 2), (float) Math.cos(headingRadians / 2) };
     }
 
     public void updateMotionSample(MotionSample motionSample) {
@@ -417,7 +420,7 @@ public class MadgwickAHRS {
     }
 
     public float findHeading(){
-        return (float) Math.toDegrees(Math.atan2(2f * (quaternion[1] * quaternion[2] + quaternion[0] * quaternion[3]), 0.5f - quaternion[2] * quaternion[2] - quaternion[3] * quaternion[3]));
+        return (float) -Math.toDegrees(Math.atan2(2f * (quaternion[1] * quaternion[2] + quaternion[0] * quaternion[3]), 0.5f - quaternion[2] * quaternion[2] - quaternion[3] * quaternion[3]));
     }
 
     public float findPitch(){

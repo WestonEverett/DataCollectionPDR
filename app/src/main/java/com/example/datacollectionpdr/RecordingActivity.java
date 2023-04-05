@@ -24,6 +24,7 @@ import com.example.datacollectionpdr.datacollectionandpreparation.DataManager;
 import com.example.datacollectionpdr.nativedata.MotionSample;
 import com.example.datacollectionpdr.nativedata.PDRStep;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
+import com.example.datacollectionpdr.nativedata.UserPositionData;
 import com.example.datacollectionpdr.serializationandserver.FileManager;
 import com.example.datacollectionpdr.serializationandserver.ServerManager;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -33,6 +34,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
@@ -44,6 +46,7 @@ public class RecordingActivity extends DataManager {
     public static double[] currPointCoordinates= {0,0};
 
     public TrajectoryNative trajectoryNative;
+    public ArrayList<PDRStep> oldPdrSteps;
     // Initialize view
 
     @Override
@@ -59,7 +62,7 @@ public class RecordingActivity extends DataManager {
         setContentView(R.layout.activity_recording);
         viewModel = new ViewModelProvider(this).get(DataViewModel.class);
         showProperFragment();
-        this.startRecording();
+        this.startRecording(new UserPositionData(0,0,1,1));
 
     }
 

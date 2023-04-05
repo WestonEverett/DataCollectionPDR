@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class UITools {
 
-    public static void plotPDRTrajectory(ArrayList<PDRStep> steps, XYPlot plot){
+    public static void plotPDRTrajectory(ArrayList<PDRStep> steps, int color, XYPlot plot){
 
         ArrayList<Number> xVals = new ArrayList<>();
         ArrayList<Number> yVals = new ArrayList<>();
@@ -32,7 +32,7 @@ public class UITools {
 
         SimpleXYSeries series = new SimpleXYSeries(xVals, yVals, null);
 
-        LineAndPointFormatter series1Format = new LineAndPointFormatter(Color.RED, Color.RED, null, null);
+        LineAndPointFormatter series1Format = new LineAndPointFormatter(color, color, null, null);
 
         if (plot !=null){
             plot.clear();

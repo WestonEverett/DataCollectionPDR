@@ -12,8 +12,10 @@ import com.example.datacollectionpdr.nativedata.PositionData;
 import com.example.datacollectionpdr.nativedata.PressureData;
 import com.example.datacollectionpdr.nativedata.SensorDetails;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
+import com.example.datacollectionpdr.nativedata.UserPositionData;
 import com.example.datacollectionpdr.nativedata.WifiSample;
 import com.example.datacollectionpdr.pdrcalculation.AltitudeEstimation;
+import com.example.datacollectionpdr.pdrcalculation.GNSSCalculations;
 import com.example.datacollectionpdr.pdrcalculation.MadgwickAHRS;
 import com.example.datacollectionpdr.pdrcalculation.StepLengthEstimation;
 
@@ -36,7 +38,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     private ArrayList<float[]> gravities = new ArrayList<>();
 
 
-    private MadgwickAHRS madgwickAHRS = new MadgwickAHRS(0.1f);
+    private MadgwickAHRS madgwickAHRS = new MadgwickAHRS(0.1f, 0);
     private float startingAltitude;
     private boolean hasStartingAltitude;
     AltitudeEstimation altitudeEstimation = new AltitudeEstimation();
@@ -233,10 +235,11 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         return trajectoryNative;
     }
 
-    public void startRecording(){
+    public void startRecording(UserPositionData initPos){
         motionSample = new MotionSample();
-        trajectoryNative = new TrajectoryNative(System.currentTimeMillis());
-        trajectoryNative.setDataID("hmmmmm");
+        madgwickAHRS = new MadgwickAHRS(0.1f, initPos.heading);
+        trajectoryNative = new TrajectoryNative(System.currentTimeMillis(), initPos);
+        trajectoryNative.setDataID("no_id_entered");
         stepcountDM = curStepcount;
         isRecording = true;
         mMotionSensorManager.registerMotionSensors();
