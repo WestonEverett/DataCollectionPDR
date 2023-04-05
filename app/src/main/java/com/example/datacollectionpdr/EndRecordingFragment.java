@@ -15,9 +15,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.datacollectionpdr.nativedata.TrajectoryNative;
+import com.example.datacollectionpdr.nativedata.UserPositionData;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -41,7 +42,6 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
     double currLon;             //longitude from gps
     double currLat;             //lattitude from gps
     String recordingTime;
-    TextView timeTextView;
 
     public EndRecordingFragment() {
         // Required empty public constructor
@@ -56,9 +56,6 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_end_recording, container, false);
-
-        timeTextView = (TextView) view.findViewById(R.id.textViewTime);
-
         sendButton = (Button) view.findViewById(R.id.button_review);
         sendButton.setOnClickListener(this);
         sendButton.setEnabled(false);
@@ -75,18 +72,6 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
         orientationButton.setEnabled(false);
         orientationButton.setTextColor(getResources().getColor(R.color.blue_light));
 
-
-        long Tinit=(((RecordingActivity)getActivity()).trajectoryNative.initTime);
-
-        int pdrSize=((RecordingActivity)getActivity()).trajectoryNative.getmotionSample().size();
-
-        if (pdrSize != 0){
-            long Tfinal=(((RecordingActivity)getActivity()).trajectoryNative.getmotionSample().get(pdrSize- 1).initTime);
-            recordingTime=String.valueOf(Tinit-Tfinal);
-            timeTextView.setText("Recording Duration" + recordingTime);
-        }else {
-            timeTextView.setText("No Data Recorded");
-        }
 
 
         // Initialize map fragment
@@ -109,13 +94,14 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
                 }
 
 
-                googleMap.setMapType( GoogleMap.MAP_TYPE_NORMAL);
+                googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
                 googleMap.getUiSettings().setCompassEnabled(true);
                 googleMap.getUiSettings().setRotateGesturesEnabled(true);
                 googleMap.getUiSettings().setScrollGesturesEnabled(true);
                 googleMap.getUiSettings().setTiltGesturesEnabled(true);
                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
                     return;
                 }
                 else {
@@ -162,6 +148,12 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
                 ((Activity) getActivity()).overridePendingTransition(0, 0);
                 break;
             case R.id.button_review:
+                UserPositionData endPos = new UserPositionData(RecordingActivity.endCoordinates[0], RecordingActivity.endCoordinates[1], RecordingActivity.endCoordinates[2], RecordingActivity.endCoordinates[3]);
+
+                TrajectoryNative trajectoryNative = ((RecordingActivity) getActivity()).trajectoryNative;
+                trajectoryNative.applyGyroCorrection(endPos);
+                trajectoryNative.applyTrajectoryScaling(endPos);
+
                 FragmentTransaction fragmentTransaction = getActivity()
                         .getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentContainerView_recording_activity, new ReviewFragment());

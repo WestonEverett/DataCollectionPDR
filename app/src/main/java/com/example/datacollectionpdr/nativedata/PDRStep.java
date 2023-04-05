@@ -33,6 +33,12 @@ public class PDRStep {
         this.initTime = initTime;
     }
 
+    public PDRStep(long initTime, float x, float y){
+        this.x = x;
+        this.y = y;
+        this.initTime = initTime;
+    }
+
     public float getX() {
         return x;
     }
