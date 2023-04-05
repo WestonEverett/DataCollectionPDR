@@ -24,6 +24,7 @@ public class MainActivity extends PermissionsManager {
     private static final int REQUEST_ID_READ_WRITE_PERMISSION = 99;
     BottomNavigationView bottomNavigationView;
     public static String serverKeyString= "6xJi8iwetoU6miQZyduemQ";
+    public static String fileNameString="EnterFileName";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

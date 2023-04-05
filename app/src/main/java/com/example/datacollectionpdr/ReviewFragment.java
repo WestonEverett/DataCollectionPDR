@@ -24,6 +24,7 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
     Button sendButton;          //Send Button
     Button discardButton;      //Button to set Users start Location
     Button enterTextButton;      //Button to set Users start Location
+    Button enterFileNameButton;
     XYPlot plot;
 
     public ReviewFragment() {
@@ -48,6 +49,12 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
 
         enterTextButton = (Button) view.findViewById(R.id.button_entertext);
         enterTextButton.setOnClickListener(this);
+
+        enterFileNameButton = (Button) view.findViewById(R.id.button_entertext_file);
+        enterFileNameButton.setOnClickListener(this);
+
+        TextInputLayout textInputLayoutFile = view.findViewById(R.id.textInput_filename);
+        textInputLayoutFile.setHint("Suggested Name: "+ MainActivity.fileNameString);
 
         discardButton = (Button) view.findViewById(R.id.button_discard);
         discardButton.setOnClickListener(this);
@@ -78,6 +85,12 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
                 String text = textInputLayout.getEditText().getText().toString();
                 MainActivity.serverKeyString = text;
                 textInputLayout.setHint("Current ID: " + MainActivity.serverKeyString);
+                break;
+            case R.id.button_entertext_file:
+                TextInputLayout textInputLayoutFile = view.findViewById(R.id.textInput_filename);
+                String text_file = textInputLayoutFile.getEditText().getText().toString();
+                MainActivity.fileNameString = text_file;
+                textInputLayoutFile.setHint("Chosen Name: " + MainActivity.fileNameString);
                 break;
         }
     }
