@@ -80,10 +80,10 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
 
         long Tinit=(((RecordingActivity)getActivity()).trajectoryNative.initTime);
 
-        int pdrSize=((RecordingActivity)getActivity()).trajectoryNative.getmotionSample().size();
+        int pdrSize=((RecordingActivity)getActivity()).trajectoryNative.getMotionSample().size();
 
         if (pdrSize != 0){
-            long Tfinal=(((RecordingActivity)getActivity()).trajectoryNative.getmotionSample().get(pdrSize- 1).initTime);
+            long Tfinal=(((RecordingActivity)getActivity()).trajectoryNative.getMotionSample().get(pdrSize- 1).initTime);
             recordingTime=String.valueOf(Tinit-Tfinal);
             timeTextView.setText("Recording Duration" + recordingTime);
         }else {
