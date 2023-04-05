@@ -11,7 +11,7 @@
     android:layout_marginVertical="12dp"
     android:layout_marginStart="12dp"
     tools:context=".MainActivity"
-    android:background="@color/blue_light">
+    android:background="@color/blue_dark">
 
 
     <com.androidplot.xy.XYPlot

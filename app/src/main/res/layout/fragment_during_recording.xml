@@ -44,26 +44,26 @@
             <TextView
                 android:id="@+id/time_view_top"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_height="22dp"
                 android:gravity="center"
                 android:text="Recording Time:"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/time_view_bottom"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
+                android:layout_height="22dp"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/time_view_top"
-                android:gravity="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/black"/>
+                app:layout_constraintTop_toBottomOf="@+id/time_view_top" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -77,8 +77,9 @@
 
         <Button
             android:id="@+id/button_endRecording"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="60dp"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/rounded_corner"
@@ -89,9 +90,9 @@
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/coordinatorLayout"
-            android:layout_width="412dp"
-            android:layout_height="416dp"
-            android:layout_marginBottom="100dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="32dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -106,12 +107,13 @@
                     android:id="@+id/tab_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:itemBackground="@color/blue_dark"
+                    android:background="@color/blue"
                     app:tabGravity="fill"
-                    app:tabIndicatorColor="@color/orange_light"
+                    app:tabIndicatorColor="@color/blue_dark"
                     app:tabIndicatorHeight="264dp"
                     app:tabMode="fixed"
-                    app:tabSelectedTextColor="@color/black" />
+                    app:tabSelectedTextColor="@color/orange"
+                    app:tabTextColor="@color/orange_light" />
 
             </com.google.android.material.appbar.AppBarLayout>
 
