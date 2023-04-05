@@ -16,7 +16,6 @@
 
     <com.androidplot.xy.XYPlot
         android:id="@+id/plot"
-        style="@style/APDefacto.Dark"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_below="@+id/spinner2"
@@ -28,6 +27,7 @@
         android:layout_marginEnd="16dp"
         ap:borderThickness="1dp"
         ap:domainTitle="domain"
+        style="@style/APDefacto.Dark"
         android:background="@drawable/text_background"
         ap:backgroundColor="#00FFFFFF"
         ap:graphBackgroundColor="#00FFFFFF"
