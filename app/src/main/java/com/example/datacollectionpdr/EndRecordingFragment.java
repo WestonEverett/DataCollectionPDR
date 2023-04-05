@@ -111,13 +111,14 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
                 }
 
 
-                googleMap.setMapType( GoogleMap.MAP_TYPE_NORMAL);
+                googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
                 googleMap.getUiSettings().setCompassEnabled(true);
                 googleMap.getUiSettings().setRotateGesturesEnabled(true);
                 googleMap.getUiSettings().setScrollGesturesEnabled(true);
                 googleMap.getUiSettings().setTiltGesturesEnabled(true);
                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
                     return;
                 }
                 else {
