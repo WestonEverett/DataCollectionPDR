@@ -164,7 +164,7 @@ public class TrajectoryNative {
         double changeInHeadingDif = trueChangeInHeading - estimatedChangeInHeading;
 
         for (PDRStep pdr: pdrs) {
-            float percentTimePassed = (pdr.initTime - this.initTime) / totalTime;
+            float percentTimePassed = ((float) (pdr.initTime - this.initTime)) / totalTime;
             double pdrHeadingDif = percentTimePassed * changeInHeadingDif;
             pdr.setHeading(pdr.getHeading() + pdrHeadingDif);
         }
