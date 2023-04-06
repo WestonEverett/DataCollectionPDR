@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,14 +31,17 @@ public class About extends AppCompatActivity {
     Spinner dropdown;
 
     String[] SensorList = { "Accelerometer", "Gyroscope",
-            "Rotation", "Barometer", };
+            "Magnetometer", "Barometer", "Ambient Light", "Proximity" };
 
     public static Map<String, Integer> sensorTypes;
     static {
         sensorTypes = new HashMap<>();
         sensorTypes.put("Accelerometer", Sensor.TYPE_ACCELEROMETER);
         sensorTypes.put("Gyroscope", Sensor.TYPE_GYROSCOPE);
+        sensorTypes.put("Magnetometer", Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED);
         sensorTypes.put("Barometer", Sensor.TYPE_PRESSURE);
+        sensorTypes.put("Ambient Light", Sensor.TYPE_LIGHT);
+        sensorTypes.put("Proximity", Sensor.TYPE_PROXIMITY);
     }
 
     TextView textViewSensorInfo;
@@ -109,9 +113,12 @@ public class About extends AppCompatActivity {
 
                 int currSensor = sensorTypes.get(parent.getItemAtPosition(position));
                 SensorDetails currentDisplaySensor = sensorDetails(currSensor);
-                textViewSensorInfo.setText(currentDisplaySensor.name+" "+currentDisplaySensor.vendor+" "+currentDisplaySensor.version);
-
-
+                textViewSensorInfo.setText(Html.fromHtml(
+                        "<b>Name: </b>"+ currentDisplaySensor.name
+                        +"<br> <b> Vendor: </b> " + currentDisplaySensor.vendor
+                        +"<br> <b> Version: </b>"+currentDisplaySensor.version
+                        +"<br> <b>Power:</b>  "+ currentDisplaySensor.power
+                        +"<br><b>Resolution: </b> "+ currentDisplaySensor.res));
             }
 
             @Override
