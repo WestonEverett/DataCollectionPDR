@@ -243,5 +243,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         stepcountDM = curStepcount;
         isRecording = true;
         mMotionSensorManager.registerMotionSensors();
+
+
     }
 }

@@ -22,10 +22,18 @@
     <string name="settings_description">If you wish to save recorded trajectories to your files select  Save to Files option. To send data to the server enter your id below. Wait for WiFi option allows you to choose to only send data when connected to WiFi.</string>
     <string name="about_app">This app is your new tool for indoor positioning data collection.......</string>
     <string name="title_activity_maps">MapsActivity</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="description_startRec">Before you start recording, tell the app where you are and which way you are facing. Do that by first placing a marker on the map and then when you are happy with your marker accept it with a button.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="recordingDuration">Recording Duration:</string>
+    <string name="recordingDuration_noData"> No Data Recorded</string>
+
+    RECORDING STOPPED
+
+
+
+
 
 
 </resources>

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class TrajectoryNative {
 
     UserPositionData initPos;
-    long initTime;
+    public final long initTime;
     String androidVersion;
     String dataID;
 
@@ -53,6 +53,10 @@ public class TrajectoryNative {
 
     public ArrayList<PDRStep> getPdrs() {
         return pdrs;
+    }
+
+    public ArrayList<MotionSample> getMotionSample() {
+        return motions;
     }
 
     public void addPDRStep(PDRStep pdrStep){

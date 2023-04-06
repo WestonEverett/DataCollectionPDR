@@ -26,6 +26,7 @@ import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYSeries;
 import com.androidplot.xy.*;
+import com.androidplot.xy.XYPlot;
 
 import java.text.FieldPosition;
 import java.text.Format;
@@ -35,7 +36,7 @@ import java.util.*;
 public class GraphsFragment extends Fragment {
 
     String[] SensorList = { "Accelerometer", "Gyroscope",
-            "Rotation"};
+            "Rotation", "Barometer"};
 
     public GraphsFragment() {
         // required empty public constructor.
@@ -54,6 +55,7 @@ public class GraphsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_graphs, container, false);
         // initialize our XYPlot reference:
         plot = (XYPlot) view.findViewById(R.id.plot);
+
 
         RecordingActivity activity = (RecordingActivity) getActivity();
 
@@ -145,12 +147,10 @@ public class GraphsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.v("item", (String) parent.getItemAtPosition(position));
-                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLUE);
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
 
                 currentDisplaySensor=(String) parent.getItemAtPosition(position);
                 RecordingActivity activity = (RecordingActivity) getActivity();
-
-
 
              }
 
