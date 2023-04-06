@@ -5,20 +5,42 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.datacollectionpdr.nativedata.SensorDetails;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class About extends AppCompatActivity {
 
     private SensorManager sensorManager; // SensorManager for getting sensor info (not data)
+    Spinner dropdown;
+
+    String[] SensorList = { "Accelerometer", "Gyroscope",
+            "Rotation", "Barometer", };
+
+    public static Map<String, Integer> sensorTypes;
+    static {
+        sensorTypes = new HashMap<>();
+        sensorTypes.put("Accelerometer", Sensor.TYPE_ACCELEROMETER);
+        sensorTypes.put("Gyroscope", Sensor.TYPE_GYROSCOPE);
+        sensorTypes.put("Barometer", Sensor.TYPE_PRESSURE);
+    }
+
+    TextView textViewSensorInfo;
 
     // Function returns sensor info object
     public SensorDetails sensorDetails(int type){
@@ -35,13 +57,16 @@ public class About extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         setContentView(R.layout.activity_about);
-
         getSupportActionBar().hide();
 
-        //Simple TextView for accelerometer info, change into menu later
-        TextView textView9 = findViewById(R.id.text_sensor_info1);
-        SensorDetails Accelerometer = sensorDetails(Sensor.TYPE_ACCELEROMETER); // Instantiate SensorDetails object with the sensor type
-        textView9.setText(Accelerometer.name+" "+Accelerometer.vendor+" "+Accelerometer.version);
+        dropdown = findViewById(R.id.spinner_sensors);
+        initspinnerfooter();
+
+        //Simple TextView for sensor info display
+        textViewSensorInfo = findViewById(R.id.textView_sensorInfo);
+        textViewSensorInfo.setText(R.string.text_spiner_init);
+
+
         // Initialize and assign variable
         BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_navigation);
 
@@ -71,5 +96,29 @@ public class About extends AppCompatActivity {
         });
     }
     public static final String EXTRA_MESSAGE = "com.example.datacollectionPDR.MESSAGE";
+
+    private void initspinnerfooter() {
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, SensorList);
+        dropdown.setAdapter(adapter);
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.v("item", (String) parent.getItemAtPosition(position));
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
+
+                int currSensor = sensorTypes.get(parent.getItemAtPosition(position));
+                SensorDetails currentDisplaySensor = sensorDetails(currSensor);
+                textViewSensorInfo.setText(currentDisplaySensor.name+" "+currentDisplaySensor.vendor+" "+currentDisplaySensor.version);
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
 
 }
