@@ -6,12 +6,14 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.datacollectionpdr.nativedata.MotionSample;
 import com.example.datacollectionpdr.nativedata.PDRStep;
+import com.example.datacollectionpdr.nativedata.PressureData;
 
 import java.util.ArrayList;
 
 public class DataViewModel extends ViewModel {
     private final MutableLiveData<MotionSample> motionSampleLiveData = new MutableLiveData<>();
     private final MutableLiveData<PDRStep> pdrStepLiveData = new MutableLiveData<>();
+    private final MutableLiveData<PressureData> pressureLiveData = new MutableLiveData<>();
 
     public void updateMotionSample(MotionSample motionSample) {
         motionSampleLiveData.setValue(motionSample);
@@ -27,5 +29,13 @@ public class DataViewModel extends ViewModel {
 
     public LiveData<PDRStep> getPDRStep() {
         return pdrStepLiveData;
+    }
+
+    public void updatePressure(PressureData pressureData) {
+        pressureLiveData.setValue(pressureData);
+    }
+
+    public LiveData<PressureData> getPressure() {
+        return pressureLiveData;
     }
 }

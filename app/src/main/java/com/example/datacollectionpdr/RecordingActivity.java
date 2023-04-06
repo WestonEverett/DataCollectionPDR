@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.example.datacollectionpdr.datacollectionandpreparation.DataManager;
 import com.example.datacollectionpdr.nativedata.MotionSample;
 import com.example.datacollectionpdr.nativedata.PDRStep;
+import com.example.datacollectionpdr.nativedata.PressureData;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
 import com.example.datacollectionpdr.nativedata.UserPositionData;
 import com.example.datacollectionpdr.serializationandserver.FileManager;
@@ -78,6 +79,13 @@ public class RecordingActivity extends DataManager {
         super.newPDRStep(pdrStep);
 
         viewModel.updatePDRSample(pdrStep);
+    }
+
+    @Override
+    public void onBarometerValueUpdated(float pressure){
+        super.onBarometerValueUpdated(pressure);
+
+        viewModel.updatePressure(new PressureData(System.currentTimeMillis(), pressure));
     }
 
     private void showProperFragment() {
