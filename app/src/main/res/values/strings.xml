@@ -20,7 +20,6 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
     <string name="settings_description">If you wish to save recorded trajectories to your files select  Save to Files option. To send data to the server enter your id below. Wait for WiFi option allows you to choose to only send data when connected to WiFi.</string>
-    <string name="about_app">PathFinder is a tool meant to aid research in indoor positioning. The app collects data from the following sensors: Accelerometer, Gyroscope, Magnetometer, Barometer, Location, WiFi, Ambient Light, Proximity, Rotation and Activity data.\nThese data are used to trace your position as you walk around a building. The raw data and the path estimation are submitted to an online database. The path estimation is adjusted when starting and ending points are provided.</string>
     <!-- TODO: Increase the size of the above textview -->
     <string name="title_activity_maps">MapsActivity</string>
 
@@ -36,9 +35,13 @@
     <!-- About Page -->
     <string name="aboutPage_title">INFORMATION  </string>
     <string name="aboutApp_title"> About PathFinder App </string>
-    <string name="AboutApp_text"> Write something about the app purpose etc </string>
+    <string name="AboutApp_text"> PathFinder aids research in indoor positioning, creating indoor building maps, and assessing building hotspots.\nThe app collects data from the following sensors: Accelerometer, Gyroscope, Magnetometer, Barometer, Location, WiFi, Ambient Light, Proximity, Rotation and Activity data.\nThese data are used to trace your position as you walk around a building, and are submitted to an online database.</string>
     <string name="howToUse_title">Tips on Using PathFinder </string>
-    <string name="howToUse_text"> Tips on using this app? or FaQ or something like that?</string>
+    <string name="howToUse_text"> To achieve the best results with PathFinder, try holding your phone
+                                    in a consistent orientation, and take regular steps with an
+                                    exaggerated motion, to assist the step detection algorithms.
+                                    Recognising floor changes can take time, as such continuous floor
+                                    changes are discouraged.</string>
     <string name="sensorInfo_title">Sensor Information  </string>
     <string name="sensorInfo_type">Sensor Type: </string>
     <string name="text_spiner_init">Select Sensor Type</string>
