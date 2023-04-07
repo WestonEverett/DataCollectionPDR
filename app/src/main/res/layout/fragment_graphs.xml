@@ -36,7 +36,7 @@
         ap:lineLabels="left|bottom"
         ap:paddingTop="6dp"
         ap:rangeTitle="range"
-        ap:title="Live Sensor Data Plot"
+        ap:title="@string/SensorsGraphTitle"
         ap:titleTextColor="@color/orange">
 
     </com.androidplot.xy.XYPlot>
@@ -49,9 +49,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="18dp"
         android:layout_marginTop="18dp"
-        android:layout_weight="1"
         android:gravity="center"
-        android:text="SENSOR DATA DISPLAYED:"
+        android:text="@string/SensorsDropdown"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/white" />
 

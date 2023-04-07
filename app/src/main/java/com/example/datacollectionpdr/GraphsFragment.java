@@ -89,7 +89,6 @@ public class GraphsFragment extends Fragment {
 
         recentMeasurements = new RecentMeasurements(200);
         currentDisplaySensor = "Accelerometer";
-
         PixelUtils.init(getActivity());
     }
 

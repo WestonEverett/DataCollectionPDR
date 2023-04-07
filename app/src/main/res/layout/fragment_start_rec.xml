@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,7 +20,7 @@
             android:layout_marginBottom="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="CHOOSE STARTING POINT"
+            android:text="@string/startRec_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:autoSizeTextType="uniform"
             android:textColor="@color/white"
@@ -50,7 +51,7 @@
                 android:layout_height="60dp"
                 android:layout_marginStart="16dp"
                 android:background="@drawable/rounded_corner"
-                android:text="I am Here"
+                android:text="@string/location_button"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -63,7 +64,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:background="@drawable/rounded_corner"
-                android:text="I am facing this way"
+                android:text="@string/orientation_button"
                 app:layout_constraintBottom_toBottomOf="@+id/button_addStartPoint"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/button_addStartPoint" />
@@ -78,14 +79,14 @@
                 android:layout_weight="2"
                 android:background="@drawable/rounded_corner"
                 android:elevation="0dp"
-                android:text="START RECORDING"
+                android:text="@string/startRec_button"
                 app:iconPadding="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/google_map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="0dp"
@@ -102,4 +103,4 @@
 
     </LinearLayout>
 
-</FrameLayout>
+</RelativeLayout>
