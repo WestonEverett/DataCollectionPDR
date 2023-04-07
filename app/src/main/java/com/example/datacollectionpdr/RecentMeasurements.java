@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.datacollectionpdr.nativedata.MotionSample;
 import com.example.datacollectionpdr.nativedata.PDRStep;
+import com.example.datacollectionpdr.nativedata.PressureData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,12 +15,16 @@ public class RecentMeasurements {
     private final SetLengthFloatArray[] accRecentMeasurements;
     private final SetLengthFloatArray[] gyroRecentMeasurements;
     private final SetLengthFloatArray[] rotRecentMeasurements;
+    private final SetLengthFloatArray[] baroRecentMeasurements;
 
     public RecentMeasurements(int graphPoints){
         motionTimeRecentMeasurements = new SetLengthLongArray(graphPoints);
         accRecentMeasurements = new SetLengthFloatArray[]{
                 new SetLengthFloatArray(graphPoints),
                 new SetLengthFloatArray(graphPoints),
+                new SetLengthFloatArray(graphPoints),
+        };
+        baroRecentMeasurements = new SetLengthFloatArray[]{
                 new SetLengthFloatArray(graphPoints),
         };
         gyroRecentMeasurements = new SetLengthFloatArray[]{
@@ -56,6 +61,10 @@ public class RecentMeasurements {
         rotRecentMeasurements[2].addValue(rot[2]);
     }
 
+    public void updateMeasurements(PressureData pressureData) {
+        baroRecentMeasurements[0].addValue(pressureData.pressure);
+    }
+
     public Number[][] getData(String sensor) {
 
         Long[] times = motionTimeRecentMeasurements.getArray();
@@ -78,6 +87,10 @@ public class RecentMeasurements {
                 Float[] rotZ = rotRecentMeasurements[2].getArray();
                 //Log.e("Hm", Arrays.toString(rotX));
                 return new Number[][]{times, rotX, rotY, rotZ};
+            case "Barometer":
+                Float[] baro = baroRecentMeasurements[0].getArray();
+                //Log.e("Hm", Arrays.toString(rotX));
+                return new Number[][]{times, baro};
         }
 
         return new Number[][]{times};

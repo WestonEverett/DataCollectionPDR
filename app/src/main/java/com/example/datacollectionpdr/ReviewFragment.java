@@ -2,6 +2,7 @@ package com.example.datacollectionpdr;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -23,6 +24,7 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
     Button sendButton;          //Send Button
     Button discardButton;      //Button to set Users start Location
     Button enterTextButton;      //Button to set Users start Location
+    Button enterFileNameButton;
     XYPlot plot;
 
     public ReviewFragment() {
@@ -48,11 +50,17 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
         enterTextButton = (Button) view.findViewById(R.id.button_entertext);
         enterTextButton.setOnClickListener(this);
 
+        enterFileNameButton = (Button) view.findViewById(R.id.button_entertext_file);
+        enterFileNameButton.setOnClickListener(this);
+
+        TextInputLayout textInputLayoutFile = view.findViewById(R.id.textInput_filename);
+        textInputLayoutFile.setHint("Suggested Name: "+ MainActivity.fileNameString);
+
         discardButton = (Button) view.findViewById(R.id.button_discard);
         discardButton.setOnClickListener(this);
 
         plot = (XYPlot) view.findViewById(R.id.plot2);
-        UITools.plotPDRTrajectory(((RecordingActivity) getActivity()).trajectoryNative.getPdrs(), plot);
+        UITools.plotPDRTrajectory(((RecordingActivity) getActivity()).trajectoryNative.getPdrs(), Color.RED, plot);
 
         // Inflate the layout for this fragment
         return view;
@@ -77,6 +85,12 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
                 String text = textInputLayout.getEditText().getText().toString();
                 MainActivity.serverKeyString = text;
                 textInputLayout.setHint("Current ID: " + MainActivity.serverKeyString);
+                break;
+            case R.id.button_entertext_file:
+                TextInputLayout textInputLayoutFile = view.findViewById(R.id.textInput_filename);
+                String text_file = textInputLayoutFile.getEditText().getText().toString();
+                MainActivity.fileNameString = text_file;
+                textInputLayoutFile.setHint("Chosen Name: " + MainActivity.fileNameString);
                 break;
         }
     }

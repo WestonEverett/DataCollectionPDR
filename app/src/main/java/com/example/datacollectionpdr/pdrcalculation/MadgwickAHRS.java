@@ -420,7 +420,7 @@ public class MadgwickAHRS {
     }
 
     public float findHeading(){
-        return (float) Math.toDegrees(Math.atan2(2f * (quaternion[1] * quaternion[2] + quaternion[0] * quaternion[3]), 0.5f - quaternion[2] * quaternion[2] - quaternion[3] * quaternion[3]));
+        return (float) -Math.toDegrees(Math.atan2(2f * (quaternion[1] * quaternion[2] + quaternion[0] * quaternion[3]), 0.5f - quaternion[2] * quaternion[2] - quaternion[3] * quaternion[3]));
     }
 
     public float findPitch(){

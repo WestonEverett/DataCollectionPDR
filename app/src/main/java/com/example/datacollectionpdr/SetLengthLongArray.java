@@ -10,7 +10,7 @@ public class SetLengthLongArray {
     public SetLengthLongArray(int maxLength, Long defaultVal){
         this.maxLength = maxLength;
         internalArray = new ArrayList<>();
-        for(int i = 0; i < 20; i++){
+        for(int i = 0; i < maxLength; i++){
             internalArray.add(0,defaultVal);
         }
     }
@@ -37,7 +37,7 @@ public class SetLengthLongArray {
         }
         */
 
-        return internalArray.toArray(internalArray.toArray(new Long[0]));
+        return internalArray.toArray(new Long[0]);
     }
 
 }

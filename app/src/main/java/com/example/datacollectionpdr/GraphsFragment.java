@@ -22,10 +22,12 @@ import android.widget.Spinner;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.androidplot.Series;
 import com.androidplot.util.PixelUtils;
 import com.androidplot.xy.SimpleXYSeries;
 import com.androidplot.xy.XYSeries;
 import com.androidplot.xy.*;
+import com.androidplot.xy.XYPlot;
 
 import java.text.FieldPosition;
 import java.text.Format;
@@ -35,7 +37,7 @@ import java.util.*;
 public class GraphsFragment extends Fragment {
 
     String[] SensorList = { "Accelerometer", "Gyroscope",
-            "Rotation"};
+            "Rotation", "Barometer"};
 
     public GraphsFragment() {
         // required empty public constructor.
@@ -55,6 +57,7 @@ public class GraphsFragment extends Fragment {
         // initialize our XYPlot reference:
         plot = (XYPlot) view.findViewById(R.id.plot);
 
+
         RecordingActivity activity = (RecordingActivity) getActivity();
 
         dropdown = view.findViewById(R.id.spinner2);
@@ -69,9 +72,14 @@ public class GraphsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
+
         viewModel.getMotionSample().observe(getViewLifecycleOwner(), item -> {
             recentMeasurements.updateMeasurements(item);
             PlotThePlot(recentMeasurements.getData(currentDisplaySensor));
+        });
+
+        viewModel.getPressure().observe(getViewLifecycleOwner(), item -> {
+            recentMeasurements.updateMeasurements(item);
         });
     }
 
@@ -88,38 +96,23 @@ public class GraphsFragment extends Fragment {
     public void PlotThePlot(Number[][] plotData){
 
         Number[] domainLabels=plotData[0];
-        Number[] series1Numbers=plotData[1];
-        Number[] series2Numbers=plotData[2];
-        Number[] series3Numbers=plotData[3];
 
-        //Log.d("plt", "Value: " + Float.toString((Float) series1Numbers[0]));
-        //Log.d("plt", "Current Display Sensor: " + currentDisplaySensor);
-        //Log.d("plt","should be showing a value");
+        ArrayList<SimpleXYSeries> series = new ArrayList<>();
+        ArrayList<LineAndPointFormatter> seriesFormats = new ArrayList<>();
+        String[] titles = new String[]{"time", "X data", "Y data", "Z data"};
+        int[] colors = new int[]{Color.BLACK, Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.CYAN};
 
-        // turn the above arrays into XYSeries':
-        // (Y_VALS_ONLY means use the element index as the x value)
-        XYSeries series1 = new SimpleXYSeries(
-                Arrays.asList(series1Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "X data");
-        XYSeries series2 = new SimpleXYSeries(
-                Arrays.asList(series2Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Y data");
-        XYSeries series3 = new SimpleXYSeries(
-                Arrays.asList(series3Numbers), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, "Z data");
-
-        // create formatters to use for drawing a series using LineAndPointRenderer
-        // and configure them from xml:
-        LineAndPointFormatter series1Format = new LineAndPointFormatter(Color.RED, Color.RED, null, null);
-        LineAndPointFormatter series2Format = new LineAndPointFormatter(Color.BLUE, Color.BLUE, null, null);
-        LineAndPointFormatter series3Format = new LineAndPointFormatter(Color.GREEN, Color.GREEN, null, null);
-
+        for(int i = 1; i < plotData.length; i++){
+            series.add(new SimpleXYSeries(Arrays.asList(plotData[i]), SimpleXYSeries.ArrayFormat.Y_VALS_ONLY, titles[i]));
+            seriesFormats.add(new LineAndPointFormatter(colors[i], colors[i], null, null));
+        }
 
         if (plot !=null){
             plot.clear();
 
-            // add a new series' to the xyplot:
-            plot.addSeries(series1, series1Format);
-            plot.addSeries(series2, series2Format);
-            plot.addSeries(series3, series3Format);
-
+            for (int i = 0; i < series.size(); i++){
+                plot.addSeries(series.get(i), seriesFormats.get(i));
+            }
 
             plot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new Format() {
                 @Override
@@ -145,12 +138,10 @@ public class GraphsFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.v("item", (String) parent.getItemAtPosition(position));
-                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLUE);
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
 
                 currentDisplaySensor=(String) parent.getItemAtPosition(position);
                 RecordingActivity activity = (RecordingActivity) getActivity();
-
-
 
              }
 

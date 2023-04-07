@@ -10,7 +10,7 @@ public class SetLengthFloatArray {
     public SetLengthFloatArray(int maxLength, Float defaultVal){
         this.maxLength = maxLength;
         internalArray = new ArrayList<>();
-        for(int i = 0; i < 20; i++){
+        for(int i = 0; i < maxLength; i++){
             internalArray.add(0,defaultVal);
         }
     }

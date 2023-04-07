@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.example.datacollectionpdr.datacollectionandpreparation.DataManager;
 import com.example.datacollectionpdr.nativedata.MotionSample;
 import com.example.datacollectionpdr.nativedata.PDRStep;
+import com.example.datacollectionpdr.nativedata.PressureData;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
 import com.example.datacollectionpdr.nativedata.UserPositionData;
 import com.example.datacollectionpdr.serializationandserver.FileManager;
@@ -34,6 +35,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
@@ -45,6 +47,7 @@ public class RecordingActivity extends DataManager {
     public static double[] currPointCoordinates= {0,0};
 
     public TrajectoryNative trajectoryNative;
+    public ArrayList<PDRStep> oldPdrSteps;
     // Initialize view
 
     @Override
@@ -76,6 +79,13 @@ public class RecordingActivity extends DataManager {
         super.newPDRStep(pdrStep);
 
         viewModel.updatePDRSample(pdrStep);
+    }
+
+    @Override
+    public void onBarometerValueUpdated(float pressure){
+        super.onBarometerValueUpdated(pressure);
+
+        viewModel.updatePressure(new PressureData(System.currentTimeMillis(), pressure));
     }
 
     private void showProperFragment() {

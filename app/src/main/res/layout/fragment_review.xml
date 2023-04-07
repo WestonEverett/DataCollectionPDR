@@ -1,150 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ap="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginTop="12dp"
+    android:layout_marginBottom="72dp"
     tools:context=".ReviewFragment">
 
     <TextView
-        android:id="@+id/textView15"
+        android:id="@+id/textView_heading"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="12dp"
-        android:text="RECORDING STOPPED"
-        android:textColor="@color/white"
+        android:gravity="center"
+        android:text="/recordingStopped"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_review"
         app:layout_constraintTop_toTopOf="parent"
-        app:textAllCaps="true"
-        android:gravity="center"/>
+        app:textAllCaps="true" />
 
     <FrameLayout
         android:id="@+id/frameLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView15">
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        ap:layout_constraintBottom_toTopOf="@+id/constraintLayout_filename"
+        ap:layout_constraintEnd_toEndOf="parent"
+        ap:layout_constraintStart_toStartOf="parent"
+        ap:layout_constraintTop_toBottomOf="@+id/textView_heading">
 
         <com.androidplot.xy.XYPlot
             android:id="@+id/plot2"
-            style="@style/APDefacto.Light"
-            ap:domainTitle="domain"
-            ap:lineLabelRotationBottom="-45"
-            ap:lineLabels="left|bottom"
-            ap:rangeTitle="range"
-            ap:title="Corrected PDR Trajectory Plot"
+            style="@style/APDefacto.Dark"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/spinner2"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/text_background"
+            ap:backgroundColor="#00FFFFFF"
+            ap:graphBackgroundColor="#00FFFFFF"
+            ap:gridBackgroundColor="#00FFFFFF"
+            ap:domainTitle="domain"
+            ap:lineLabelRotationBottom="-45"
+            ap:lineLabels="left|bottom"
+            ap:rangeTitle="range"
+            ap:title="Corrected PDR Trajectory Plot"
+            ap:titleTextColor="@color/orange"/>
     </FrameLayout>
 
+    <Button
+        android:id="@+id/button_discard"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/rounded_corner"
+        android:text="Discard"
+        ap:layout_constraintBottom_toBottomOf="parent"
+        ap:layout_constraintEnd_toEndOf="parent"
+        ap:layout_constraintStart_toStartOf="@+id/guideline2"
+        ap:layout_constraintTop_toTopOf="@+id/button_review" />
+
+    <Button
+        android:id="@+id/button_review"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/rounded_corner"
+        android:text="Send"
+        ap:layout_constraintBottom_toBottomOf="parent"
+        ap:layout_constraintEnd_toStartOf="@+id/guideline2"
+        ap:layout_constraintStart_toStartOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/constraintLayout_filename"
         android:layout_width="match_parent"
-        android:layout_height="268dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="124dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintGuide_end="194dp"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:padding="8dp"
-            android:background="@drawable/text_background">
-
-            <Button
-                android:id="@+id/button_entertext"
-                android:layout_width="108dp"
-                android:layout_height="63dp"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_corner"
-                android:text="ENTER"
-                app:layout_constraintBottom_toBottomOf="@+id/textInput_serverid"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textInput_serverid"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="386dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="24dp"
-                android:text="To send data to the server enter a valid API key"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInput_serverid"
-                android:layout_width="0dp"
-                android:layout_height="65dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="24dp"
-                app:layout_constraintEnd_toStartOf="@+id/button_entertext"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView8">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="enter your server ID" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/text_background"
+        android:padding="8dp"
+        ap:layout_constraintBottom_toTopOf="@+id/constraintLayout_key"
+        ap:layout_constraintEnd_toEndOf="parent"
+        ap:layout_constraintStart_toStartOf="parent">
 
         <Button
-            android:id="@+id/button_review"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginEnd="12dp"
-            android:background="@drawable/rounded_corner"
-            android:text="Send"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
-
-        <Button
-            android:id="@+id/button_discard"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:id="@+id/button_entertext_file"
+            android:layout_width="108dp"
+            android:layout_height="63dp"
             android:layout_marginStart="12dp"
+            android:layout_weight="1"
             android:background="@drawable/rounded_corner"
-            android:text="Discard"
-            app:layout_constraintBottom_toBottomOf="@+id/button_review"
+            android:text="ENTER"
+            ap:layout_constraintStart_toEndOf="@+id/textInput_filename"
+            app:layout_constraintBottom_toBottomOf="@+id/textInput_filename"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toTopOf="@+id/button_review" />
+            app:layout_constraintTop_toTopOf="@+id/textInput_filename"
+            app:layout_constraintVertical_bias="0.0" />
 
+        <TextView
+            android:id="@+id/textView_file"
+            android:layout_width="386dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="24dp"
+            android:text="Enter name of the recording file"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInput_filename"
+            android:layout_width="0dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintEnd_toStartOf="@+id/button_entertext_file"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_file"
+            android:textColorHint="@color/secondary_text">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Name your Recording File" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="194dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout_key"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/text_background"
+        android:padding="8dp"
+        ap:layout_constraintBottom_toTopOf="@+id/button_review"
+        ap:layout_constraintEnd_toEndOf="parent"
+        ap:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/button_entertext"
+            android:layout_width="108dp"
+            android:layout_height="63dp"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:background="@drawable/rounded_corner"
+            android:text="ENTER"
+            ap:layout_constraintStart_toEndOf="@+id/textInput_serverid"
+            app:layout_constraintBottom_toBottomOf="@+id/textInput_serverid"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textInput_serverid"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/textView_id_propmpt"
+            android:layout_width="386dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="24dp"
+            android:text="To send data to the server enter a valid API key"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInput_serverid"
+            android:layout_width="0dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintEnd_toStartOf="@+id/button_entertext"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_id_propmpt"
+            android:textColorHint="@color/secondary_text">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="enter your server ID" />
+        </com.google.android.material.textfield.TextInputLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
