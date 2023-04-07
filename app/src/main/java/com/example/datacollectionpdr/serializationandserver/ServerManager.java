@@ -20,17 +20,19 @@ import okhttp3.Response;
 public class ServerManager {
 
     String apiKey;
+    String site;
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     public ServerManager(String apikey){
         this.apiKey = apikey;
+        this.site = "https://openpositioning.org";
     }
 
     public String sendData(TrajectoryNative trajectoryNative) throws IOException {
 
         OkHttpClient client = new OkHttpClient();
         // URL of the server
-        String url = "https://openpositioning.org/api/live/trajectory/upload/" + apiKey + "/?key=ewireless";
+        String url =  site + "/api/live/trajectory/upload/"+ apiKey + "/?key=ewireless";
 
         Trajectory serializedTraj = trajectoryNative.generateSerialized();
         byte[] trajBytes = serializedTraj.toByteArray();
@@ -53,7 +55,43 @@ public class ServerManager {
         }
     }
 
-    public TrajectoryNative getData(){
-        return new TrajectoryNative(0, new UserPositionData(0,0,0,0));
+    public String downloadData(){
+        OkHttpClient client = new OkHttpClient();
+
+        String url = site + "/api/live/trajectory/download/" + apiKey + "/?key=ewireless";
+
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        String responseBody;
+        try (Response response = client.newCall(request).execute()) {
+            responseBody = response.body().string();
+        } catch (IOException e) {
+            responseBody = e.toString();
+        }
+
+        return responseBody;
+    }
+
+    public String readData(){
+        OkHttpClient client = new OkHttpClient();
+        // URL of the server
+        String url = "https://openpositioning.org/api/live/users/trajectories/" + apiKey + "/?key=ewireless";
+
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        String responseBody;
+        try (Response response = client.newCall(request).execute()) {
+            responseBody = response.body().string();
+        } catch (IOException e) {
+            responseBody = e.toString();
+        }
+
+        return responseBody;
     }
 }
