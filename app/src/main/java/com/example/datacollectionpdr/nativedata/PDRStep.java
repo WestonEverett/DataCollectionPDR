@@ -10,29 +10,31 @@ import com.example.datacollectionpdr.pdrcalculation.StepLengthEstimation;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/** PDRStep.java
+ * Authors: Alexandros Miteloudis Vagionas, Weston Everett
+ * Affiliation: The University of Edinburgh
+ * Description: PDRStep collects all relevant PDR data, namely step size, heading and altitude.
+ * It calculates the displacement on an X-Y axis given a step size and heading.
+ */
 public class PDRStep {
 
-    private float x;
-    private float y;
-    private double heading;
-    private int estFloor;
-    private float magnitude;
-    public long initTime;
+    private float x; //X-axis displacement
+    private float y; //Y-axis displacement
+    private double heading; //Direction the user is facing with respect to North
+    private int estFloor; //Estimated floor level the user is currently on
+    private float magnitude; //Estimated step size
+    public long initTime; //Time the step was taken
 
+    //Initialises internal values each time a step is taken
     public PDRStep(float stepSize, float heading, long initTime){
-        ////// Finding heading //////
         this.heading = heading;
-        /*StepLengthEstimation stepLengthEstimate = new StepLengthEstimation();
-        stepLengthEstimate.setAccelerations(accelerations);
-        stepLengthEstimate.setGravities(gravities);
-        float stepSize = stepLengthEstimate.findStepLength();*/
         this.magnitude = stepSize;
         Log.i("PDRStep", "stepSize:" + this.magnitude + "; Heading" + this.heading);
         this.updateXY();
-        ////// Finding x and y lengths //////
         this.initTime = initTime;
     }
 
+    //Can also be initialised with X-Y axis coordinates
     public PDRStep(long initTime, float x, float y){
         this.x = x;
         this.y = y;
@@ -77,8 +79,15 @@ public class PDRStep {
         this.estFloor = estFloor;
     }
 
+    //Updates the X-Y axis coordinates from a step size and heading
     private void updateXY(){
         this.x = magnitude * (float) Math.sin(Math.toRadians(heading));
         this.y = magnitude * (float) Math.cos(Math.toRadians(heading));
+    }
+
+    //Added for completeness
+    private void updateMagAndHeading(){
+        this.magnitude = (float) Math.sqrt(x*x+y*y);
+        this.heading = (float) Math.atan(y/x);
     }
 }
