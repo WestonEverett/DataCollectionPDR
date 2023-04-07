@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DataCollectionPDR</string>
+    <string name="app_name">PathFinder</string>
     <string name="title_activity_settings">SettingsActivity</string>
 
     <string name="map_id">33f20db2d06ca4f9</string>
@@ -29,11 +29,15 @@
     <string name="recordingDuration">Recording Duration:</string>
     <string name="recordingDuration_noData"> No Data Recorded</string>
 
-    RECORDING STOPPED
-
-
-
-
+    <!-- About Page -->
+    <string name="aboutPage_title">INFORMATION  </string>
+    <string name="aboutApp_title"> About PathFinder App </string>
+    <string name="AboutApp_text"> Write something about the app purpose etc </string>
+    <string name="howToUse_title">Tips on Using PathFinder </string>
+    <string name="howToUse_text"> Tips on using this app? or FaQ or something like that?</string>
+    <string name="sensorInfo_title">Sensor Information  </string>
+    <string name="sensorInfo_type">Sensor Type: </string>
+    <string name="text_spiner_init">Select Sensor Type</string>
 
 
 </resources>
