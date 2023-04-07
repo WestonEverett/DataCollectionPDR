@@ -22,33 +22,40 @@ import com.example.datacollectionpdr.pdrcalculation.StepLengthEstimation;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/** DataManager.java
+ * Authors: Weston Everett, Alexandros Miteloudis Vagionas
+ * Affiliation: The University of Edinburgh
+ * Description: DataManager handles part of the processing of raw data colleced by DataCollection.
+ * When new data is provided by a sensor, DataManager is called to process, package, and send the
+ * data to TrajectoryNative and to UI elements. Important functions include:
+ * onStepDetectorUpdated() which creates a new PDR step from available data each time it is called,
+ * deadWithMotionSample(), which sends a package of accelerometer, gyroscope and rotation values to
+ * TrajectoryNative whenever a complete sample package is provided.
+ */
+
 public class DataManager extends PermissionsManager implements DataCollection.OnMotionSensorManagerListener{
-    private int stepcountDM;
-    private int curStepcount;
-    private MotionSample motionSample;
+    private int stepcountDM; //Initial step count when app is opened
+    private int curStepcount; //Step count since app was opened
+    private MotionSample motionSample; //Collection of acc,gyr, and rot data
     private com.example.datacollectionpdr.datacollectionandpreparation.DataCollection mMotionSensorManager;
-    protected TrajectoryNative trajectoryNative;
-    private boolean isRecording;
-    HashMap<String, WifiObject> WifiData;
-
-    private float[] curGravity = new float[]{0f, 9.8f, 0f};
-    private float[] curMagnetic;
-    public GNSSData curGNSSData;
-    private ArrayList<float[]> accelerations = new ArrayList<>();
-    private ArrayList<float[]> gravities = new ArrayList<>();
-
-
-    private MadgwickAHRS madgwickAHRS = new MadgwickAHRS(0.1f, 0);
-    private float startingAltitude;
-    private boolean hasStartingAltitude;
-    AltitudeEstimation altitudeEstimation = new AltitudeEstimation();
-    private float lpfPressure;
-    private float hpfPressure;
-    private static final float ALPHA = 0.8f;
+    protected TrajectoryNative trajectoryNative; //Class used to send data to server
+    private boolean isRecording; //Used to register sensors only when user is recording data
+    HashMap<String, WifiObject> WifiData; //Contains a map of all data gathered from WiFi, indexed by MAC address
+    private float[] curGravity = new float[]{0f, 9.8f, 0f}; //Holds the latest gravity sensor values
+    private float[] curMagnetic; //Holds the latest magnetic field sensor values
+    public GNSSData curGNSSData; //Holds the latest location data
+    private ArrayList<float[]> accelerations = new ArrayList<>(); //Holds all acceleration values since the last step
+    private ArrayList<float[]> gravities = new ArrayList<>(); //Holds all gravity values since the last step
+    private MadgwickAHRS madgwickAHRS = new MadgwickAHRS(0.1f, 0); //Algorithm
+    private boolean hasStartingAltitude; //Flag for initialising the reference altitude
+    AltitudeEstimation altitudeEstimation = new AltitudeEstimation(); //Class that contains variables and functions to help with altitude estimation
+    private float lpfPressure = 1013.25f; //Atmospheric pressure at sea level, a good estimate for initial pressure
+    private static final float ALPHA = 0.99f; //Very high alpha means strong filtering but slow response time
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Initialise data collection tools and flags
         mMotionSensorManager = new com.example.datacollectionpdr.datacollectionandpreparation.DataCollection(this);
         mMotionSensorManager.setOnMotionSensorManagerListener(this);
         WifiData = new HashMap<>();
@@ -59,6 +66,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     @Override
     protected void onResume() {
         super.onResume();
+        //Enable sensors only when recording
         if(isRecording){
             mMotionSensorManager.registerMotionSensors();
         }
@@ -66,6 +74,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     @Override
     protected void onPause(){
         super.onPause();
+        //Disable sensors
         mMotionSensorManager.unregisterMotionSensors();
     }
     @Override
@@ -88,9 +97,8 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     }
     @Override
     public void onAccelerometerValueUpdated(float[] acceleration){
+        //Append current accelerometer values to a list; gets reset when a step is detected
         accelerations.add(acceleration);
-        //float[] linearAcc = new float[]{acceleration[0] - curGravity[0], acceleration[1] - curGravity[1], acceleration[2] - curGravity[2]};
-        //madgwickAHRS.updateAccelerometer(linearAcc);
         //Log.i("DataM", "Acc data updated");
     }
     @Override
@@ -101,25 +109,24 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     }
     @Override
     public void onGyroscopeValueUpdated(float[] gyroscope){
-        madgwickAHRS.updateGyroscope(gyroscope);
         //Log.i("DataM", "Gyr data updated");
+        madgwickAHRS.updateGyroscope(gyroscope);
     }
     @Override
     public void onBarometerValueUpdated(float pressure){
         //Log.i("DataM", "Bar data updated");
+        //Update TrajectoryNative
         PressureData pressureData = new PressureData(System.currentTimeMillis(), pressure);
         trajectoryNative.addPressure(pressureData);
+        //For the first measurement, log a starting altitude as a reference point
         if(!hasStartingAltitude) {
-            altitudeEstimation.setStartingAltitude(SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, pressure));
+            altitudeEstimation.setStartingAltitude(altitudeEstimation.findAltitude(pressure));
             hasStartingAltitude = true;
-            //Altitude change from the first barometer measurement
-            float currentRelativeAltitude = SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE, pressure) - startingAltitude;
-            altitudeEstimation.setAltitude(currentRelativeAltitude);
-            altitudeEstimation.floorsChanged();
         }
+        //Low-pass filter helps with sudden variations
         lpfPressure = ALPHA*lpfPressure + (1-ALPHA)*pressure;
-        hpfPressure = pressure - lpfPressure;
-        altitudeEstimation.changeAltitude(hpfPressure);
+        altitudeEstimation.setAltitude(altitudeEstimation.findAltitude(lpfPressure));
+        Log.i("PressureDelta",altitudeEstimation.altitudeDelta()+"; FloorsChanged" + altitudeEstimation.floorsChanged());
     }
     @Override
     public void onAmbientLightValueChanged(float luminance){
@@ -150,7 +157,6 @@ public class DataManager extends PermissionsManager implements DataCollection.On
        WifiSample wifiSample = new WifiSample(System.currentTimeMillis());
        wifiSample.addMacSampleDict(map);
        trajectoryNative.addWifi(wifiSample);
-
        for(String mac : map.keySet()){
            WifiData.put(mac, map.get(mac));
        }
@@ -205,6 +211,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
             this.motionSample = new MotionSample();
         }
     }
+    //Sends device sensor information (e.g. manufacturer, model name, etc.) to trajectoryNative
     @Override
     public void onSensorInfoCollected(SensorDetails accInfo, SensorDetails gyrInfo,
                                       SensorDetails magInfo, SensorDetails barInfo,
@@ -218,11 +225,11 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     }
 
     protected void newCompleteMotionSample(MotionSample motionSample){
-        //overwritten to trigger behavior in UI
+        //Overwritten to trigger behavior in UI
     }
 
     protected void newPDRStep(PDRStep pdrStep){
-        //overwritten to trigger behavior in UI
+        //Overwritten to trigger behavior in UI
     }
 
     public TrajectoryNative endRecording(){
