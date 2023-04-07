@@ -78,13 +78,13 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         mMotionSensorManager.unregisterMotionSensors();
     }
     @Override
-    public void onMagnetometerUncalibratedValueUpdated(float[] magneticfield, float h){
+    public void onMagnetometerUncalibratedValueUpdated(float[] magneticfield){
         //Log.i("DataM", "MagU data updated");
         PositionData positionData = new PositionData(System.currentTimeMillis(), magneticfield);
         trajectoryNative.addPosition(positionData);
     }
     @Override
-    public void onMagnetometerValueUpdated(float[] magneticfield, float h){
+    public void onMagnetometerValueUpdated(float[] magneticfield){
         //Log.i("DataM", "Mag data updated");
         curMagnetic = magneticfield;
         madgwickAHRS.updateMagnetometer(magneticfield);

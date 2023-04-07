@@ -27,12 +27,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/** DataCollection.java
+ * Authors: Alexandros Miteloudis Vagionas, Weston Everett
+ * Affiliation: The University of Edinburgh
+ * Description: DataCollection handles the collection and part of the packaging of sensor data.
+ * It initialises, pauses, and resumes all sensors. The data it collects is sent to DataManager.
+ */
 public class DataCollection implements SensorEventListener {
+    private static final int WIFI_UPDATE_INTERVAL = 300; //300ms update interval for WiFi
+    private static final int UPDATES_BEFORE_WIFI_PURGE = 5; //5 data aggregations before list purge
 
-    private static final int WIFI_UPDATE_INTERVAL = 300; // .3s update interval for WiFi
-    private static final int UPDATES_BEFORE_WIFI_PURGE = 5; // 15 data aggregations before list purge
-
-    // Function returns sensor info object
+    //Function returns packaged sensor information in a SensorDetails object
     public SensorDetails sensorDetails(int type){
         String name = sensorManager.getDefaultSensor(type).getName();
         String vendor = sensorManager.getDefaultSensor(type).getVendor();
@@ -41,12 +46,15 @@ public class DataCollection implements SensorEventListener {
         int version = sensorManager.getDefaultSensor(type).getVersion();
         return new SensorDetails(name, vendor,res,power,version,type);
     };
+    //Initialising objects, sensors, and variables
+    //Managers and listeners
     WifiManager wifiManager;
     LocationManager locationManager;
     LocationListener locationListener;
     private OnMotionSensorManagerListener motionSensorManagerListener;
 
     private SensorManager sensorManager;
+    //Sensors
     private Sensor Accelerometer;
     private Sensor AccelerometerUncalibrated;
     private Sensor Gyroscope;
@@ -60,6 +68,8 @@ public class DataCollection implements SensorEventListener {
     private Sensor RotationVector;
     private Sensor StepDetector;
     private Sensor StepCounter;
+
+    //Sensor information
     SensorDetails accInfo;
     SensorDetails gyrInfo;
     SensorDetails magInfo;
@@ -69,7 +79,6 @@ public class DataCollection implements SensorEventListener {
     private Context context;
 
     private List<ScanResult> wifiScanList = null; // Initialise WiFi scan list
-    private float startingAltitude = 0.0f;
 
     // WiFi data works differently to all other sensors
     // Stored as hashmap of BSSID and maximum observed signal level in dBm
@@ -81,6 +90,7 @@ public class DataCollection implements SensorEventListener {
         }
     };
 
+    //DataCollection LocationListener gets provider, accuracy, altitude, time, longitude, latitude and speed.
     class  dcLocationListener implements LocationListener{
         @Override
         public void onLocationChanged(@NonNull Location location){
@@ -125,10 +135,11 @@ public class DataCollection implements SensorEventListener {
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new dcLocationListener();
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            Toast.makeText(context, "Open GPS", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Please enable location services.", Toast.LENGTH_SHORT).show();
         }
         //Enable WiFi if disabled
         if(wifiManager.getWifiState()==wifiManager.WIFI_STATE_DISABLED){
+            Toast.makeText(context, "WiFi disabled, enabling...", Toast.LENGTH_SHORT).show();
             wifiManager.setWifiEnabled(true);
         }
     }
@@ -187,27 +198,22 @@ public class DataCollection implements SensorEventListener {
         motionSensorManagerListener.onSensorInfoCollected(accInfo, gyrInfo, magInfo, barInfo, ambInfo, rotInfo);
     }
 
-    //Magnetic field stuff, remove?
-    private double h;
-    final float alpha = .8f;
-    private float gravity[] = new float[3];
     //Timestamps for WiFi data aggregation
     private long lastTimestamp = System.currentTimeMillis();
-    private long currentTimestamp;
     //Counter for number of currently aggregated samples
     private int purgeWifiDataCount;
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent){
         //Scan for WiFi networks every interval and increment count
-        currentTimestamp = System.currentTimeMillis();
+        long currentTimestamp = System.currentTimeMillis();
         if(currentTimestamp-lastTimestamp > WIFI_UPDATE_INTERVAL){
             //Check that permissions have been given before asking for the WiFi scan results
             if(ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_WIFI_STATE) == PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(context, Manifest.permission.CHANGE_WIFI_STATE) == PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(context, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.CHANGE_WIFI_STATE) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED){
 
                 wifiScanList = wifiManager.getScanResults(); //Get WiFi scan results
                 //Log.i("Number of WiFi networks:", String.valueOf(wifiScanList.size())); //Log the number of wifi networks detected
@@ -220,8 +226,6 @@ public class DataCollection implements SensorEventListener {
                     long freq = wifiScanList.get(i).frequency;
 
                     WifiObject curWifiData = new WifiObject(power, id, ssid, freq);
-
-
                     //Log.i(id, String.valueOf(power));
                     // If the entry doesn't exist, add it to the hashmap.
                     if(!wifiData.containsKey(id)){
@@ -235,9 +239,6 @@ public class DataCollection implements SensorEventListener {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
                 wifiManager.startScan();
             }
-            //////////////////////
-
-            /////////////////////////
             lastTimestamp = currentTimestamp;
             purgeWifiDataCount++;
             //Log.i("Timestamp", String.valueOf(currentTimestamp));
@@ -250,12 +251,10 @@ public class DataCollection implements SensorEventListener {
             purgeWifiDataCount = 0;
         }
 
+        //Call DataManager whenever a sensor updates
         switch (sensorEvent.sensor.getType()){
             case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
-                h = Math.sqrt(sensorEvent.values[0] * sensorEvent.values[0] + sensorEvent.values[1] * sensorEvent.values[1] +
-                        sensorEvent.values[2] * sensorEvent.values[2]);
-
-                motionSensorManagerListener.onMagnetometerUncalibratedValueUpdated(sensorEvent.values, (float) h);
+                motionSensorManagerListener.onMagnetometerUncalibratedValueUpdated(sensorEvent.values);
                 break;
 
             case Sensor.TYPE_ACCELEROMETER_UNCALIBRATED:
@@ -267,10 +266,7 @@ public class DataCollection implements SensorEventListener {
                 break;
 
             case Sensor.TYPE_MAGNETIC_FIELD:
-                h = Math.sqrt(sensorEvent.values[0] * sensorEvent.values[0] + sensorEvent.values[1] * sensorEvent.values[1] +
-                        sensorEvent.values[2] * sensorEvent.values[2]);
-
-                motionSensorManagerListener.onMagnetometerValueUpdated(sensorEvent.values, (float) h);
+                motionSensorManagerListener.onMagnetometerValueUpdated(sensorEvent.values);
                 break;
 
             case Sensor.TYPE_ACCELEROMETER:
@@ -311,11 +307,12 @@ public class DataCollection implements SensorEventListener {
         }
     }
 
+    //Functions initialised here and instantiated in DataManager
     public interface OnMotionSensorManagerListener{
-        void onMagnetometerUncalibratedValueUpdated(float[] magneticfield, float h);
+        void onMagnetometerUncalibratedValueUpdated(float[] magneticfield);
         void onAccelerometerUncalibratedValueUpdated(float[] acceleration);
         void onGyroscopeUncalibratedValueUpdated(float[] gyroscope);
-        void onMagnetometerValueUpdated(float[] magneticfield, float h);
+        void onMagnetometerValueUpdated(float[] magneticfield);
         void onAccelerometerValueUpdated(float[] acceleration);
         void onGyroscopeValueUpdated(float[] gyroscope);
         void onBarometerValueUpdated(float pressure);
@@ -332,6 +329,7 @@ public class DataCollection implements SensorEventListener {
                                    SensorDetails AmbInfo, SensorDetails RotInfo);
     }
 
+    //Code left for potential future implementations of dealing with accuracy changes
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         switch (sensor.getType()){
