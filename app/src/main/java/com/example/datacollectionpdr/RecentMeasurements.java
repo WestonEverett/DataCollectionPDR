@@ -15,10 +15,13 @@ public class RecentMeasurements {
     private final SetLengthFloatArray[] accRecentMeasurements;
     private final SetLengthFloatArray[] gyroRecentMeasurements;
     private final SetLengthFloatArray[] rotRecentMeasurements;
+
+    private final SetLengthLongArray baroTimeRecentMeasurements;
     private final SetLengthFloatArray[] baroRecentMeasurements;
 
     public RecentMeasurements(int graphPoints){
         motionTimeRecentMeasurements = new SetLengthLongArray(graphPoints);
+        baroTimeRecentMeasurements = new SetLengthLongArray(graphPoints);
         accRecentMeasurements = new SetLengthFloatArray[]{
                 new SetLengthFloatArray(graphPoints),
                 new SetLengthFloatArray(graphPoints),
@@ -63,6 +66,7 @@ public class RecentMeasurements {
 
     public void updateMeasurements(PressureData pressureData) {
         baroRecentMeasurements[0].addValue(pressureData.pressure);
+        baroTimeRecentMeasurements.addValue(pressureData.timestamp);
     }
 
     public Number[][] getData(String sensor) {
@@ -88,9 +92,10 @@ public class RecentMeasurements {
                 //Log.e("Hm", Arrays.toString(rotX));
                 return new Number[][]{times, rotX, rotY, rotZ};
             case "Barometer":
+                Long[] baroTimes = baroTimeRecentMeasurements.getArray();
                 Float[] baro = baroRecentMeasurements[0].getArray();
                 //Log.e("Hm", Arrays.toString(rotX));
-                return new Number[][]{times, baro};
+                return new Number[][]{baroTimes, baro};
         }
 
         return new Number[][]{times};

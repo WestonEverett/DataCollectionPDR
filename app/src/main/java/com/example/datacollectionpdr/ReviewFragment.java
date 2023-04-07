@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.androidplot.xy.XYPlot;
+import com.example.datacollectionpdr.nativedata.TrajectoryNative;
 import com.google.android.material.textfield.TextInputLayout;
 
 /**
@@ -26,6 +27,7 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
     Button enterTextButton;      //Button to set Users start Location
     Button enterFileNameButton;
     XYPlot plot;
+    TrajectoryNative trajectoryNative;
 
     public ReviewFragment() {
         // Required empty public constructor
@@ -59,8 +61,10 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
         discardButton = (Button) view.findViewById(R.id.button_discard);
         discardButton.setOnClickListener(this);
 
+        trajectoryNative = ((RecordingActivity) getActivity()).trajectoryNative;
+
         plot = (XYPlot) view.findViewById(R.id.plot2);
-        UITools.plotPDRTrajectory(((RecordingActivity) getActivity()).trajectoryNative.getPdrs(), Color.RED, plot);
+        UITools.plotPDRTrajectory(trajectoryNative.getPdrs(), Color.RED, plot);
 
         // Inflate the layout for this fragment
         return view;
