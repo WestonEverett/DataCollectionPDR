@@ -23,6 +23,7 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
 
     View view;                  //View of the fragment
     Button sendButton;          //Send Button
+    Button saveButton;          //Save Button
     Button discardButton;      //Button to set Users start Location
     Button enterTextButton;      //Button to set Users start Location
     Button enterFileNameButton;
@@ -43,8 +44,11 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
 
         view = inflater.inflate(R.layout.fragment_review, container, false);
 
-        sendButton = (Button) view.findViewById(R.id.button_review);
+        sendButton = (Button) view.findViewById(R.id.button_send);
         sendButton.setOnClickListener(this);
+
+        saveButton = (Button) view.findViewById(R.id.button_save);
+        saveButton.setOnClickListener(this);
 
         TextInputLayout textInputLayout = view.findViewById(R.id.textInput_serverid);
         textInputLayout.setHint("Current ID: "+ MainActivity.serverKeyString);
@@ -79,9 +83,15 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
                 startActivity(intent); //Go to the Show Help activity and its view
                 ((Activity) getActivity()).overridePendingTransition(0, 0);
                 break;
-            case R.id.button_review:
+            case R.id.button_send:
                 Intent intent_send = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent_send); //Go to the Show Help activity and its view
+                ((Activity) getActivity()).overridePendingTransition(0, 0);
+                break;
+            case R.id.button_save:
+                Intent intent_save = new Intent(getActivity(), MainActivity.class);
+                //TODO ADD SEND ACTION
+                startActivity(intent_save); //Go to the Show Help activity and its view
                 ((Activity) getActivity()).overridePendingTransition(0, 0);
                 break;
             case R.id.button_entertext:

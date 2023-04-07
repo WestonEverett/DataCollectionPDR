@@ -1,8 +1,8 @@
 <resources>
+    <!-- General -->
     <string name="app_name">PathFinder</string>
-    <string name="title_activity_settings">SettingsActivity</string>
-
     <string name="map_id">33f20db2d06ca4f9</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
@@ -15,19 +15,26 @@
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails</string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
-    <string name="settings_description">If you wish to save recorded trajectories to your files select  Save to Files option. To send data to the server enter your id below. Wait for WiFi option allows you to choose to only send data when connected to WiFi.</string>
-    <string name="about_app">This app is your new tool for indoor positioning data collection.......</string>
-    <string name="title_activity_maps">MapsActivity</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
+    <!-- Sync Preferences -->
+    <string name="recordingDuration">Recording Duration:</string>
+    <string name="recordingDuration_noData">No Data Recorded</string>
     <string name="description_startRec">Before you start recording, tell the app where you are and which way you are facing. Do that by first placing a marker on the map and then when you are happy with your marker accept it with a button.</string>
 
-    <string name="recordingDuration">Recording Duration:</string>
-    <string name="recordingDuration_noData"> No Data Recorded</string>
+    <!-- Recording Review Fragment -->
+    <string name="reviewPage_title">REVIEW RECORDING</string>
+    <string name="reviewPage_filePrompt">Enter file name</string>
+    <string name="reviewPage_fileHint">Enter file name</string>
+    <string name="reviewPage_serverPrompt">Enter server credentials</string>
+    <string name="enterTextButton">ENTER</string>
+    <string name="saveButton">SAVE</string>
+    <string name="sendButton">SEND</string>
+    <string name="discardButton">DISCARD</string>
+    <string name="PDRReviewTitle">PDR Trajecory</string>
 
     <!-- About Page -->
     <string name="aboutPage_title">INFORMATION  </string>
