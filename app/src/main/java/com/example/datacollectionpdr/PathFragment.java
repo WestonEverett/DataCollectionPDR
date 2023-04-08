@@ -9,69 +9,66 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.androidplot.xy.LineAndPointFormatter;
-import com.androidplot.xy.SimpleXYSeries;
-import com.androidplot.xy.XYGraphWidget;
 import com.androidplot.xy.XYPlot;
-import com.androidplot.xy.XYSeries;
-import com.example.datacollectionpdr.R;
 import com.example.datacollectionpdr.nativedata.PDRStep;
-
-import java.lang.reflect.Array;
-import java.text.FieldPosition;
-import java.text.Format;
-import java.text.ParsePosition;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.ListIterator;
 
+/**
+ * Class with fragment that shows user PDR live when recording
+ */
 public class PathFragment extends Fragment {
 
-    private DataViewModel viewModel;
-    XYPlot plot;
-    private int curFloor = 0;
-    private ArrayList<PDRStep> curSteps = new ArrayList<>();
+    XYPlot plot;                                                //initialise XYplot plot
+    private int curFloor = 0;                                   //initialise current floor level to 0
+    private ArrayList<PDRStep> curSteps = new ArrayList<>();    //initialise step count
 
     public PathFragment() {
         // required empty public constructor.
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) { //initialise fragment from saved previous state
         super.onCreate(savedInstanceState);
     }
 
-    @Nullable
-    @Override
+    /**
+     * function called to create the view - set up the plot window
+     * @param inflater - to put fragment in the activity view
+     * @param container - view in which fragment is nested
+     * @param savedInstanceState - saved state of the fragment
+     * @return view of the fragment
+     */
+    @Nullable  @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        View view = inflater.inflate(R.layout.fragment_path, container, false);
-        // initialize our XYPlot reference:
-        plot = (XYPlot) view.findViewById(R.id.plot);
-
-        RecordingActivity activity = (RecordingActivity) getActivity();
+        View view = inflater.inflate(R.layout.fragment_path, container, false);//put fragment in a view container
+        plot = (XYPlot) view.findViewById(R.id.plot);            // initialize  XYPlot reference:
 
         return view;
     }
 
+    /**
+     * When view is created set up the graph and initial plot
+     * @param view - view initialised in onViewCreate
+     * @param savedInstanceState - previous state of the fragment
+     */
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
-
-        viewModel.getPDRStep().observe(getViewLifecycleOwner(), item -> {
+        //set up acces to data passed from DataViewModel class
+        DataViewModel viewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
+        viewModel.getPDRStep().observe(getViewLifecycleOwner(), item -> {   //set up listener to get updated PDR values from dataViewModel
 
             //if(item.getEstFloor() != curFloor){
             //    curSteps = new ArrayList<>();
             //    curFloor = item.getEstFloor();
             //}
+            //TODO should thid be commented out???
 
-            curSteps.add(item);
-            UITools.plotPDRTrajectory(curSteps, Color.RED, plot);
-            //TODO GRAPH
+            curSteps.add(item);         //add another step to the trajectory
+            UITools.plotPDRTrajectory(curSteps, Color.RED, plot);   //re-plot the plot
         });
     }
 }

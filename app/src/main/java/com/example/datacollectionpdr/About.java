@@ -119,9 +119,6 @@ public class About extends AppCompatActivity {
     });
     }
 
-    // TODO Is this needed or just a log?
-    //public static final String EXTRA_MESSAGE = "com.example.datacollectionPDR.MESSAGE";
-
     /** Function dealing with the dropdown menu actions
      * input: -
      * output: -
