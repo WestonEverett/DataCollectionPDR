@@ -27,7 +27,7 @@
         ap:lineLabelRotationBottom="-45"
         ap:lineLabels="left|bottom"
         ap:rangeTitle="range"
-        ap:title="PDR Trajectory Plot"
+        ap:title="@string/PDRDuringTitle"
         ap:titleTextColor="@color/orange"/>
 
 </FrameLayout>

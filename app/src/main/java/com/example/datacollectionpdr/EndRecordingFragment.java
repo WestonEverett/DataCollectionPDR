@@ -58,7 +58,7 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
         timeTextView = (TextView) view.findViewById(R.id.textViewTime);        //Time text view
 
         // Button to review recording
-        sendButton = (Button) view.findViewById(R.id.button_review);
+        sendButton = (Button) view.findViewById(R.id.button_send);
         sendButton.setOnClickListener(this);  //
         sendButton.setEnabled(false);                                         //Dis-enable for now
         sendButton.setTextColor(getResources().getColor(R.color.blue_light)); //Change dis-enabled style
@@ -160,7 +160,7 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
                 startActivity(intent); //Go to the Show Help activity and its view
                 ((Activity) getActivity()).overridePendingTransition(0, 0);
                 break;
-            case R.id.button_review:
+            case R.id.button_send:
                 UserPositionData endPos = new UserPositionData(RecordingActivity.endCoordinates[0], RecordingActivity.endCoordinates[1], RecordingActivity.endCoordinates[2], RecordingActivity.endCoordinates[3]);
                 TrajectoryNative trajectoryNative = ((RecordingActivity) getActivity()).trajectoryNative;
                 trajectoryNative.applyGyroCorrection(endPos);

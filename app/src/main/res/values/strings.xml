@@ -1,16 +1,12 @@
 <resources>
+    <!-- General -->
     <string name="app_name">PathFinder</string>
+    <string name="map_id">33f20db2d06ca4f9</string>
     <string name="title_activity_settings">SettingsActivity</string>
 
-    <string name="map_id">33f20db2d06ca4f9</string>
 
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
+
 
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
@@ -30,7 +26,33 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="recordingDuration">Recording Duration:</string>
-    <string name="recordingDuration_noData"> No Data Recorded</string>
+    <string name="recordingDuration_noData">No Data Recorded</string>
+    <string name="stopRec">STOP RECORDING</string>
+    <string name="PDRDuringTitle">PDR Trajectory</string>
+    <string name="SensorsGraphTitle">Live Sensor Data</string>
+    <string name="SensorsDropdown">SENSOR DATA DISPLAYED:</string>
+
+
+    <string name="duringRec_title">RECORDING</string>
+
+    <!-- rec activity fragment-->
+    <string name="startRec_title">CHOOSE STARTING POINT</string>
+    <string name="location_button">I AM HERE</string>
+    <string name="orientation_button">I AM FACING THIS WAY</string>
+    <string name="startRec_button">START RECORDING</string>
+    <string name="stpRec_title">RECORDING STOPPED</string>
+    <string name="stpRec_button">REVIEW DATA</string>
+
+    <!-- Recording Review Fragment -->
+    <string name="reviewPage_title">REVIEW RECORDING</string>
+    <string name="reviewPage_filePrompt">Enter file name</string>
+    <string name="reviewPage_fileHint">Enter file name</string>
+    <string name="reviewPage_serverPrompt">Enter server credentials</string>
+    <string name="enterTextButton">ENTER</string>
+    <string name="saveButton">SAVE</string>
+    <string name="sendButton">SEND</string>
+    <string name="discardButton">DISCARD</string>
+    <string name="PDRReviewTitle">PDR Trajecory</string>
 
     <!-- About Page -->
     <string name="aboutPage_title">INFORMATION  </string>
