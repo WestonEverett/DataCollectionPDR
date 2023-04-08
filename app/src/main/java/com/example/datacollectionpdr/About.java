@@ -20,7 +20,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.datacollectionpdr.nativedata.SensorDetails;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -31,8 +33,6 @@ public class About extends AppCompatActivity {
 
     private SensorManager sensorManager; // SensorManager for getting sensor info (not data)
 
-    String[] SensorList = { "Accelerometer", "Gyroscope",
-            "Magnetometer", "Barometer", "Ambient Light", "Proximity" }; //Options for the dropdown - sensor list
 
     public static Map<String, Integer> sensorTypes; //Hashmap to map dropdown menu options to sensorTypes objects
     static {
@@ -44,7 +44,10 @@ public class About extends AppCompatActivity {
         sensorTypes.put("Ambient Light", Sensor.TYPE_LIGHT);
         sensorTypes.put("Proximity", Sensor.TYPE_PROXIMITY);
     }
+    String[] sensorList = { "Accelerometer", "Gyroscope",
+            "Magnetometer", "Barometer", "Ambient Light", "Proximity" }; //Options for the dropdown - sensor list
 
+    List<String> sensorListDropDown=new ArrayList<String>();
 
 
     /** Function returns sensor info object to display sensor details
@@ -69,6 +72,13 @@ public class About extends AppCompatActivity {
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE); //Set up sensor manager
         setContentView(R.layout.activity_about);        //activity view from xml
         Objects.requireNonNull(getSupportActionBar()).hide();                   // Hide app Bar
+
+        for (String element : sensorList){
+            int currSensor = sensorTypes.get(element); //get sensor type based on the hashmap and item selected
+            if (sensorDetails(currSensor) != null) {
+                sensorListDropDown.add(element);
+            }
+        }
 
         dropdown = findViewById(R.id.spinner_sensors);  //find and initialise the dropdown menu
         initspinnerfooter();
@@ -120,7 +130,7 @@ public class About extends AppCompatActivity {
     private void initspinnerfooter() {
 
         //Initialise adapter for the menu
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, SensorList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, sensorListDropDown);
         dropdown.setAdapter(adapter);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             /** Function dealing with dropdown menu on click

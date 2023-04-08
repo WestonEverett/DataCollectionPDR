@@ -25,7 +25,7 @@
     <string name="location_button">I AM HERE</string>
     <string name="orientation_button">I AM FACING THIS WAY</string>
     <string name="startRec_button">START RECORDING</string>
-    <string name="review_title">RECORDING STOPPED</string>
+    <string name="stpRec_title">RECORDING STOPPED</string>
     <string name="stpRec_button">REVIEW DATA</string>
 
     <!-- Recording Review Fragment -->

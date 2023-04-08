@@ -96,6 +96,12 @@ public class GraphsFragment extends Fragment {
 
         Number[] domainLabels=plotData[0];
 
+        for(int i = 0; i <= plotData.length; i++){
+            domainLabels[i]=i;
+        }
+        //Number[] domainLabels=plotData[0];
+
+
         ArrayList<SimpleXYSeries> series = new ArrayList<>();
         ArrayList<LineAndPointFormatter> seriesFormats = new ArrayList<>();
         String[] titles = new String[]{"time", "X data", "Y data", "Z data"};
