@@ -1,5 +1,10 @@
 package com.example.datacollectionpdr.nativedata;
 
+/** SensorDetails.java
+ * Author: Weston Everett
+ * Affiliation: The University of Edinburgh
+ * Description: Object for holding sensor information, e.g. manufacturer, version, etc.
+ */
 public class SensorDetails {
 
     public String name;

@@ -4,12 +4,19 @@ package com.example.datacollectionpdr.pdrcalculation;
 import com.example.datacollectionpdr.nativedata.MotionSample;
 import com.example.datacollectionpdr.nativedata.PositionData;
 
-/**
+/** MadgwickAHRS.java
+ * Authors: Weston Everett, Alexandros Miteloudis Vagionas
+ * Affiliation: The University of Edinburgh
+ * Description: Class for calculating the phone's rotation relative to its intial position.
+ * MadgwickAHRS is a well-known algorithm for finding orientation, written in several languages.
+ * The one used here is adapted from http://www.x-io.co.uk/open-source-imu-and-ahrs-algorithms/
+ * It has been altered to accept a variable sample period.
+ */
+/*
  * MadgwickAHRS class. Implementation of Madgwick's IMU and AHRS algorithms in
  * Java.
  *
- * @see <a
- *      href="http://www.x-io.co.uk/open-source-imu-and-ahrs-algorithms">http://www.x-io.co.uk/open-source-imu-and-ahrs-algorithms/</a>
+ *
  */
 
 
@@ -27,71 +34,32 @@ public class MadgwickAHRS {
     private float[] accelerometer = null;
     private float[] gyroscope = null;
 
-    /**
-     * Gets the sample period.
-     *
-     * @return Sample Period
-     */
     public float getSamplePeriod() {
         return samplePeriod;
     }
 
-    /**
-     * Sets the sample period.
-     *
-     * @param samplePeriod
-     *            Sample period
-     */
     public void setSamplePeriod(float samplePeriod) {
         this.samplePeriod = samplePeriod;
     }
 
-    /**
-     * Gets the sample algorithm gain beta.
-     *
-     * @return Algorithm gain beta
-     */
     public float getBeta() {
         return beta;
     }
 
-    /**
-     * Sets the algorithm gain beta.
-     *
-     * @param beta
-     *            Algorithm gain beta
-     */
     public void setBeta(float beta) {
         this.beta = beta;
     }
 
-    /**
-     * Gets the quaternion output.
-     *
-     * @return Quaternion output
-     */
     public float[] getQuaternion() {
         return quaternion;
     }
 
-    /**
-     * Initializes a new instance of the {@link MadgwickAHRS} class.
-     *
-     * @param samplePeriod
-     *            Sample period.
-     */
+    //Initializes a new instance of the MadgwickAHRS class.
     public MadgwickAHRS(float samplePeriod, double initHeading) {
         this(samplePeriod, 1f, initHeading);
     }
 
-    /**
-     * Initializes a new instance of the {@link MadgwickAHRS} class.
-     *
-     * @param samplePeriod
-     *            Sample period.
-     * @param beta
-     *            Algorithm gain beta.
-     */
+     // Initializes a new instance of the MadgwickAHRS class. Parameters: Sample period, algorithm gain beta.
     public MadgwickAHRS(float samplePeriod, float beta, double initHeading) {
         this.samplePeriod = samplePeriod;
         this.beta = beta;
@@ -153,34 +121,18 @@ public class MadgwickAHRS {
         this.motionSample = null;
     }
 
-    /**
+    /*
      * Algorithm AHRS update method. Requires only gyroscope and accelerometer
      * data.
-     * <p>
-     * Optimised for minimal arithmetic. <br>
-     * Total ±: 160 <br>
-     * Total *: 172 <br>
-     * Total /: 5 <br>
-     * Total sqrt: 5 <br>
-     *
-     * @param gx
-     *            Gyroscope x axis measurement in radians/s.
-     * @param gy
-     *            Gyroscope y axis measurement in radians/s.
-     * @param gz
-     *            Gyroscope z axis measurement in radians/s.
-     * @param ax
-     *            Accelerometer x axis measurement in any calibrated units.
-     * @param ay
-     *            Accelerometer y axis measurement in any calibrated units.
-     * @param az
-     *            Accelerometer z axis measurement in any calibrated units.
-     * @param mx
-     *            Magnetometer x axis measurement in any calibrated units.
-     * @param my
-     *            Magnetometer y axis measurement in any calibrated units.
-     * @param mz
-     *            Magnetometer z axis measurement in any calibrated units.
+     * gx Gyroscope x axis measurement in radians/s.
+     * gy Gyroscope y axis measurement in radians/s.
+     * gz Gyroscope z axis measurement in radians/s.
+     * ax Accelerometer x axis measurement in any calibrated units.
+     * ay Accelerometer y axis measurement in any calibrated units.
+     * az Accelerometer z axis measurement in any calibrated units.
+     * mx Magnetometer x axis measurement in any calibrated units.
+     * my Magnetometer y axis measurement in any calibrated units.
+     * mz Magnetometer z axis measurement in any calibrated units.
      */
     public void update(float gx, float gy, float gz, float ax, float ay,
                        float az, float mx, float my, float mz) {
@@ -318,28 +270,15 @@ public class MadgwickAHRS {
         quaternion[3] = q4 * norm;
     }
 
-    /**
+    /*
      * Algorithm IMU update method. Requires only gyroscope and accelerometer
      * data.
-     * <p>
-     * Optimised for minimal arithmetic. <br>
-     * Total ±: 45 <br>
-     * Total *: 85 <br>
-     * Total /: 3 <br>
-     * Total sqrt: 3
-     *
-     * @param gx
-     *            Gyroscope x axis measurement in radians/s.
-     * @param gy
-     *            Gyroscope y axis measurement in radians/s.
-     * @param gz
-     *            Gyroscope z axis measurement in radians/s.
-     * @param ax
-     *            Accelerometer x axis measurement in any calibrated units.
-     * @param ay
-     *            Accelerometer y axis measurement in any calibrated units.
-     * @param az
-     *            Accelerometer z axis measurement in any calibrated units.
+     * gx Gyroscope x axis measurement in radians/s.
+     * gy Gyroscope y axis measurement in radians/s.
+     * gz Gyroscope z axis measurement in radians/s.
+     * ax Accelerometer x axis measurement in any calibrated units.
+     * ay Accelerometer y axis measurement in any calibrated units.
+     * az Accelerometer z axis measurement in any calibrated units.
      */
     public void update(float gx, float gy, float gz, float ax, float ay,
                        float az) {
@@ -351,12 +290,7 @@ public class MadgwickAHRS {
         }
         this.lastTime = System.currentTimeMillis();
 
-        float q1 = quaternion[0], q2 = quaternion[1], q3 = quaternion[2], q4 = quaternion[3]; // short
-        // name
-        // local
-        // variable
-        // for
-        // readability
+        float q1 = quaternion[0], q2 = quaternion[1], q3 = quaternion[2], q4 = quaternion[3];
         float norm;
         float s1, s2, s3, s4;
         float qDot1, qDot2, qDot3, qDot4;
@@ -419,14 +353,15 @@ public class MadgwickAHRS {
         quaternion[3] = q4 * norm;
     }
 
+    //Finds the user's heading relative to their start location
     public float findHeading(){
         return (float) -Math.toDegrees(Math.atan2(2f * (quaternion[1] * quaternion[2] + quaternion[0] * quaternion[3]), 0.5f - quaternion[2] * quaternion[2] - quaternion[3] * quaternion[3]));
     }
-
+    //Finds the user's pitch relative to their start location
     public float findPitch(){
         return (float) Math.asin(-2.0f * (quaternion[1] * quaternion[3] - quaternion[0] * quaternion[2]));
     }
-
+    //Finds the user's roll relative to their start location
     public float findRoll(){
         return (float) Math.atan2(quaternion[0] * quaternion[1] + quaternion[2] * quaternion[3], 0.5f - quaternion[1] * quaternion[1] - quaternion[2] * quaternion[2]);
     }

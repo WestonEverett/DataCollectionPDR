@@ -1,5 +1,11 @@
 package com.example.datacollectionpdr.nativedata;
 
+/** MotionSample.java
+ * Author: Weston Everett
+ * Affiliation: The University of Edinburgh
+ * Description: Object for holding timestamped accelerometer, gyroscope, rotation, and step count
+ * data. Includes a flag for when a complete sample is acquired.
+ */
 public class MotionSample {
 
     public long initTime;

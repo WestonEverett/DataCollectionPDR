@@ -17,6 +17,14 @@ import androidx.core.app.ActivityCompat;
 
 import java.util.List;
 
+/** PermissionsManager.java
+ * Authors: Weston Everett, Alexandros Miteloudis Vagionas
+ * Affiliation: The University of Edinburgh
+ * Description: Class for requesting and holding permission information from the user. PathFinder
+ * requires WiFi, Internet, Location, and Activity permissions for the WiFi, location, and step
+ * detection.
+ */
+
 public class PermissionsManager extends AppCompatActivity{
 
     private static final int REQUEST_ID_READ_WRITE_PERMISSION = 99; // What is this constant even?
@@ -36,7 +44,7 @@ public class PermissionsManager extends AppCompatActivity{
             int activityRecognitionPermission = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACTIVITY_RECOGNITION);
             int internetPermission = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.INTERNET);
 
-            //If we don't have the permissions
+            //If we don't have all permissions
             if(wifiAccessPermission != PackageManager.PERMISSION_GRANTED ||
                     wifiChangePermission != PackageManager.PERMISSION_GRANTED ||
                     coarseLocationPermission != PackageManager.PERMISSION_GRANTED ||
@@ -71,10 +79,10 @@ public class PermissionsManager extends AppCompatActivity{
                         grantResults[3] == PackageManager.PERMISSION_GRANTED &&
                         grantResults[4] == PackageManager.PERMISSION_GRANTED &&
                         grantResults[5] == PackageManager.PERMISSION_GRANTED){
-                    Toast.makeText(this, "Permission Granted!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Permissions Granted!", Toast.LENGTH_LONG).show();
                 }
                 //Cancelled or denied
-                else Toast.makeText(this, "Permission Denied!", Toast.LENGTH_LONG).show();
+                else Toast.makeText(this, "Permissions Denied!", Toast.LENGTH_LONG).show();
             }
             break;
         }

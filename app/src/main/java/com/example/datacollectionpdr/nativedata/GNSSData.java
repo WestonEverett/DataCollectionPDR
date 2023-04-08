@@ -1,5 +1,10 @@
 package com.example.datacollectionpdr.nativedata;
 
+/** GNSSData.java
+ * Author: Weston Everett
+ * Affiliation: The University of Edinburgh
+ * Description: Object holding location data.
+ */
 public class GNSSData {
 
     public String provider;

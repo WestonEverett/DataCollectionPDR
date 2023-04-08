@@ -1,5 +1,11 @@
 package com.example.datacollectionpdr.nativedata;
 
+/** MacData.java
+ * Author: Weston Everett
+ * Affiliation: The University of Edinburgh
+ * Description: Class for holding and processing MAC address data in the way required by
+ * TrajectoryNative.
+ */
 public class MacData {
 
     public long mac;
