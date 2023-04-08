@@ -33,7 +33,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputLayout;
 
-
+//TODO finish commenting
 public class StartRecFragment extends Fragment implements View.OnClickListener {
 
     View view;                  //View of the fragment

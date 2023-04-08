@@ -16,6 +16,7 @@
 
     <com.androidplot.xy.XYPlot
         android:id="@+id/plot"
+        style="@style/APDefacto.Dark"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_below="@+id/spinner2"
@@ -25,17 +26,17 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        ap:borderThickness="1dp"
-        ap:domainTitle="domain"
-        style="@style/APDefacto.Dark"
         android:background="@drawable/text_background"
         ap:backgroundColor="#00FFFFFF"
+        ap:borderThickness="1dp"
+        ap:domainTitle="Number of Samples"
         ap:graphBackgroundColor="#00FFFFFF"
         ap:gridBackgroundColor="#00FFFFFF"
+        ap:graphWidthMode="fill"
         ap:lineLabelRotationBottom="-45"
         ap:lineLabels="left|bottom"
         ap:paddingTop="6dp"
-        ap:rangeTitle="range"
+        ap:rangeTitle="MeasuredValues"
         ap:title="@string/SensorsGraphTitle"
         ap:titleTextColor="@color/orange">
 

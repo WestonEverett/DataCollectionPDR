@@ -21,14 +21,14 @@
         android:layout_marginEnd="14dp"
         android:background="@drawable/text_background"
         ap:backgroundColor="#00FFFFFF"
-        ap:domainTitle="domain"
+        ap:domainTitle="x-direction [m]"
         ap:graphBackgroundColor="#00FFFFFF"
         ap:gridBackgroundColor="#00FFFFFF"
         ap:lineLabelRotationBottom="-45"
         ap:lineLabels="left|bottom"
-        ap:rangeTitle="range"
+        ap:rangeTitle="y-direction [m]"
         ap:title="@string/PDRDuringTitle"
-        ap:titleTextColor="@color/orange"/>
+        ap:titleTextColor="@color/orange" />
 
 </FrameLayout>
 

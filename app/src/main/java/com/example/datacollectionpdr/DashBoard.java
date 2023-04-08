@@ -56,4 +56,12 @@ public class DashBoard extends AppCompatActivity {
 
     //TODO Ideally add delete and show buttons - spearate fragment
 
+    /**set up back button to go to home page*/
+    @Override
+    public void onBackPressed()
+    {
+        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+        overridePendingTransition(0,0);
+    }
+
 }

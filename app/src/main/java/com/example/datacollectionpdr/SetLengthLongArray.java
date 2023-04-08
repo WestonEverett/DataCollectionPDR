@@ -2,6 +2,7 @@ package com.example.datacollectionpdr;
 
 import java.util.ArrayList;
 
+//TODO finish commenting
 public class SetLengthLongArray {
 
     private int maxLength;

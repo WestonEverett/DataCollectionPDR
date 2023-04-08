@@ -68,4 +68,9 @@ public class MainActivity extends PermissionsManager {
         //TODO turn the sensors etc off???
         super.onPause();
     }
+
+    @Override
+    public void onBackPressed()
+    {
+    }
 }

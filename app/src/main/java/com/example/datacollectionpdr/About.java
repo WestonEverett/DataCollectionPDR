@@ -1,5 +1,6 @@
 package com.example.datacollectionpdr;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -153,5 +154,12 @@ public class About extends AppCompatActivity {
                 textViewSensorInfo.setText(R.string.text_spiner_init);               //Set text when no item selected
             }
         });
+    }
+    /**set up back button to go to home page*/
+    @Override
+    public void onBackPressed()
+    {
+        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+        overridePendingTransition(0,0);
     }
 }
