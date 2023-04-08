@@ -96,8 +96,8 @@ public class GraphsFragment extends Fragment {
 
         Number[] domainLabels=plotData[0];
 
-        for(int i = 0; i <= plotData.length; i++){
-            domainLabels[i]=i;
+        for(long i = 0; i <= plotData.length; i++){
+            domainLabels[(int)i]=i;
         }
         //Number[] domainLabels=plotData[0];
 

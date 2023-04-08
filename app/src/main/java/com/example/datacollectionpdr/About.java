@@ -74,8 +74,8 @@ public class About extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();                   // Hide app Bar
 
         for (String element : sensorList){
-            int currSensor = sensorTypes.get(element); //get sensor type based on the hashmap and item selected
-            if (sensorDetails(currSensor) != null) {
+            if(sensorManager.getDefaultSensor(sensorTypes.get(element)) != null){
+                //int currSensor = sensorTypes.get(element); //get sensor type based on the hashmap and item selected
                 sensorListDropDown.add(element);
             }
         }

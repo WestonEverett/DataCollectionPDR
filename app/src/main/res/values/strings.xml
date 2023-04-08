@@ -3,11 +3,6 @@
     <string name="app_name">PathFinder</string>
     <string name="map_id">33f20db2d06ca4f9</string>
     <string name="title_activity_settings">SettingsActivity</string>
-
-
-
-
-
     <!-- Sync Preferences -->
     <string name="sync_title">Sync email periodically</string>
     <string name="attachment_title">Download incoming attachments</string>
