@@ -38,6 +38,8 @@ public class PDRStep {
     public PDRStep(long initTime, float x, float y){
         this.x = x;
         this.y = y;
+        this.heading = Math.atan2(this.y, this.x);
+        this.magnitude = (float) Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
         this.initTime = initTime;
     }
 

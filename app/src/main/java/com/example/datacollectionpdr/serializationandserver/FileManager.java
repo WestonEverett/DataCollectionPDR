@@ -18,6 +18,8 @@ import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class FileManager {
 
@@ -43,22 +45,13 @@ public class FileManager {
         return filenames;
     }
 
-    public static TrajectoryNative getTrajectoryFile(Context context, String filename) throws FileNotFoundException {
-        FileInputStream fis = context.openFileInput(filename);
-        InputStreamReader inputStreamReader =
-                new InputStreamReader(fis, StandardCharsets.UTF_8);
-        StringBuilder stringBuilder = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(inputStreamReader)) {
-            String line = reader.readLine();
-            while (line != null) {
-                stringBuilder.append(line).append('\n');
-                line = reader.readLine();
-            }
-        } catch (IOException e) {
-            // Error occurred when opening raw file for reading.
-        } finally {
-            String contents = stringBuilder.toString();
-        }
+    public static TrajectoryNative getTrajectoryFile(Context context, String filename) throws IOException {
+        byte[] fileBytes = Files.readAllBytes(Paths.get(filename));
+
+        Trajectory loadedTraj = Trajectory.parseFrom(fileBytes);
+
+
+
 
         return new TrajectoryNative(0, new UserPositionData(0,0,1,1));
     }

@@ -2,6 +2,16 @@ package com.example.datacollectionpdr.nativedata;
 
 import android.os.Build;
 
+import com.example.datacollectionpdr.data.AP_Data;
+import com.example.datacollectionpdr.data.GNSS_Sample;
+import com.example.datacollectionpdr.data.Light_Sample;
+import com.example.datacollectionpdr.data.Mac_Scan;
+import com.example.datacollectionpdr.data.Motion_Sample;
+import com.example.datacollectionpdr.data.Pdr_Sample;
+import com.example.datacollectionpdr.data.Position_Sample;
+import com.example.datacollectionpdr.data.Pressure_Sample;
+import com.example.datacollectionpdr.data.Sensor_Info;
+import com.example.datacollectionpdr.data.WiFi_Sample;
 import com.example.datacollectionpdr.pdrcalculation.GNSSCalculations;
 import com.example.datacollectionpdr.serializationandserver.TrajectoryBuilder;
 import com.example.datacollectionpdr.data.Trajectory;
@@ -49,6 +59,75 @@ public class TrajectoryNative {
         this(initTime, initPos);
         this.androidVersion = androidVersion;
         this.dataID = dataID;
+    }
+
+    public TrajectoryNative(Trajectory trajectory){
+        this.initTime = trajectory.getStartTimestamp();
+        this.androidVersion = trajectory.getAndroidVersion();
+        this.dataID = trajectory.getDataIdentifier();
+
+        this.accInfo = new SensorDetails(trajectory.getAccelerometerInfo());
+        this.gyroInfo = new SensorDetails(trajectory.getGyroscopeInfo());
+        this.rotVectorInfo = new SensorDetails(trajectory.getRotationVectorInfo());
+        this.magInfo = new SensorDetails(trajectory.getMagnetometerInfo());
+        this.baroInfo = new SensorDetails(trajectory.getBarometerInfo());
+        this.lightInfo = new SensorDetails(trajectory.getLightSensorInfo());
+
+        this.pdrs = new ArrayList<>();
+        for (Pdr_Sample pdr : trajectory.getPdrDataList()){
+            pdrs.add(new PDRStep(pdr.getRelativeTimestamp(), pdr.getX(), pdr.getY()));
+        }
+
+        this.aps = new ArrayList<>();
+        for(AP_Data ap : trajectory.getApsDataList()){
+            aps.add(new APData(ap.getMac(), ap.getSsid(), ap.getFrequency()));
+        }
+
+        this.gnssSamples = new ArrayList<>();
+        for(GNSS_Sample gnss : trajectory.getGnssDataList()){
+            gnssSamples.add(new GNSSData(gnss.getProvider(), gnss.getAccuracy(), gnss.getAltitude(), gnss.getRelativeTimestamp(), gnss.getLongitude(), gnss.getLatitude(), gnss.getSpeed()));
+        }
+
+        this.lights = new ArrayList<>();
+        for(Light_Sample light : trajectory.getLightDataList()){
+            lights.add(new LightData(light.getRelativeTimestamp(), light.getLight()));
+        }
+
+        this.wifis = new ArrayList<>();
+        for (WiFi_Sample wifi : trajectory.getWifiDataList()){
+            WifiSample newWifi = new WifiSample(wifi.getRelativeTimestamp());
+            for(Mac_Scan mac : wifi.getMacScansList()){
+                newWifi.addMacSample(new MacData(mac.getMac(), mac.getRssi()));
+            }
+            wifis.add(newWifi);
+        }
+
+        this.motions = new ArrayList<>();
+        for(Motion_Sample mot : trajectory.getImuDataList()){
+            MotionSample nativeMot = new MotionSample();
+            nativeMot.setAcc(new float[]{mot.getAccX(), mot.getAccY(), mot.getAccZ()});
+            nativeMot.setGyro(new float[]{mot.getGyrX(), mot.getGyrY(), mot.getGyrZ()});
+            nativeMot.setRotVector(new float[]{mot.getRotationVectorX(), mot.getRotationVectorY(), mot.getRotationVectorZ(), mot.getRotationVectorW()});
+            nativeMot.initTime = mot.getRelativeTimestamp();
+            nativeMot.steps = 0;
+            motions.add(nativeMot);
+        }
+
+        this.positions = new ArrayList<>();
+        for(Position_Sample pos : trajectory.getPositionDataList()){
+            positions.add(new PositionData(pos.getRelativeTimestamp(), new float[]{pos.getMagX(), pos.getMagY(), pos.getMagZ()}));
+        }
+
+        this.baros = new ArrayList<>();
+        for(Pressure_Sample pressure : trajectory.getPressureDataList()){
+            baros.add(new PressureData(pressure.getRelativeTimestamp(), pressure.getPressure()));
+        }
+
+        if(pdrs.size() > 1 && gnssSamples.size() > 0){
+            GNSSData gnssData = gnssSamples.get(0);
+            PDRStep pdrStep = pdrs.get(1);
+            this.initPos = new UserPositionData(gnssData.lat, gnssData.lon, gnssData.lat + pdrStep.getX(), gnssData.lon + pdrStep.getY());
+        }
     }
 
     public ArrayList<PDRStep> getPdrs() {
