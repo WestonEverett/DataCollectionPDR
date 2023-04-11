@@ -104,7 +104,7 @@ public class GraphsFragment extends Fragment {
         //define array list so that any number of data series can  be displayed at once
         ArrayList<SimpleXYSeries> series = new ArrayList<>();
         ArrayList<LineAndPointFormatter> seriesFormats = new ArrayList<>();
-        String[] titles = new String[]{"time", "X data", "Y data", "Z data"};
+        String[] titles = new String[]{"time", "X data", "Y data", "Z data", "", "", ""};
         int[] colors = new int[]{Color.BLACK, Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.CYAN};
 
         //display all available series of data with different colours
