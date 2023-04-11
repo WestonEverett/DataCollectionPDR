@@ -37,15 +37,6 @@ public class DataCollection implements SensorEventListener {
     private static final int WIFI_UPDATE_INTERVAL = 300; //300ms update interval for WiFi
     private static final int UPDATES_BEFORE_WIFI_PURGE = 5; //5 data aggregations before list purge
 
-    //Function returns packaged sensor information in a SensorDetails object
-    public SensorDetails sensorDetails(int type){
-        String name = sensorManager.getDefaultSensor(type).getName();
-        String vendor = sensorManager.getDefaultSensor(type).getVendor();
-        float res = sensorManager.getDefaultSensor(type).getResolution();
-        float power = sensorManager.getDefaultSensor(type).getPower();
-        int version = sensorManager.getDefaultSensor(type).getVersion();
-        return new SensorDetails(name, vendor,res,power,version,type);
-    };
     //Initialising objects, sensors, and variables
     //Managers and listeners
     WifiManager wifiManager;
@@ -68,6 +59,7 @@ public class DataCollection implements SensorEventListener {
     private Sensor RotationVector;
     private Sensor StepDetector;
     private Sensor StepCounter;
+    private Boolean sensorsRegistered;
 
     //Sensor information
     SensorDetails accInfo;
@@ -82,16 +74,17 @@ public class DataCollection implements SensorEventListener {
 
     // WiFi data works differently to all other sensors
     // Stored as hashmap of BSSID and maximum observed signal level in dBm
+
     HashMap<String, WifiObject> wifiData = new HashMap<>();
-    BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
+    /*BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
         public void onReceive(Context c, Intent intent) {
 
 
         }
     };
-
+    */
     //DataCollection LocationListener gets provider, accuracy, altitude, time, longitude, latitude and speed.
-    class  dcLocationListener implements LocationListener{
+    class DCLocationListener implements LocationListener{
         @Override
         public void onLocationChanged(@NonNull Location location){
             if(location != null){
@@ -133,7 +126,7 @@ public class DataCollection implements SensorEventListener {
         wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         //Initialise location manager and listener, prompt the user to enable GPS if disabled
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new dcLocationListener();
+        locationListener = new DCLocationListener();
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
             Toast.makeText(context, "Please enable location services.", Toast.LENGTH_SHORT).show();
         }
@@ -149,11 +142,13 @@ public class DataCollection implements SensorEventListener {
     }
 
     public void unregisterMotionSensors(){
+        sensorsRegistered = true;
         sensorManager.unregisterListener(this);
-        context.unregisterReceiver(wifiScanReceiver);
+        //context.unregisterReceiver(wifiScanReceiver);
     }
 
     public void registerMotionSensors(){
+        sensorsRegistered = false;
         sensorManager.registerListener(this, MagneticFieldUncalibrated, 10000); // 100 Samples/s
         sensorManager.registerListener(this, AccelerometerUncalibrated, 10000); // 100 Samples/s
         sensorManager.registerListener(this, GyroscopeUncalibrated, 10000); // 100 Samples/s
@@ -167,32 +162,32 @@ public class DataCollection implements SensorEventListener {
         sensorManager.registerListener(this, RotationVector, 10000); // 100 Samples/s
         sensorManager.registerListener(this, StepDetector,10000); // 100 Samples/s
         sensorManager.registerListener(this, StepCounter, 10000); // 100 Samples/s
-        context.registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+        //context.registerReceiver(wifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         wifiManager.startScan();
 
         //Check if sensor exists before trying to get its details
         if(sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null){
-            accInfo = sensorDetails(Sensor.TYPE_ACCELEROMETER);
+            accInfo = getSensorDetails(Sensor.TYPE_ACCELEROMETER);
             Log.i("HasSensor", "Acc");
         }
         if(sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null){
-            gyrInfo = sensorDetails(Sensor.TYPE_GYROSCOPE);
+            gyrInfo = getSensorDetails(Sensor.TYPE_GYROSCOPE);
             Log.i("HasSensor", "Gyr");
         }
         if(sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null){
-            magInfo = sensorDetails(Sensor.TYPE_MAGNETIC_FIELD);
+            magInfo = getSensorDetails(Sensor.TYPE_MAGNETIC_FIELD);
             Log.i("HasSensor", "Mag");
         }
         if(sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE) != null){
-            barInfo = sensorDetails(Sensor.TYPE_PRESSURE);
+            barInfo = getSensorDetails(Sensor.TYPE_PRESSURE);
             Log.i("HasSensor", "Bar");
         }
         if(sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) != null){
-            ambInfo = sensorDetails(Sensor.TYPE_LIGHT);
+            ambInfo = getSensorDetails(Sensor.TYPE_LIGHT);
             Log.i("HasSensor", "Amb");
         }
         if(sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR) != null){
-            rotInfo = sensorDetails(Sensor.TYPE_ROTATION_VECTOR);
+            rotInfo = getSensorDetails(Sensor.TYPE_ROTATION_VECTOR);
             Log.i("HasSensor", "Rot");
         }
         motionSensorManagerListener.onSensorInfoCollected(accInfo, gyrInfo, magInfo, barInfo, ambInfo, rotInfo);
@@ -203,17 +198,25 @@ public class DataCollection implements SensorEventListener {
     //Counter for number of currently aggregated samples
     private int purgeWifiDataCount;
 
-    @Override
-    public void onSensorChanged(SensorEvent sensorEvent){
-        //Scan for WiFi networks every interval and increment count
+    //Function returns packaged sensor information in a SensorDetails object
+    public SensorDetails getSensorDetails(int type){
+        String name = sensorManager.getDefaultSensor(type).getName();
+        String vendor = sensorManager.getDefaultSensor(type).getVendor();
+        float res = sensorManager.getDefaultSensor(type).getResolution();
+        float power = sensorManager.getDefaultSensor(type).getPower();
+        int version = sensorManager.getDefaultSensor(type).getVersion();
+        return new SensorDetails(name, vendor,res,power,version,type);
+    };
+
+    private void checkWifiUpdate(){
         long currentTimestamp = System.currentTimeMillis();
         if(currentTimestamp-lastTimestamp > WIFI_UPDATE_INTERVAL){
             //Check that permissions have been given before asking for the WiFi and location scan results
             if(ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_WIFI_STATE) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.CHANGE_WIFI_STATE) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.checkSelfPermission(context, Manifest.permission.CHANGE_WIFI_STATE) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(context, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED){
 
                 wifiScanList = wifiManager.getScanResults(); //Get WiFi scan results
                 //Log.i("Number of WiFi networks:", String.valueOf(wifiScanList.size())); //Log the number of wifi networks detected
@@ -250,6 +253,12 @@ public class DataCollection implements SensorEventListener {
             wifiData = new HashMap<>(); // Clear wifi data
             purgeWifiDataCount = 0;
         }
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent){
+        //Scan for WiFi networks every interval and increment count
+        checkWifiUpdate();
 
         //Call DataManager whenever a sensor updates
         switch (sensorEvent.sensor.getType()){

@@ -31,16 +31,12 @@ public class UITools {
             yVals.add(curY);
         }
 
-        SimpleXYSeries series = new SimpleXYSeries(xVals, yVals, null);
+        SimpleXYSeries series = new SimpleXYSeries(xVals, yVals, "Estimated Location");
 
         LineAndPointFormatter series1Format = new LineAndPointFormatter(color, color, null, null);
 
         if (plot !=null){
             plot.clear();
-
-
-            plot.addSeries(series, new LineAndPointFormatter(Color.BLUE, null, null, null));
-
             // add a new series' to the xyplot:
             plot.addSeries(series, series1Format);
 
