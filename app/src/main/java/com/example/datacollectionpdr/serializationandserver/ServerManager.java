@@ -20,15 +20,10 @@ import okhttp3.Response;
 public class ServerManager {
 
     String apiKey;
-    String site;
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    public static final String site = "https://openpositioning.org";
 
-    public ServerManager(String apikey){
-        this.apiKey = apikey;
-        this.site = "https://openpositioning.org";
-    }
-
-    public String sendData(TrajectoryNative trajectoryNative) throws IOException {
+    public static String sendData(TrajectoryNative trajectoryNative, String apiKey) {
 
         OkHttpClient client = new OkHttpClient();
         // URL of the server
@@ -52,6 +47,8 @@ public class ServerManager {
                 .build();
         try (Response response = client.newCall(request).execute()) {
             return response.body().string();
+        } catch (IOException e) {
+            return e.toString();
         }
     }
 

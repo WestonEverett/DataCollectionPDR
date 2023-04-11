@@ -14,8 +14,11 @@ import android.widget.Button;
 
 import com.androidplot.xy.XYPlot;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
+import com.example.datacollectionpdr.serializationandserver.FileManager;
+import com.example.datacollectionpdr.serializationandserver.ServerManager;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.File;
 import java.util.Objects;
 
 /**
@@ -37,6 +40,7 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
     }
 
@@ -95,14 +99,14 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
                 ((Activity) requireActivity()).overridePendingTransition(0, 0);
                 break;
             case R.id.button_send:  //Send button -> Go to Send activity which sends the recording to server
-                //TODO ADD SEND ACTION
+                ServerManager.sendData(trajectoryNative, MainActivity.serverKeyString);
                 Intent intent_send = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent_send);
                 ((Activity) requireActivity()).overridePendingTransition(0, 0);
                 break;
             case R.id.button_save:  //Save button -> Go to Save activity which saves the recording to local file
+                FileManager.createDataFile(getContext(), trajectoryNative);
                 Intent intent_save = new Intent(getActivity(), MainActivity.class);
-                //TODO ADD SAVE ACTION
                 startActivity(intent_save); //Go to the Show Help activity and its view
                 ((Activity) requireActivity()).overridePendingTransition(0, 0);
                 break;

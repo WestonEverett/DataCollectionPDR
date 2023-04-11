@@ -2,6 +2,7 @@ package com.example.datacollectionpdr.serializationandserver;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.datacollectionpdr.data.Trajectory;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
@@ -23,7 +24,7 @@ import java.nio.file.Paths;
 
 public class FileManager {
 
-    public static void createDataFile(Context context, TrajectoryNative trajectoryNative) throws IOException {
+    public static void createDataFile(Context context, TrajectoryNative trajectoryNative) {
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String dataFileName = "Trajectory_" + timeStamp + ".pkt";
@@ -31,6 +32,11 @@ public class FileManager {
 
         try (FileOutputStream fos = context.openFileOutput(dataFileName, Context.MODE_PRIVATE)) {
             fos.write(trajectoryNative.generateSerialized().toByteArray());
+            Toast.makeText(context, dataFileName + " saved", Toast.LENGTH_LONG);
+        } catch (FileNotFoundException e) {
+            Toast.makeText(context, "File not found", Toast.LENGTH_LONG);
+        } catch (IOException e) {
+            Toast.makeText(context, "Error while writing", Toast.LENGTH_LONG);
         }
 
         Log.e("hm",dataFileName);
