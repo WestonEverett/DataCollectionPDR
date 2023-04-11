@@ -5,6 +5,11 @@ import com.example.datacollectionpdr.datacollectionandpreparation.WifiObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/** WifiSample.java
+ * Authors: Weston Everett
+ * Affiliation: The University of Edinburgh
+ * Description: Class for holding detected WiFi network MAC addresses (BSSID)
+ */
 public class WifiSample {
 
     public long initTime;

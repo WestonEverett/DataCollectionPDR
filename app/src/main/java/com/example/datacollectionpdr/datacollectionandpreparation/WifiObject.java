@@ -1,5 +1,10 @@
 package com.example.datacollectionpdr.datacollectionandpreparation;
 
+/** WifiObject.java
+ * Author: Weston Everett
+ * Affiliation: The University of Edinburgh
+ * Description: Object for holding WiFi data.
+ */
 public class WifiObject {
 
     public int power;

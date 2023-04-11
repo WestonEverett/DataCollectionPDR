@@ -18,6 +18,12 @@ import com.example.datacollectionpdr.data.Trajectory;
 
 import java.util.ArrayList;
 
+/** TrajectoryNative.java
+ * Authors: Weston Everett, Alexandros Miteloudis Vagionas, Dagna Wocjak
+ * Affiliation: The University of Edinburgh
+ * Description: TODO: FILL THIS IN
+ */
+
 public class TrajectoryNative {
 
     UserPositionData initPos;
@@ -205,9 +211,6 @@ public class TrajectoryNative {
      */
 
     public void applyTrajectoryScaling(UserPositionData endPos){
-
-        //TODO Add Bounds, if each step is going to be changed by more than +- 25 (ish) make no change as we are in a boundary condition
-        //Should be done ^^
         final float RATIO_LIMIT = 0.25f;
 
         float appDistance = 1;

@@ -1,5 +1,10 @@
 package com.example.datacollectionpdr.nativedata;
 
+/** LightData.java
+ * Author: Weston Everett
+ * Affiliation: The University of Edinburgh
+ * Description: Object holding timestamped ambient light data.
+ */
 public class LightData {
 
     public float light;

@@ -1,7 +1,11 @@
 package com.example.datacollectionpdr.nativedata;
 
 import com.example.datacollectionpdr.pdrcalculation.GNSSCalculations;
-
+/** UserPostionData.java
+ * Authors: Alexandros Miteloudis Vagionas, Weston Everett
+ * Affiliation: The University of Edinburgh
+ * Description: Class for holding user-provided location and heading data.
+ */
 public class UserPositionData {
     public final double startLat;
     public final double startLon;

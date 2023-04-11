@@ -1,5 +1,10 @@
 package com.example.datacollectionpdr.nativedata;
 
+/** PressureData.java
+ * Author: Weston Everett
+ * Affiliation: The University of Edinburgh
+ * Description: Object holding timestamped barometer data.
+ */
 public class PressureData {
 
     public float pressure;

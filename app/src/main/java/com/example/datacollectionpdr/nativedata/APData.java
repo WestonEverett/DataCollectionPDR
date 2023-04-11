@@ -2,6 +2,11 @@ package com.example.datacollectionpdr.nativedata;
 
 import com.example.datacollectionpdr.datacollectionandpreparation.WifiObject;
 
+/** APData.java
+ * Authors: Weston Everett, Alexandros Miteloudis Vagionas
+ * Affiliation: The University of Edinburgh
+ * Description: TODO: FILL THIS IN
+ */
 public class APData {
 
     public long mac;
