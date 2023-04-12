@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,7 +100,8 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
                 ((Activity) requireActivity()).overridePendingTransition(0, 0);
                 break;
             case R.id.button_send:  //Send button -> Go to Send activity which sends the recording to server
-                ServerManager.sendData(trajectoryNative, MainActivity.serverKeyString);
+                String response = ServerManager.sendData(trajectoryNative, MainActivity.serverKeyString);
+                Log.e("ServerResponse", response);
                 Intent intent_send = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent_send);
                 ((Activity) requireActivity()).overridePendingTransition(0, 0);

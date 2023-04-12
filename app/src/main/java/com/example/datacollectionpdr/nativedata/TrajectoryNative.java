@@ -18,10 +18,14 @@ import com.example.datacollectionpdr.data.Trajectory;
 
 import java.util.ArrayList;
 
+import kotlin.NotImplementedError;
+
 /** TrajectoryNative.java
  * Authors: Weston Everett, Alexandros Miteloudis Vagionas, Dagna Wocjak
  * Affiliation: The University of Edinburgh
- * Description: TODO: FILL THIS IN
+ * Description: A Native-Java Wrapper class for the Trajectory objects defined in the .proto files,
+ *      provides functions for post-recording trajectory correction as well as serialization and
+ *      deserialization to Trajectory objects
  */
 
 public class TrajectoryNative {
@@ -145,6 +149,11 @@ public class TrajectoryNative {
     }
 
     public void addPDRStep(PDRStep pdrStep){
+        pdrStep.initTime = pdrStep.initTime - this.initTime;
+        pdrs.add(pdrStep);
+    }
+
+    public void addRawPDRStep(PDRStep pdrStep){
         pdrs.add(pdrStep);
     }
 
@@ -153,26 +162,32 @@ public class TrajectoryNative {
     }
 
     public void addGNSS(GNSSData gnssData){
+        gnssData.initTime = gnssData.initTime - this.initTime;
         gnssSamples.add(gnssData);
     }
 
     public void addLight(LightData lightData){
+        lightData.initTime = lightData.initTime - this.initTime;
         lights.add(lightData);
     }
 
     public void addWifi(WifiSample wifiSample){
+        wifiSample.initTime = wifiSample.initTime - this.initTime;
         wifis.add(wifiSample);
     }
 
     public void addMotion(MotionSample motionSample){
+        motionSample.initTime = motionSample.initTime - this.initTime;
         motions.add(motionSample);
     }
 
     public void addPosition(PositionData positionData){
+        positionData.initTime = positionData.initTime - this.initTime;
         positions.add(positionData);
     }
 
     public void addPressure(PressureData baro){
+        baro.timestamp = baro.timestamp - this.initTime;
         baros.add(baro);
     }
 
@@ -271,7 +286,7 @@ public class TrajectoryNative {
         trajectoryBuilder.addPDR(curPDR);
 
         for(PDRStep pdr : pdrs){
-            curPDR = new PDRStep(this.initTime, curPDR.getX() + pdr.getX(), curPDR.getY() + pdr.getY());
+            curPDR = new PDRStep(pdr.initTime, curPDR.getX() + pdr.getX(), curPDR.getY() + pdr.getY());
             trajectoryBuilder.addPDR(curPDR);
         }
 

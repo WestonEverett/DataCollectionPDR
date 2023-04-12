@@ -54,7 +54,7 @@ public class TrajectoryBuilder {
 
     public void addPDR(float x, float y, long curTime){
         Pdr_Sample.Builder newPDR = Pdr_Sample.newBuilder();
-        newPDR.setRelativeTimestamp(curTime - initTime);
+        newPDR.setRelativeTimestamp(curTime);
         newPDR.setX(x);
         newPDR.setY(y);
 
@@ -82,7 +82,7 @@ public class TrajectoryBuilder {
         GNSS_Sample.Builder newGNSS = GNSS_Sample.newBuilder();
         newGNSS.setAccuracy(acc);
         newGNSS.setAltitude(alt);
-        newGNSS.setRelativeTimestamp(curTime - initTime);
+        newGNSS.setRelativeTimestamp(curTime);
         newGNSS.setLatitude(lat);
         newGNSS.setLongitude(lon);
         newGNSS.setProvider(provider);
@@ -98,7 +98,7 @@ public class TrajectoryBuilder {
     public void addLight(float light, long curTime){
         Light_Sample.Builder newLight = Light_Sample.newBuilder();
         newLight.setLight(light);
-        newLight.setRelativeTimestamp(curTime- initTime);
+        newLight.setRelativeTimestamp(curTime);
 
         trajectoryBuilder.addLightData(newLight.build());
     }
@@ -109,7 +109,7 @@ public class TrajectoryBuilder {
 
     public void addWifi(long curTime, long[] mac, int[] rssi){
         WiFi_Sample.Builder newWifi = WiFi_Sample.newBuilder();
-        long relTime = curTime - initTime;
+        long relTime = curTime;
 
         newWifi.setRelativeTimestamp(relTime);
 
@@ -127,7 +127,7 @@ public class TrajectoryBuilder {
 
     public void addWifi(WifiSample wifiSample){
         WiFi_Sample.Builder newWifi = WiFi_Sample.newBuilder();
-        long relTime = wifiSample.initTime - initTime;
+        long relTime = wifiSample.initTime;
 
         newWifi.setRelativeTimestamp(relTime);
 
@@ -160,7 +160,7 @@ public class TrajectoryBuilder {
         newMotion.setRotationVectorW(rotVector[3]);
 
         newMotion.setStepCount(steps);
-        newMotion.setRelativeTimestamp(curTime - initTime);
+        newMotion.setRelativeTimestamp(curTime);
 
         trajectoryBuilder.addImuData(newMotion.build());
     }
@@ -171,7 +171,7 @@ public class TrajectoryBuilder {
 
     public void addPosition(long curTime, float[] mag){
         Position_Sample.Builder newPosition = Position_Sample.newBuilder();
-        newPosition.setRelativeTimestamp(curTime - initTime);
+        newPosition.setRelativeTimestamp(curTime);
         newPosition.setMagX(mag[0]);
         newPosition.setMagY(mag[1]);
         newPosition.setMagZ(mag[2]);
@@ -186,7 +186,7 @@ public class TrajectoryBuilder {
     public void addBaro(float pressure, long curTime){
         Pressure_Sample.Builder newPressure = Pressure_Sample.newBuilder();
         newPressure.setPressure(pressure);
-        newPressure.setRelativeTimestamp(curTime - initTime);
+        newPressure.setRelativeTimestamp(curTime);
 
         trajectoryBuilder.addPressureData(newPressure.build());
     }
