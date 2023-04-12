@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import kotlin.NotImplementedError;
 
 /** TrajectoryNative.java
- * Authors: Weston Everett, Alexandros Miteloudis Vagionas, Dagna Wocjak
+ * Authors: Weston Everett, Alexandros Miteloudis Vagionas
  * Affiliation: The University of Edinburgh
  * Description: A Native-Java Wrapper class for the Trajectory objects defined in the .proto files,
  *      provides functions for post-recording trajectory correction as well as serialization and
