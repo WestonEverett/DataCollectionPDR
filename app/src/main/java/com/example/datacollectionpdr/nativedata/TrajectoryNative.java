@@ -1,6 +1,7 @@
 package com.example.datacollectionpdr.nativedata;
 
 import android.os.Build;
+import android.util.Log;
 
 import com.example.datacollectionpdr.data.AP_Data;
 import com.example.datacollectionpdr.data.GNSS_Sample;
@@ -129,14 +130,16 @@ public class TrajectoryNative {
 
         //Reads in PDR steps, including making X/Y relative to most recent step rather than start
         this.pdrs = new ArrayList<>();
-        PDRStep lastPDR = new PDRStep(0L, 0f, 0f);
+
+        Pdr_Sample lastPDR = trajectory.getPdrDataList().get(0);
         for (Pdr_Sample pdr : trajectory.getPdrDataList()){
-            lastPDR = new PDRStep(
+            pdrs.add(new PDRStep(
                     pdr.getRelativeTimestamp(),
                     (pdr.getX() - lastPDR.getX()),
                     (pdr.getY() - lastPDR.getY())
-            );
-            pdrs.add(lastPDR);
+            ));
+
+            lastPDR = pdr;
         }
 
         //removes initial (0,0) PDR

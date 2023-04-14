@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,10 +25,10 @@ import java.nio.file.Paths;
 
 public class FileManager {
 
-    public static void createDataFile(Context context, TrajectoryNative trajectoryNative) {
+    public static void createDataFile(Context context, TrajectoryNative trajectoryNative, String filename) {
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String dataFileName = "Trajectory_" + timeStamp + ".pkt";
+        String dataFileName = filename + "_" + timeStamp + ".pkt";
         File file = new File(context.getFilesDir(), dataFileName);
 
         try (FileOutputStream fos = context.openFileOutput(dataFileName, Context.MODE_PRIVATE)) {
@@ -43,23 +44,25 @@ public class FileManager {
     }
 
     public static String[] seeFiles(Context context){
-        String[] filenames = context.fileList();
-        for(String str : filenames){
-            Log.e("LocalFile", str);
+        ArrayList<String> filenames = new ArrayList<>();
+        for(String str : context.fileList()){
+            if(str.contains(".pkt")){
+                filenames.add(str);
+            }
         }
 
-        return filenames;
+        return filenames.toArray(new String[0]);
     }
 
     public static TrajectoryNative getTrajectoryFile(Context context, String filename) throws IOException {
-        byte[] fileBytes = Files.readAllBytes(Paths.get(filename));
+        File file = new File(context.getFilesDir(), filename);
+        byte[] fileBytes = Files.readAllBytes(file.toPath());
 
         Trajectory loadedTraj = Trajectory.parseFrom(fileBytes);
+        TrajectoryNative trajectoryNative = new TrajectoryNative(loadedTraj);
 
 
-
-
-        return new TrajectoryNative(0, new UserPositionData(0,0,1,1));
+        return trajectoryNative;
     }
 
 }

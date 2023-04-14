@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,11 +36,14 @@ import java.io.IOException;
 public class DashBoard extends AppCompatActivity implements View.OnClickListener{
 
     String[] files;
-    String selectedFile;
     XYPlot plot;
     TrajectoryNative trajectoryNative;
     Spinner dropdown;                               //initialise dropdown menu
     String currentDisplayFile;                    //initialise string with the currently selected sensor
+
+    Button sendButton;                  //Send Button
+    Button loadButton;                  //Load Button
+    Button deleteButton;               //Delete Button
 
     //TODO hook up to UI, add displays for other information like data ID, duration, etc
     /** on create function to set up the view for activity and initialise all the elements*/
@@ -56,6 +60,17 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
         currentDisplayFile = null;
         dropdown = findViewById(R.id.spinner_files);// initialize drop down menureference:
         initspinnerfooter();                        //set up the menu
+
+        sendButton = findViewById(R.id.button_sendfromfile);
+        sendButton.setOnClickListener(this);
+
+        loadButton = findViewById(R.id.button_load);
+        loadButton.setOnClickListener(this);
+
+        deleteButton = findViewById(R.id.button_delete);
+        deleteButton.setOnClickListener(this);
+
+        plot = (XYPlot) findViewById(R.id.plot3);
 
 
         // Initialize and assign variable
@@ -96,11 +111,12 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
                 break;
 
             case R.id.button_load:
+                Log.e("button", "Starting load of " + currentDisplayFile);
                 try{
-                    this.trajectoryNative = FileManager.getTrajectoryFile(getApplicationContext(), selectedFile);
+                    this.trajectoryNative = FileManager.getTrajectoryFile(getApplicationContext(), currentDisplayFile);
                     UITools.plotPDRTrajectory(this.trajectoryNative.getPdrs(), Color.RED, plot);
                 } catch (IOException e) {
-                    Log.e("Load Failure", selectedFile + " Failed to Load");
+                    Log.e("Load Failure", e.toString());
                 }
 
             case R.id.button_delete:

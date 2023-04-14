@@ -101,13 +101,13 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
                 break;
             case R.id.button_send:  //Send button -> Go to Send activity which sends the recording to server
                 String response = ServerManager.sendData(trajectoryNative, MainActivity.serverKeyString);
-                Log.e("ServerResponse", response);
+                Log.i("ServerResponse", response);
                 Intent intent_send = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent_send);
                 ((Activity) requireActivity()).overridePendingTransition(0, 0);
                 break;
             case R.id.button_save:  //Save button -> Go to Save activity which saves the recording to local file
-                FileManager.createDataFile(getContext(), trajectoryNative);
+                FileManager.createDataFile(getContext(), trajectoryNative, MainActivity.fileNameString);
                 Intent intent_save = new Intent(getActivity(), MainActivity.class);
                 startActivity(intent_save); //Go to the Show Help activity and its view
                 ((Activity) requireActivity()).overridePendingTransition(0, 0);

@@ -13,7 +13,6 @@
         <entry key="..\:/Users/dagna/AndroidStudioProjects/DataCollectionPDR/app/src/main/res/drawable/text_background.xml" value="0.1" />
         <entry key="..\:/Users/dagna/AndroidStudioProjects/DataCollectionPDR/app/src/main/res/drawable/text_background_disabled.xml" value="0.1" />
         <entry key="..\:/Users/dagna/AndroidStudioProjects/DataCollectionPDR/app/src/main/res/layout/activity_about.xml" value="0.20416666666666666" />
-        <entry key="..\:/Users/dagna/AndroidStudioProjects/DataCollectionPDR/app/src/main/res/layout/activity_dashboard.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/dagna/AndroidStudioProjects/DataCollectionPDR/app/src/main/res/layout/activity_main.xml" value="0.16" />
         <entry key="..\:/Users/dagna/AndroidStudioProjects/DataCollectionPDR/app/src/main/res/layout/activity_recording.xml" value="0.2" />
         <entry key="..\:/Users/dagna/AndroidStudioProjects/DataCollectionPDR/app/src/main/res/layout/activity_recording_review.xml" value="0.25" />
@@ -37,6 +36,7 @@
         <entry key="..\:/Users/dagna/AndroidStudioProjects/DataCollectionPDR/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
         <entry key="..\:/Users/dagna/AndroidStudioProjects/DataCollectionPDR/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />
         <entry key="..\:/Users/dagna/AndroidStudioProjects/DataCollectionPDR/app/src/main/res/xml/root_preferences.xml" value="0.22" />
+        <entry key="..\:/Users/westo/AndroidStudioProjects/DataCollectionPDR/app/src/main/res/layout/activity_dashboard.xml" value="0.176" />
       </map>
     </option>
   </component>
