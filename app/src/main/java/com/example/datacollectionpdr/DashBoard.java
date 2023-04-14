@@ -38,6 +38,8 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
     String selectedFile;
     XYPlot plot;
     TrajectoryNative trajectoryNative;
+    Spinner dropdown;                               //initialise dropdown menu
+    String currentDisplayFile;                    //initialise string with the currently selected sensor
 
     //TODO hook up to UI, add displays for other information like data ID, duration, etc
     /** on create function to set up the view for activity and initialise all the elements*/
@@ -46,9 +48,15 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
 
         files = FileManager.seeFiles(getApplicationContext());
+
         setContentView(R.layout.activity_dashboard);    //Set up view from activity_dashboard xml
 
         getSupportActionBar().hide();   //Hide app bar
+
+        currentDisplayFile = null;
+        dropdown = findViewById(R.id.spinner_files);// initialize drop down menureference:
+        initspinnerfooter();                        //set up the menu
+
 
         // Initialize and assign variable
         BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_navigation);
@@ -78,35 +86,38 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
     }
 
 
-
     /**function dealing with buttons actions - its outcome depends on the button clicked*/
     @Override
     public void onClick(View v) {
         //do what you want to do when button is clicked
         switch (v.getId()) {
-            case 1: //R.id.button_send:  //->Go to review page and apply trajectory corrections based on user points input
+            case R.id.button_sendfromfile:
                 ServerManager.sendData(this.trajectoryNative, MainActivity.serverKeyString);
                 break;
 
-            case 2: //R.id.button_load:
+            case R.id.button_load:
                 try{
                     this.trajectoryNative = FileManager.getTrajectoryFile(getApplicationContext(), selectedFile);
                     UITools.plotPDRTrajectory(this.trajectoryNative.getPdrs(), Color.RED, plot);
                 } catch (IOException e) {
                     Log.e("Load Failure", selectedFile + " Failed to Load");
                 }
+
+            case R.id.button_delete:
+                //try{
+                    //TODO delete the file
+                ///} catch (IOException e) {
+                   // Log.e("File Delete Failure", selectedFile + " Failed to Delete");
+                //}
         }
     }
 
-    //TODO Button to update files list
-
-    //TODO to delete all files
 
     //TODO to get stuff from server
 
     //TODO list display for files
 
-    //TODO Ideally add delete and show buttons - spearate fragment
+
 
     /**set up back button to go to home page*/
     @Override
@@ -116,6 +127,30 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
         overridePendingTransition(0,0);
     }
 
+    /**function that sets up the drop down menu allowing user to pick the sensor which data is displayed
+     */
+    private void initspinnerfooter() {
 
+        //get the layout element
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, files);
+        dropdown.setAdapter(adapter);   //set up view adater
+
+        //when a new item is selected from the menu
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.v("item", (String) parent.getItemAtPosition(position));     //check which item choosen
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);   //display the selected item when drop down menu rolled up
+
+                currentDisplayFile=(String) parent.getItemAtPosition(position);   //update the string indicating the choosen sensor
+            }
+
+            //set the default seected sensor
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                currentDisplayFile = files[1];
+            }
+        });
+    }
 
 }

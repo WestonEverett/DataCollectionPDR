@@ -8,13 +8,121 @@
     android:background="@drawable/background"
     tools:context=".DashBoard">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Here put all the server stuff"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_centerInParent="true"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottom_navigation"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/savedTrajectories_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:autoSizeTextType="uniform"
+            android:textColor="@color/white"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/textView_choosefileload"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/textView_choosefileload"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            android:padding="8dp"
+            android:background="@drawable/text_background"
+            style="@style/Widget.MaterialComponents.TextView"
+            android:justificationMode="inter_word"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:textAllCaps="false" />
+
+        <Spinner
+            android:id="@+id/spinner_files"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintEnd_toStartOf="@+id/button_load"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_choosefileload"
+            style="@style/Widget.AppCompat.Spinner"
+            android:background="@drawable/text_background"
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/button_load"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="@string/Load_button"
+            app:layout_constraintBottom_toBottomOf="@+id/spinner_files"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/spinner_files" />
+
+        <FrameLayout
+            android:layout_width="334dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toTopOf="@+id/button_sendfromfile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinner_files">
+
+            <com.androidplot.xy.XYPlot
+                android:id="@+id/plot3"
+                style="@style/APDefacto.Dark"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/spinner2"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="0dp"
+                android:background="@drawable/text_background"
+                app:backgroundColor="#00FFFFFF"
+                app:domainTitle="x-direction [m]"
+                app:graphBackgroundColor="#00FFFFFF"
+                app:gridBackgroundColor="#00FFFFFF"
+                app:lineLabelRotationBottom="-45"
+                app:lineLabels="left|bottom"
+                app:rangeTitle="y-direction [m]"
+                app:title="@string/PDRDuringTitle"
+                app:titleTextColor="@color/orange" />
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/button_sendfromfile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:text="@string/sendButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_delete"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/button_delete"
+            android:layout_width="202dp"
+            android:layout_height="wrap_content"
+            android:text="@string/ButtonDelete"
+            app:layout_constraintBottom_toBottomOf="@+id/button_sendfromfile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/button_sendfromfile" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
