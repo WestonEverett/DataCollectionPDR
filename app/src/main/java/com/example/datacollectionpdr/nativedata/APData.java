@@ -5,7 +5,7 @@ import com.example.datacollectionpdr.datacollectionandpreparation.WifiObject;
 /** APData.java
  * Authors: Weston Everett, Alexandros Miteloudis Vagionas
  * Affiliation: The University of Edinburgh
- * Description: TODO: FILL THIS IN
+ * Description: Contains information about a WiFi reading
  */
 public class APData {
 

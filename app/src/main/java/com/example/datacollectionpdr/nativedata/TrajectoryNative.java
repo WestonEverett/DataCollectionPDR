@@ -26,23 +26,47 @@ import kotlin.NotImplementedError;
  * Description: A Native-Java Wrapper class for the Trajectory objects defined in the .proto files,
  *      provides functions for post-recording trajectory correction as well as serialization and
  *      deserialization to Trajectory objects
+ *
+ *      Several differences from Trajectory exist, such as PDRs, which are stored as relative to the
+ *      last step, not relative to the start position for easier calculation
  */
 
 public class TrajectoryNative {
 
+    //Initial User-entered Position/Orientation
     UserPositionData initPos;
+
+    //initial time
     public final long initTime;
+
     String androidVersion;
     String dataID;
 
+    //PDR steps, each is a displacement from the last step
     ArrayList<PDRStep> pdrs;
+
+    //WIFI data of the connected network
     ArrayList<APData> aps;
+
+    //Location/GPS measurements
     ArrayList<GNSSData> gnssSamples;
+
+    //Light measurements
     ArrayList<LightData> lights;
+
+    //1-2 second scans of available WiFi networks and power
     ArrayList<WifiSample> wifis;
+
+    //Accelo, Gyro, steps, and time measurements
     ArrayList<MotionSample> motions;
+
+    //Magnetometer data (oddly named but following the Trajectory class for consistency)
     ArrayList<PositionData> positions;
+
+    //Barometer/pressure measurements
     ArrayList<PressureData> baros;
+
+    //Information about the sensors used to collect data
     SensorDetails accInfo;
     SensorDetails gyroInfo;
     SensorDetails rotVectorInfo;
@@ -50,8 +74,13 @@ public class TrajectoryNative {
     SensorDetails baroInfo;
     SensorDetails lightInfo;
 
+    /*
+        Typical Constructor for building trajectories from scratch
+        Requires initial Time and position
+     */
     public TrajectoryNative(long initTime, UserPositionData initPos)
     {
+        //initializes class variables
         this.initTime = initTime;
         this.initPos = initPos;
         this.androidVersion = String.valueOf(Build.VERSION.SDK_INT);
@@ -65,13 +94,28 @@ public class TrajectoryNative {
         baros = new ArrayList<>();
     }
 
-    public TrajectoryNative(long initTime, UserPositionData initPos, String androidVersion, String dataID){
+    /*
+        Simple constructor Overload to automatically select start time
+     */
+    public TrajectoryNative(UserPositionData initPos) {
+        this(System.currentTimeMillis(), initPos);
+    }
+
+    /*
+        Constructor overload including data identifier
+     */
+    public TrajectoryNative(long initTime, UserPositionData initPos, String dataID){
         this(initTime, initPos);
-        this.androidVersion = androidVersion;
         this.dataID = dataID;
     }
 
+    /*
+        Deserialization Constructor, accepts Trajectory object and creates a TrajectoryNative
+        with the same internal data
+     */
     public TrajectoryNative(Trajectory trajectory){
+
+        //initializes and sets simple class variables
         this.initTime = trajectory.getStartTimestamp();
         this.androidVersion = trajectory.getAndroidVersion();
         this.dataID = trajectory.getDataIdentifier();
@@ -83,26 +127,40 @@ public class TrajectoryNative {
         this.baroInfo = new SensorDetails(trajectory.getBarometerInfo());
         this.lightInfo = new SensorDetails(trajectory.getLightSensorInfo());
 
+        //Reads in PDR steps, including making X/Y relative to most recent step rather than start
         this.pdrs = new ArrayList<>();
+        PDRStep lastPDR = new PDRStep(0L, 0f, 0f);
         for (Pdr_Sample pdr : trajectory.getPdrDataList()){
-            pdrs.add(new PDRStep(pdr.getRelativeTimestamp(), pdr.getX(), pdr.getY()));
+            lastPDR = new PDRStep(
+                    pdr.getRelativeTimestamp(),
+                    (pdr.getX() - lastPDR.getX()),
+                    (pdr.getY() - lastPDR.getY())
+            );
+            pdrs.add(lastPDR);
         }
 
+        //removes initial (0,0) PDR
+        pdrs.remove(0);
+
+        //Reads in APS data
         this.aps = new ArrayList<>();
         for(AP_Data ap : trajectory.getApsDataList()){
             aps.add(new APData(ap.getMac(), ap.getSsid(), ap.getFrequency()));
         }
 
+        //Reads in GPS/Position data
         this.gnssSamples = new ArrayList<>();
         for(GNSS_Sample gnss : trajectory.getGnssDataList()){
             gnssSamples.add(new GNSSData(gnss.getProvider(), gnss.getAccuracy(), gnss.getAltitude(), gnss.getRelativeTimestamp(), gnss.getLongitude(), gnss.getLatitude(), gnss.getSpeed()));
         }
 
+        //Reads in light data
         this.lights = new ArrayList<>();
         for(Light_Sample light : trajectory.getLightDataList()){
             lights.add(new LightData(light.getRelativeTimestamp(), light.getLight()));
         }
 
+        //Reads in wifi scans
         this.wifis = new ArrayList<>();
         for (WiFi_Sample wifi : trajectory.getWifiDataList()){
             WifiSample newWifi = new WifiSample(wifi.getRelativeTimestamp());
@@ -112,6 +170,7 @@ public class TrajectoryNative {
             wifis.add(newWifi);
         }
 
+        //Reads in motion samples
         this.motions = new ArrayList<>();
         for(Motion_Sample mot : trajectory.getImuDataList()){
             MotionSample nativeMot = new MotionSample();
@@ -119,23 +178,30 @@ public class TrajectoryNative {
             nativeMot.setGyro(new float[]{mot.getGyrX(), mot.getGyrY(), mot.getGyrZ()});
             nativeMot.setRotVector(new float[]{mot.getRotationVectorX(), mot.getRotationVectorY(), mot.getRotationVectorZ(), mot.getRotationVectorW()});
             nativeMot.initTime = mot.getRelativeTimestamp();
-            nativeMot.steps = 0;
+            nativeMot.steps = mot.getStepCount();
             motions.add(nativeMot);
         }
 
+        //reads in position (magnetometer) data
         this.positions = new ArrayList<>();
         for(Position_Sample pos : trajectory.getPositionDataList()){
             positions.add(new PositionData(pos.getRelativeTimestamp(), new float[]{pos.getMagX(), pos.getMagY(), pos.getMagZ()}));
         }
 
+        //Reads in barometer/pressure data
         this.baros = new ArrayList<>();
         for(Pressure_Sample pressure : trajectory.getPressureDataList()){
             baros.add(new PressureData(pressure.getRelativeTimestamp(), pressure.getPressure()));
         }
 
+        //Creates an initial location based on the GPS coordinates and the first PDR step
         if(pdrs.size() > 1 && gnssSamples.size() > 0){
             GNSSData gnssData = gnssSamples.get(0);
             PDRStep pdrStep = pdrs.get(1);
+            /*
+                Unit conversion of meters to lat/lon is not done as reference lat/lon is only used
+                for direction so scale does not matter
+             */
             this.initPos = new UserPositionData(gnssData.lat, gnssData.lon, gnssData.lat + pdrStep.getX(), gnssData.lon + pdrStep.getY());
         }
     }
@@ -148,11 +214,13 @@ public class TrajectoryNative {
         return motions;
     }
 
+    //inserts new pdr to internal list after modify time to be relative
     public void addPDRStep(PDRStep pdrStep){
         pdrStep.initTime = pdrStep.initTime - this.initTime;
         pdrs.add(pdrStep);
     }
 
+    //overload that does not modify time
     public void addRawPDRStep(PDRStep pdrStep){
         pdrs.add(pdrStep);
     }
@@ -162,31 +230,37 @@ public class TrajectoryNative {
     }
 
     public void addGNSS(GNSSData gnssData){
+        //converts absolute to relative time
         gnssData.initTime = gnssData.initTime - this.initTime;
         gnssSamples.add(gnssData);
     }
 
     public void addLight(LightData lightData){
+        //converts absolute to relative time
         lightData.initTime = lightData.initTime - this.initTime;
         lights.add(lightData);
     }
 
     public void addWifi(WifiSample wifiSample){
+        //converts absolute to relative time
         wifiSample.initTime = wifiSample.initTime - this.initTime;
         wifis.add(wifiSample);
     }
 
     public void addMotion(MotionSample motionSample){
+        //converts absolute to relative time
         motionSample.initTime = motionSample.initTime - this.initTime;
         motions.add(motionSample);
     }
 
     public void addPosition(PositionData positionData){
+        //converts absolute to relative time
         positionData.initTime = positionData.initTime - this.initTime;
         positions.add(positionData);
     }
 
     public void addPressure(PressureData baro){
+        //converts absolute to relative time
         baro.timestamp = baro.timestamp - this.initTime;
         baros.add(baro);
     }
@@ -226,6 +300,7 @@ public class TrajectoryNative {
      */
 
     public void applyTrajectoryScaling(UserPositionData endPos){
+        //percentage the program is willing to scale by before assuming there is an error
         final float RATIO_LIMIT = 0.25f;
 
         float appDistance = 1;
@@ -250,10 +325,17 @@ public class TrajectoryNative {
         }
     }
 
+    /*
+        Uses the user-inputted locations/headings to calculate absolute heading change
+        Assumes that this heading change is caused by a time-dependent drift
+        Modifies each PDR step with a scaled heading change so the start and end headings are
+            correct
+     */
     public void applyGyroCorrection(UserPositionData endPos){
 
         double trueChangeInHeading = GNSSCalculations.userHeadingDeltaDeg(this.initPos, endPos);
 
+        //Calculates the change in heading estimated by the PDR
         double estimatedChangeInHeading = 0;
         long totalTime = 1;
 
@@ -262,8 +344,13 @@ public class TrajectoryNative {
             totalTime = this.pdrs.get(pdrs.size()-1).initTime - this.initTime;
         }
 
+        //Calculates difference to correct
         double changeInHeadingDif = trueChangeInHeading - estimatedChangeInHeading;
 
+        /*
+            Assumes heading drift is time-linear, so headingError = totalError * timePast/totalTime
+            Adds calculated headingError to each pdrStep
+         */
         for (PDRStep pdr: pdrs) {
             float percentTimePassed = ((float) (pdr.initTime - this.initTime)) / totalTime;
             double pdrHeadingDif = percentTimePassed * changeInHeadingDif;
@@ -271,10 +358,15 @@ public class TrajectoryNative {
         }
     }
 
+    /*
+        Serializes the current TrajectoryNative object to a Trajectory object with TrajectoryBuilder
+     */
     public Trajectory generateSerialized()
     {
+        //Instantiates object of TrajectoryBuilder
         TrajectoryBuilder trajectoryBuilder = new TrajectoryBuilder(initTime, androidVersion, dataID);
 
+        //adds sensor information
         trajectoryBuilder.addAccInfo(accInfo);
         trajectoryBuilder.addGyroInfo(gyroInfo);
         trajectoryBuilder.addRotationVectorInfo(rotVectorInfo);
@@ -282,9 +374,9 @@ public class TrajectoryNative {
         trajectoryBuilder.addBaroInfo(baroInfo);
         trajectoryBuilder.addLightInfo(lightInfo);
 
+        //Translates
         PDRStep curPDR = new PDRStep(this.initTime, 0f, 0f);
         trajectoryBuilder.addPDR(curPDR);
-
         for(PDRStep pdr : pdrs){
             curPDR = new PDRStep(pdr.initTime, curPDR.getX() + pdr.getX(), curPDR.getY() + pdr.getY());
             trajectoryBuilder.addPDR(curPDR);

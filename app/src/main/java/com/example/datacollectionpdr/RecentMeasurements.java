@@ -47,7 +47,8 @@ public class RecentMeasurements {
 
     /**
      * Update the measurements when new motion sample is ready
-     * @param motionSample  - object defined in motionSample function holding empty arrays for the sensor measurements
+     * @param motionSample  - MotionSample containing accelerometer, gyro, magnet, step count, and
+     *                      time readings
      */
     public void updateMeasurements(MotionSample motionSample){
         motionTimeRecentMeasurements.addValue(motionSample.initTime); //time for the last motion sample
@@ -73,7 +74,7 @@ public class RecentMeasurements {
 
     /**
      * Update the measurements when new motion sample is ready
-     * @param pressureData  - object defined in pressure data function holding empty arrays for the sensor measurements
+     * @param pressureData  - Object containing the most recent barometer reading and timestamp
      */
     public void updateMeasurements(PressureData pressureData) {
         baroRecentMeasurements[0].addValue(pressureData.pressure);  //get reading
@@ -84,7 +85,7 @@ public class RecentMeasurements {
      * function that gives array containing time and data of the last x samples of
      * a chosen sensor
      * @param sensor - which sensor is to be plotted
-     * @return - array with recent samples of that sensor (Floats) and timestamps (longs)
+     * @return - array with recent samples of that sensor (Floats) and timestamps (Longs)
      */
     public Number[][] getData(String sensor) {
 
