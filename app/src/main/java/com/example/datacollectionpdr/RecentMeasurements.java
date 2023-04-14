@@ -6,6 +6,9 @@ import com.example.datacollectionpdr.nativedata.PressureData;
 /**
  * Class that manages sensor data and structures them into formats used in the UI visualisation tools
  * such as XYplots
+ *
+ *  * Author: Weston Everett
+ *  * Affiliation: The University of Edinburgh
  */
 public class RecentMeasurements {
 

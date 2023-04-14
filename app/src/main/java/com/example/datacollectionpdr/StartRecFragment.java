@@ -30,7 +30,10 @@ import java.util.Objects;
 
 /**
  * Class managing the start recording fragment where user chooses start location
+ * Author:  Dagna Wojciak
+ * Affiliation: The University of Edinburgh
  */
+
 public class StartRecFragment extends Fragment implements View.OnClickListener {
 
     View view;                  //View of the fragment

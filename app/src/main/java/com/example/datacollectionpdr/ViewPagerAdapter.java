@@ -11,6 +11,7 @@ import java.util.List;
 
 /**
  * Set up the fragment swipe menu used for display during recording
+ * Source: Geeks4Geeks Swipe Fragment View in Java
  */
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 

@@ -18,6 +18,9 @@ import com.google.android.gms.maps.model.LatLng;
 /**
  * Fragment class that shown google map to the user while recording with indication of the phone position
  * according to GPS readings
+ *
+ *  * Author: Dagna Wojciak
+ *  * Affiliation: The University of Edinburgh
  */
 public class MapFragment extends Fragment {
 

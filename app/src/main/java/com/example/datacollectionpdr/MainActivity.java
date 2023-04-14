@@ -7,7 +7,9 @@ import androidx.annotation.NonNull;
 import com.example.datacollectionpdr.datacollectionandpreparation.PermissionsManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-/**Main class where the app is started - manages the home page layout - and checks for permissions*/
+/**Main class where the app is started - manages the home page layout - and checks for permissions
+ *  * Author: Dagna Wojciak, Weston Everett
+ *  * Affiliation: The University of Edinburgh*/
 public class MainActivity extends PermissionsManager {
 
     private static final int REQUEST_ID_READ_WRITE_PERMISSION = 99;

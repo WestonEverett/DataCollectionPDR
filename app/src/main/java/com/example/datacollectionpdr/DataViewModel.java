@@ -8,9 +8,10 @@ import com.example.datacollectionpdr.nativedata.MotionSample;
 import com.example.datacollectionpdr.nativedata.PDRStep;
 import com.example.datacollectionpdr.nativedata.PressureData;
 
-import java.util.ArrayList;
-
-/** class to allow access of sensor and pdr data in recording activity UI*/
+/** class to allow access of sensor and pdr data in recording activity UI
+ * Author: Weston Everett
+ * Affiliation: University of Edinburgh
+ */
 public class DataViewModel extends ViewModel {
     private final MutableLiveData<MotionSample> motionSampleLiveData = new MutableLiveData<>(); //variablre to pass motion samples
     private final MutableLiveData<PDRStep> pdrStepLiveData = new MutableLiveData<>();   //variable to pass pdr steps

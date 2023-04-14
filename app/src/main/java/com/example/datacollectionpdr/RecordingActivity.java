@@ -17,6 +17,9 @@ import java.util.Objects;
 
 /**
  * Class with activity handling all process of data recording and reviewing
+ *
+ *  * Author: Dagna Wojciak, Weston Everett
+ *  * Affiliation: The University of Edinburgh
  */
 public class RecordingActivity extends DataManager {
 

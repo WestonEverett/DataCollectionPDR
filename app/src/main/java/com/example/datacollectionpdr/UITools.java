@@ -7,6 +7,11 @@ import com.example.datacollectionpdr.nativedata.PDRStep;
 import java.util.ArrayList;
 
 
+/**
+ * Class managing UI display elements in particular trajectory plots
+ * Author:  Weston Everett
+ * Affiliation: The University of Edinburgh
+ */
 public class UITools {
 
     /**
