@@ -49,15 +49,24 @@
     <string name="aboutPage_title">INFORMATION  </string>
     <string name="aboutApp_title"> About PathFinder App </string>
     <string name="AboutApp_text"> PathFinder aids research in indoor positioning, creating indoor
-        building maps, and assessing building hotspots.\nThe app collects data from the following sensors:
-        Accelerometer, Gyroscope, Magnetometer, Barometer, Location, WiFi, Ambient Light, Proximity, Rotation and Activity data.\nThese data are used to trace your position as you walk around a building, and are submitted to an online database.</string>
+        building maps, and assessing building hotspots.\n \n
+        The app collects data from the following sensors:\n
+        Accelerometer, Gyroscope, Magnetometer, Barometer, Location, WiFi, Ambient Light, Proximity, Rotation
+        and Activity data.\n \n
+        These data are used to trace your position as you walk around a building, and are
+        submitted to an online database.</string>
     <string name="howToUse_title">Tips on Using PathFinder </string>
 
-    <string name="howToUse_text"> To achieve the best results with PathFinder, try holding your phone
-                                    in a consistent orientation, and take regular steps with an
-                                    exaggerated motion, to assist the step detection algorithms.
+    <string name="howToUse_text">  To achieve the best results with PathFinder, try holding your phone
+                                    in a consistent orientation. For example, if you wish to take phone call while recording,
+                                    lift the phone to your ear before hitting he start recoding button. \n \n
+                                    Try to take regular confident steps to assist the step detection algorithms.\n \n
                                     Recognising floor changes can take time, as such continuous floor
-                                    changes are discouraged.</string>
+                                    changes are discouraged.\n \n
+                                    To maximise the benefit of post processing trajectory corrections it is recommend to
+                                    finish the recording at a considerable distance from the start point - avoid walking in a loop.
+    </string>
+
     <string name="sensorInfo_title">Sensor Information  </string>
     <string name="sensorInfo_type">Sensor Type: </string>
     <string name="text_spiner_init">Select Sensor Type</string>
@@ -65,7 +74,7 @@
 
     <!-- Files Page -->
     <string name="savedTrajectories_title">Saved Trajectories Review</string>
-    <string name="textView_choosefileload">Choose saved file to view</string>
+    <string name="textView_choosefileload">Choose saved trajectory file to be displayed</string>
     <string name="Load_button">Load Trajectory</string>
     <string name="ButtonDelete">DELETE FILE</string>
 

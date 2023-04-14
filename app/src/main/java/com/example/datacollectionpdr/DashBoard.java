@@ -1,82 +1,75 @@
 package com.example.datacollectionpdr;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.androidplot.xy.XYPlot;
-import com.example.datacollectionpdr.data.Traj;
-import com.example.datacollectionpdr.nativedata.PDRStep;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
-import com.example.datacollectionpdr.nativedata.UserPositionData;
 import com.example.datacollectionpdr.serializationandserver.FileManager;
 import com.example.datacollectionpdr.serializationandserver.ServerManager;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
+import java.util.Objects;
 
+
+/**
+ * Class for the activity where past saved files with trajectories can be viewed and managed
+ */
 public class DashBoard extends AppCompatActivity implements View.OnClickListener{
 
-    String[] files;
-    XYPlot plot;
-    TrajectoryNative trajectoryNative;
-    Spinner dropdown;                               //initialise dropdown menu
-    String currentDisplayFile;                    //initialise string with the currently selected sensor
+    String[] files;                      //string array with stored trajectories
+    XYPlot plot;                         //plot for displaying the trajectories
+    TrajectoryNative trajectoryNative;   //trajectory object
+    Spinner dropdown;                    //dropdown menu
+    String currentDisplayFile;           //string with the currently selected file
 
     Button sendButton;                  //Send Button
     Button loadButton;                  //Load Button
-    Button deleteButton;               //Delete Button
+    Button deleteButton;                //Delete Button
 
-    //TODO hook up to UI, add displays for other information like data ID, duration, etc
+    //TODO add displays for other information like data ID, duration, etc
+
     /** on create function to set up the view for activity and initialise all the elements*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        files = FileManager.seeFiles(getApplicationContext());
+        files = FileManager.seeFiles(getApplicationContext());  //create a list of fies found in the memory
 
-        setContentView(R.layout.activity_dashboard);    //Set up view from activity_dashboard xml
+        setContentView(R.layout.activity_dashboard);  //Set up view from activity_dashboard xml
 
-        getSupportActionBar().hide();   //Hide app bar
+        Objects.requireNonNull(getSupportActionBar()).hide();                 //Hide app bar
 
-        currentDisplayFile = null;
-        dropdown = findViewById(R.id.spinner_files);// initialize drop down menureference:
-        initspinnerfooter();                        //set up the menu
+        currentDisplayFile = null;                   //initialise dropdown with nothing choosen
+        dropdown = findViewById(R.id.spinner_files); // initialize drop down menu reference:
+        initspinnerfooter();                         //set up the drop down menu
 
-        sendButton = findViewById(R.id.button_sendfromfile);
-        sendButton.setOnClickListener(this);
+        sendButton = findViewById(R.id.button_sendfromfile);    //Initialise button for sending to server
+        sendButton.setOnClickListener(this);                    //set button listener
 
-        loadButton = findViewById(R.id.button_load);
-        loadButton.setOnClickListener(this);
+        loadButton = findViewById(R.id.button_load);            //Initialise button for sending to server
+        loadButton.setOnClickListener(this);                    //set button listener
 
-        deleteButton = findViewById(R.id.button_delete);
-        deleteButton.setOnClickListener(this);
+        deleteButton = findViewById(R.id.button_delete);        //Initialise button for sending to server
+        deleteButton.setOnClickListener(this);                  //set button listener
 
-        plot = (XYPlot) findViewById(R.id.plot3);
+        plot = (XYPlot) findViewById(R.id.plot3);               //initialise plot for displaying trajectory
 
-
-        // Initialize and assign variable
-        BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_navigation);
-        // Set Dashboard selected
-        bottomNavigationView.setSelectedItemId(R.id.dashboard);
+        BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_navigation); //initialise bottom navigation
+        bottomNavigationView.setSelectedItemId(R.id.dashboard);     // Set Dashboard page selected on the bottom menu
 
         // Perform Bottom navigation item selected listener
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -100,17 +93,16 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
         });
     }
 
-
     /**function dealing with buttons actions - its outcome depends on the button clicked*/
     @Override
     public void onClick(View v) {
         //do what you want to do when button is clicked
         switch (v.getId()) {
-            case R.id.button_sendfromfile:
+            case R.id.button_sendfromfile:  //send button -> send selected file to server
                 ServerManager.sendData(this.trajectoryNative, MainActivity.serverKeyString);
                 break;
 
-            case R.id.button_load:
+            case R.id.button_load: //load button -> show trajectory saved in the chosen graph on the plot
                 Log.e("button", "Starting load of " + currentDisplayFile);
                 try{
                     this.trajectoryNative = FileManager.getTrajectoryFile(getApplicationContext(), currentDisplayFile);
@@ -119,7 +111,7 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
                     Log.e("Load Failure", e.toString());
                 }
 
-            case R.id.button_delete:
+            case R.id.button_delete: //delete button -> delete the chosen file
                 //try{
                     //TODO delete the file
                 ///} catch (IOException e) {
@@ -129,39 +121,32 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
     }
 
 
-    //TODO to get stuff from server
-
-    //TODO list display for files
-
-
-
-    /**set up back button to go to home page*/
+    /**set up back button to go to home page when its clicked*/
     @Override
     public void onBackPressed()
     {
-        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+        startActivity(new Intent(getApplicationContext(),MainActivity.class));  //go to the home page (main activity)
         overridePendingTransition(0,0);
     }
 
-    /**function that sets up the drop down menu allowing user to pick the sensor which data is displayed
-     */
+    /**function that sets up the drop down menu allowing user to pick the sensor which data is displayed*/
     private void initspinnerfooter() {
 
         //get the layout element
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, files);
-        dropdown.setAdapter(adapter);   //set up view adater
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, files);
+        dropdown.setAdapter(adapter);   //set up view adapter
 
-        //when a new item is selected from the menu
+        //when a new item is selected from the menu look for the position selected and put corresponding name to string
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("item", (String) parent.getItemAtPosition(position));     //check which item choosen
+                Log.v("item", (String) parent.getItemAtPosition(position));     //check which item chosen
                 ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);   //display the selected item when drop down menu rolled up
 
-                currentDisplayFile=(String) parent.getItemAtPosition(position);   //update the string indicating the choosen sensor
+                currentDisplayFile=(String) parent.getItemAtPosition(position);   //update the string indicating the chosen file
             }
 
-            //set the default seected sensor
+            //set the default selected file to the first item on the list
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 currentDisplayFile = files[1];

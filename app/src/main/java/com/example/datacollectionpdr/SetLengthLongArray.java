@@ -29,15 +29,6 @@ public class SetLengthLongArray {
 
     public Long[] getArray(){
 
-        /*
-        Long[] longArray = new Long[internalArray.size()];
-        int i = 0;
-
-        for (Long l : internalArray) {
-            longArray[i++] = (l);
-        }
-        */
-
         return internalArray.toArray(new Long[0]);
     }
 

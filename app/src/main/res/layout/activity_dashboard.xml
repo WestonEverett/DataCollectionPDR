@@ -32,36 +32,37 @@
 
         <TextView
             android:id="@+id/textView_choosefileload"
+            style="@style/Widget.MaterialComponents.TextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/text_background"
+            android:gravity="center"
+            android:padding="8dp"
             android:text="@string/textView_choosefileload"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2"
-            android:padding="8dp"
-            android:background="@drawable/text_background"
-            style="@style/Widget.MaterialComponents.TextView"
-            android:justificationMode="inter_word"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:textAllCaps="false" />
 
         <Spinner
             android:id="@+id/spinner_files"
+            style="@style/Widget.AppCompat.Spinner"
             android:layout_width="0dp"
-            android:layout_height="56dp"
+            android:layout_height="60dp"
             android:layout_alignParentStart="true"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/text_background"
+            android:gravity="center"
             app:layout_constraintEnd_toStartOf="@+id/button_load"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_choosefileload"
-            style="@style/Widget.AppCompat.Spinner"
-            android:background="@drawable/text_background"
-            android:gravity="center"/>
+            app:layout_constraintTop_toBottomOf="@+id/textView_choosefileload" />
 
         <Button
             android:id="@+id/button_load"
-            android:layout_width="wrap_content"
+            android:layout_width="136dp"
             android:layout_height="0dp"
             android:text="@string/Load_button"
             app:layout_constraintBottom_toBottomOf="@+id/spinner_files"
@@ -88,7 +89,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="0dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="0dp"
                 android:layout_marginEnd="0dp"
                 android:background="@drawable/text_background"
                 app:backgroundColor="#00FFFFFF"
@@ -105,23 +106,33 @@
         <Button
             android:id="@+id/button_sendfromfile"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="24dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="12dp"
             android:text="@string/sendButton"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_delete"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@+id/button_delete"
+            app:layout_constraintEnd_toStartOf="@+id/guideline4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/button_delete" />
 
         <Button
             android:id="@+id/button_delete"
-            android:layout_width="202dp"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="12dp"
             android:text="@string/ButtonDelete"
-            app:layout_constraintBottom_toBottomOf="@+id/button_sendfromfile"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/button_sendfromfile" />
+            app:layout_constraintStart_toStartOf="@+id/guideline4" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_begin="177dp"
+            app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

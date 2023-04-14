@@ -12,8 +12,8 @@ public class MainActivity extends PermissionsManager {
 
     private static final int REQUEST_ID_READ_WRITE_PERMISSION = 99;
     public static String serverKeyString= "6xJi8iwetoU6miQZyduemQ"; //String to store server ID (set to default at initialisation)
-    public static String fileNameString="EnterFileName";    //String for filename
-    //TODO do the default string automatically be given by rec time etc - in review fragment
+    public static String fileNameString="File Name";    //String for filename
+
 
     /**Initialise view and navigation items in the activity*/
     @Override

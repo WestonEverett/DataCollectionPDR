@@ -76,6 +76,7 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
 
         TextInputLayout textInputLayoutFile = view.findViewById(R.id.textInput_filename);  //Initialise file name text input
         textInputLayoutFile.setHint("Suggested Name: "+ MainActivity.fileNameString);      //set hint text
+        //TODO set he hint string to actual filename suggested
 
         trajectoryNative = ((RecordingActivity) requireActivity()).trajectoryNative;            //Get trajectory
         plot = (XYPlot) view.findViewById(R.id.plot2);                                      //Initialise plotXY
