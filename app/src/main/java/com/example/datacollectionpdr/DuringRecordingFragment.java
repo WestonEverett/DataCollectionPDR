@@ -18,6 +18,8 @@ import java.util.Locale;
 
 /** Class defining the main actions in the during recording activity - the swiped tab layout to see
 the sensor and pdr info + display a recording timer and stop button
+ * Author: Dagna Wojciak
+ * Affiliation: The University of Edinburgh
  */
 public class DuringRecordingFragment extends Fragment implements View.OnClickListener {
 

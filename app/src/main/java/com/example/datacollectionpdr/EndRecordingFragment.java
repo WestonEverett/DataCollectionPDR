@@ -30,6 +30,9 @@ import java.util.Objects;
 
 /**fragment that deals with setting user location and orientation after recording is paused
  * and then lets user discard or save the recording
+ *
+ *  * Author: Dagna Wojciak
+ *  * Affiliation: The University of Edinburgh
  */
 public class EndRecordingFragment extends Fragment implements View.OnClickListener{
 

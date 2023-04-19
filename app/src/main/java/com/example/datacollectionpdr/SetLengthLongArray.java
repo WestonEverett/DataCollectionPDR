@@ -3,6 +3,11 @@ package com.example.datacollectionpdr;
 import java.util.ArrayList;
 
 //TODO finish commenting
+/**
+ * Description:
+ * Author:  Weston Everett
+ * Affiliation: The University of Edinburgh
+ */
 public class SetLengthLongArray {
 
     private int maxLength;

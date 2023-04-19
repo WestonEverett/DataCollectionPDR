@@ -27,6 +27,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+  /** Class managing the about activity and page view - for display of sensor and app information
+  * * Author: Dagna Wojciak
+  * Affiliation: The University of Edinburgh
+  */
 public class About extends AppCompatActivity {
 
     Spinner dropdown;//Dropdown view

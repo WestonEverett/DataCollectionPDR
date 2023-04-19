@@ -24,6 +24,8 @@ import java.util.Objects;
 
 /**
 Fragment to show saved and corrected trajectory to the user and give option to save/send/discrad
+ * Author: Dagna Wojciak
+ * Affiliation: The University of Edinburgh
  */
 public class ReviewFragment extends Fragment  implements View.OnClickListener {
 

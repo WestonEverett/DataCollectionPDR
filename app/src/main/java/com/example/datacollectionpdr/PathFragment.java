@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 /**
  * Class with fragment that shows user PDR live when recording
+ *  * Author: Dagna Wojciak, Weston Everett
+ *  * Affiliation: The University of Edinburgh
  */
 public class PathFragment extends Fragment {
 

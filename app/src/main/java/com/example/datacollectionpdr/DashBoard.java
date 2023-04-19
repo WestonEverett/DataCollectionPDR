@@ -25,8 +25,9 @@ import java.io.IOException;
 import java.util.Objects;
 
 
-/**
- * Class for the activity where past saved files with trajectories can be viewed and managed
+/** Class managing the about activity and page view - for display of sensor and app information
+ * Author: Dagna Wojciak, Weston Everett
+ * Affiliation: The University of Edinburgh
  */
 public class DashBoard extends AppCompatActivity implements View.OnClickListener{
 

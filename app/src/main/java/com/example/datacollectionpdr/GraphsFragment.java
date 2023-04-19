@@ -29,6 +29,9 @@ import java.util.Arrays;
 /** class defining the fragment that displays live sensor data during the recording
  * it sets one of the fragments shown from the during_recording activity and uses plotXY
  * library for producing the graph. Sensor values are accesed through DataViewModel class
+ *
+ *  * Author: Dagna Wojciak, Weston Everett
+ *  * Affiliation: The University of Edinburgh
  */
 public class GraphsFragment extends Fragment {
 
