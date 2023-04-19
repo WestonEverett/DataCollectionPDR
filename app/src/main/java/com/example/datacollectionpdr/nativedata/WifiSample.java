@@ -17,7 +17,7 @@ public class WifiSample {
 
     public WifiSample(long initTime){
         this.initTime = initTime;
-        this.macSamples = new ArrayList<MacData>();
+        this.macSamples = new ArrayList<>();
     }
 
     public void addMacSample(MacData macData){

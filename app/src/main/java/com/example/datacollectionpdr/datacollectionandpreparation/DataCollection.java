@@ -338,7 +338,7 @@ public class DataCollection implements SensorEventListener {
                                    SensorDetails AmbInfo, SensorDetails RotInfo);
     }
 
-    //Code left for potential future implementations of dealing with accuracy changes
+    /**Code left for potential future implementations of dealing with accuracy changes*/
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         switch (sensor.getType()){

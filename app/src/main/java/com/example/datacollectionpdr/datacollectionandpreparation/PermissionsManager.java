@@ -35,6 +35,9 @@ public class PermissionsManager extends AppCompatActivity{
         askPermissions();
     }
 
+    /**
+     * Requests permissions for all relevant sensors
+     */
     private void askPermissions(){
         if(android.os.Build.VERSION.SDK_INT >= 23){
             int wifiAccessPermission = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_WIFI_STATE);
@@ -65,7 +68,9 @@ public class PermissionsManager extends AppCompatActivity{
         }
     }
 
-    //When you have the request results
+    /**
+     * Triggers when you have the request results, notifies user of permissions
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults){
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

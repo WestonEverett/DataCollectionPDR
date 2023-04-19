@@ -9,10 +9,10 @@ public class GNSSData {
 
     public String provider;
     public float acc;
-    public float alt;
-    public long initTime;
-    public float lon;
-    public float lat;
+    public float alt; //altitude
+    public long initTime; //initialization time
+    public float lon; //longitude
+    public float lat; //latitude
     public float speed;
 
     public GNSSData(String provider, float acc, float alt, long initTime, float lon, float lat, float speed){

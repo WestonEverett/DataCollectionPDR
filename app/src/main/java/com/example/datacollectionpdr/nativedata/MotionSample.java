@@ -10,18 +10,24 @@ public class MotionSample {
 
     public long initTime;
 
+    //acceleration data and presence boolean
     private float[] acc;
     private boolean accFlag;
 
+    //gyroscope data and presence
     private float[] gyro;
     private boolean gyroFlag;
 
+    //rotation vector data and presence
     private float[] rotVector;
     private boolean rotVectorFlag;
 
+    //number of steps
     public int steps;
 
-
+    /**
+     * MotionSample Constructor, starts with no data
+     */
     public MotionSample() {
         this.accFlag = false;
         this.gyroFlag = false;

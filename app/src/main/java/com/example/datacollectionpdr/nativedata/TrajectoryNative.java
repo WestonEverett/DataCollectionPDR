@@ -75,9 +75,9 @@ public class TrajectoryNative {
     SensorDetails baroInfo;
     SensorDetails lightInfo;
 
-    /*
-        Typical Constructor for building trajectories from scratch
-        Requires initial Time and position
+    /**
+     *   Typical Constructor for building trajectories from scratch
+     *   Requires initial Time and position
      */
     public TrajectoryNative(long initTime, UserPositionData initPos)
     {
@@ -95,24 +95,24 @@ public class TrajectoryNative {
         baros = new ArrayList<>();
     }
 
-    /*
-        Simple constructor Overload to automatically select start time
+    /**
+     *   Simple constructor Overload to automatically select start time
      */
     public TrajectoryNative(UserPositionData initPos) {
         this(System.currentTimeMillis(), initPos);
     }
 
-    /*
-        Constructor overload including data identifier
+    /**
+     *   Constructor overload including data identifier
      */
     public TrajectoryNative(long initTime, UserPositionData initPos, String dataID){
         this(initTime, initPos);
         this.dataID = dataID;
     }
 
-    /*
-        Deserialization Constructor, accepts Trajectory object and creates a TrajectoryNative
-        with the same internal data
+    /**
+      *  Deserialization Constructor, accepts Trajectory object and creates a TrajectoryNative
+      *  with the same internal data
      */
     public TrajectoryNative(Trajectory trajectory){
 
@@ -294,12 +294,12 @@ public class TrajectoryNative {
 
     public void setDataID(String dataID) { this.dataID = dataID; }
 
-    /* Trajectory correction function
-       Takes two map points (latitudes and longitudes) provided by the user and computes the
-       displacement of the user, and multiplies all the PDR step coordinates by the ratio of
-       the magnitude the user provided to the magnitude calculated by the app.
-       - Convert LatLon points to displacement magnitude
-       - Multiply all PDR step points' x and y coordinates by userDistance/appDistance
+    /** Trajectory correction function
+      * Takes two map points (latitudes and longitudes) provided by the user and computes the
+      * displacement of the user, and multiplies all the PDR step coordinates by the ratio of
+      * the magnitude the user provided to the magnitude calculated by the app.
+      * - Convert LatLon points to displacement magnitude
+      * - Multiply all PDR step points' x and y coordinates by userDistance/appDistance
      */
 
     public void applyTrajectoryScaling(UserPositionData endPos){
@@ -328,11 +328,11 @@ public class TrajectoryNative {
         }
     }
 
-    /*
-        Uses the user-inputted locations/headings to calculate absolute heading change
-        Assumes that this heading change is caused by a time-dependent drift
-        Modifies each PDR step with a scaled heading change so the start and end headings are
-            correct
+    /**
+     *   Uses the user-inputted locations/headings to calculate absolute heading change
+     *   Assumes that this heading change is caused by a time-dependent drift
+     *   Modifies each PDR step with a scaled heading change so the start and end headings are
+     *       correct
      */
     public void applyGyroCorrection(UserPositionData endPos){
 
@@ -361,8 +361,8 @@ public class TrajectoryNative {
         }
     }
 
-    /*
-        Serializes the current TrajectoryNative object to a Trajectory object with TrajectoryBuilder
+    /**
+       * Serializes the current TrajectoryNative object to a Trajectory object with TrajectoryBuilder
      */
     public Trajectory generateSerialized()
     {

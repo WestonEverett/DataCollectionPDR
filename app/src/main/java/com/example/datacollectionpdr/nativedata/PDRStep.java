@@ -25,16 +25,26 @@ public class PDRStep {
     private float magnitude; //Estimated step size
     public long initTime; //Time the step was taken
 
-    //Initialises internal values each time a step is taken
+    /**
+     * Constructs PDRStep from magnitude and direction
+     * @param stepSize magnitude of change
+     * @param heading direction of change
+     * @param initTime time of change
+     */
     public PDRStep(float stepSize, float heading, long initTime){
         this.heading = heading;
         this.magnitude = stepSize;
-        Log.i("PDRStep", "stepSize:" + this.magnitude + "; Heading" + this.heading);
+        Log.i("PDRStep", "stepSize: " + this.magnitude + "; Heading: " + this.heading);
         this.updateXY();
         this.initTime = initTime;
     }
 
-    //Can also be initialised with X-Y axis coordinates
+    /**
+     * Constructs PDRStep from x and y change
+     * @param initTime time of change
+     * @param x Change in x direction
+     * @param y Change in y direction
+     */
     public PDRStep(long initTime, float x, float y){
         this.x = x;
         this.y = y;
@@ -55,11 +65,18 @@ public class PDRStep {
         return magnitude;
     }
 
+    /**
+     * updates magnitude to new value, updates X and Y given new heading
+     */
     public void setMagnitude(float magnitude) {
         this.magnitude = magnitude;
         this.updateXY();
     }
 
+    /**
+     * scales magnitude by a certain factor
+     * @param ratio
+     */
     public void scaleMagnitude(float ratio) {
         this.setMagnitude(ratio * this.magnitude);
     }
@@ -68,6 +85,11 @@ public class PDRStep {
         return heading;
     }
 
+
+    /**
+     * changes heading, updates X and Y given new heading
+     * @param heading new Heading
+     */
     public void setHeading(double heading) {
         this.heading = heading;
         this.updateXY();
@@ -81,13 +103,17 @@ public class PDRStep {
         this.estFloor = estFloor;
     }
 
-    //Updates the X-Y axis coordinates from a step size and heading
+    /**
+     * Updates the X-Y axis coordinates from the stored step size and heading
+     */
     private void updateXY(){
         this.x = magnitude * (float) Math.sin(Math.toRadians(heading));
         this.y = magnitude * (float) Math.cos(Math.toRadians(heading));
     }
 
-    //Added for completeness
+    /**
+     * Updates the stored step size and heading from x and y
+     */
     private void updateMagAndHeading(){
         this.magnitude = (float) Math.sqrt(x*x+y*y);
         this.heading = (float) Math.atan(y/x);

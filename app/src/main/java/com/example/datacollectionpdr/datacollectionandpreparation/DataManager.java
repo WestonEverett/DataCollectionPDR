@@ -31,6 +31,8 @@ import java.util.HashMap;
  * onStepDetectorUpdated() which creates a new PDR step from available data each time it is called,
  * deadWithMotionSample(), which sends a package of accelerometer, gyroscope and rotation values to
  * TrajectoryNative whenever a complete sample package is provided.
+ *
+ * Datamanager also inherits from permissionsManager, so all permissions are handled through that
  */
 
 public class DataManager extends PermissionsManager implements DataCollection.OnMotionSensorManagerListener{
@@ -77,41 +79,69 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         //Disable sensors
         mMotionSensorManager.unregisterMotionSensors();
     }
+
+    /**
+       Creates PositionData objects
+     */
     @Override
     public void onMagnetometerUncalibratedValueUpdated(float[] magneticfield){
         //Log.i("DataM", "MagU data updated");
         PositionData positionData = new PositionData(System.currentTimeMillis(), magneticfield);
         trajectoryNative.addPosition(positionData);
     }
+
+    /**
+     Updates current heading estimate with magnetometer values
+     */
     @Override
     public void onMagnetometerValueUpdated(float[] magneticfield){
         //Log.i("DataM", "Mag data updated");
         curMagnetic = magneticfield;
         madgwickAHRS.updateMagnetometer(magneticfield);
     }
+
+    /**
+     Updates current motionsample with acclerometer values
+     */
     @Override
     public void onAccelerometerUncalibratedValueUpdated(float[] acceleration){
         //Log.i("DataM", "AccU data updated");
         motionSample.setAcc(acceleration);
         dealWithMotionSample(motionSample);
     }
+
+    /**
+        Stores accelerometer values for step size estimation
+     */
     @Override
     public void onAccelerometerValueUpdated(float[] acceleration){
         //Append current accelerometer values to a list; gets reset when a step is detected
         accelerations.add(acceleration);
         //Log.i("DataM", "Acc data updated");
     }
+
+    /**
+     Updates current motionsample with gyroscope values
+     */
     @Override
     public void onGyroscopeUncalibratedValueUpdated(float[] gyroscope){
         //Log.i("DataM", "GyrU data updated");
         motionSample.setGyro(gyroscope);
         dealWithMotionSample(motionSample);
     }
+
+    /**
+     Updates current heading estimate with gyroscope values
+     */
     @Override
     public void onGyroscopeValueUpdated(float[] gyroscope){
         //Log.i("DataM", "Gyr data updated");
         madgwickAHRS.updateGyroscope(gyroscope);
     }
+
+    /**
+         Makes altitude updates including a low pass filter to get rid of noise
+     */
     @Override
     public void onBarometerValueUpdated(float pressure){
         //Log.i("DataM", "Bar data updated");
@@ -128,16 +158,28 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         altitudeEstimation.setAltitude(altitudeEstimation.findAltitude(lpfPressure));
         Log.i("PressureDelta",altitudeEstimation.altitudeDelta()+"; FloorsChanged" + altitudeEstimation.floorsChanged());
     }
+
+    /**
+         Creates LightData objects for trajectoryNative
+     */
     @Override
     public void onAmbientLightValueChanged(float luminance){
         //Log.i("DataM", "AmbL data updated");
         LightData lightData = new LightData(System.currentTimeMillis(),luminance);
         trajectoryNative.addLight(lightData);
     }
+
+    /**
+    Stub implementation for proximity measurements
+     */
     @Override
     public void onProximityValueUpdated(float proximity){
         //Log.i("DataM", "Prox data updated");
     }
+
+    /**
+         Stores gravity estimation for heading estimation
+     */
     @Override
     public void onGravityValueUpdated(float[] gravity){
         //Log.i("DataM", "Grav data updated");
@@ -145,12 +187,20 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         gravities.add(curGravity);
         madgwickAHRS.updateAccelerometer(gravity);
     }
+
+    /**
+     Updates current motionsample with rotation vector values
+     */
     @Override
     public void onRotationVectorValueUpdated(float[] rotationvector){
         //Log.i("DataM", "RotV data updated");
         motionSample.setRotVector(rotationvector);
         dealWithMotionSample(motionSample);
     }
+
+    /**
+         Stores complete wifi sample
+     */
     @Override
     public void onWifiValueUpdated(HashMap<String, WifiObject> map){
        Log.i("DataM", "WiFi data updated");
@@ -162,6 +212,10 @@ public class DataManager extends PermissionsManager implements DataCollection.On
        }
 
     }
+
+    /**
+         Creates GNSS location estimation object
+     */
     @Override
     public void onLocationValueUpdated(String provider, float acc, float alt, long initTime, float lon, float lat, float speed){
         Log.i("DataM", "GNSS data updated");
@@ -170,6 +224,10 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         curGNSSData = gnssData;
         trajectoryNative.addGNSS(gnssData);
     }
+
+    /**
+         Estimates new PDRStep based on stored sensor data/heading/stepsize
+     */
     @Override
     public void onStepDetectorUpdated(){
         Log.i("DataM", "StpD data updated");
@@ -188,6 +246,10 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         accelerations = new ArrayList<>();
         gravities = new ArrayList<>();
     }
+
+    /**
+      Stores current change in stepcount (since program start)
+     */
     @Override
     public void onStepCountValueUpdated(int stepcount){
         //Log.i("DataM", "StpC data updated");
@@ -198,6 +260,10 @@ public class DataManager extends PermissionsManager implements DataCollection.On
 
         curStepcount = stepcount;
     }
+
+    /**
+         Checks if all necessary values for motionsample availale, builds new one if so
+     */
     private void dealWithMotionSample(MotionSample motionSample){
         // Check if all flags are set
         if(motionSample.isComplete()){
@@ -211,7 +277,8 @@ public class DataManager extends PermissionsManager implements DataCollection.On
             this.motionSample = new MotionSample();
         }
     }
-    //Sends device sensor information (e.g. manufacturer, model name, etc.) to trajectoryNative
+
+    /**Sends device sensor information (e.g. manufacturer, model name, etc.) to trajectoryNative*/
     @Override
     public void onSensorInfoCollected(SensorDetails accInfo, SensorDetails gyrInfo,
                                       SensorDetails magInfo, SensorDetails barInfo,
@@ -232,6 +299,10 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         //Overwritten to trigger behavior in UI
     }
 
+    /**
+     * Ends recording
+     * @return TrajectoryNative object containing collected data
+     */
     public TrajectoryNative endRecording(){
         mMotionSensorManager.unregisterMotionSensors();
         isRecording = false;
@@ -242,6 +313,10 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         return trajectoryNative;
     }
 
+    /**
+     * Begins recording
+     * @param initPos Initial User-inputted location/heading
+     */
     public void startRecording(UserPositionData initPos){
         motionSample = new MotionSample();
         madgwickAHRS = new MadgwickAHRS(0.1f, initPos.heading);

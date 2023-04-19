@@ -13,6 +13,12 @@ public class APData {
     public String ssid;
     public long freq;
 
+    /**
+     * COnstructor for AP Data object
+     * @param mac mac address
+     * @param ssid name, like "Eduroam"
+     * @param freq frequency, like 5GHz
+     */
     public APData(long mac, String ssid, long freq){
         this.mac = mac;
         this.ssid = ssid;

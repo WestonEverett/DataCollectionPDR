@@ -96,12 +96,13 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
     /**function dealing with buttons actions - its outcome depends on the button clicked*/
     @Override
     public void onClick(View v) {
-        //do what you want to do when button is clicked
         switch (v.getId()) {
+            //Send currently loaded trajectory
             case R.id.button_sendfromfile:  //send button -> send selected file to server
                 ServerManager.sendData(this.trajectoryNative, MainActivity.serverKeyString);
                 break;
 
+            //Load currently selected trajectory
             case R.id.button_load: //load button -> show trajectory saved in the chosen graph on the plot
                 Log.e("button", "Starting load of " + currentDisplayFile);
                 try{
@@ -111,13 +112,21 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
                     Log.e("Load Failure", e.toString());
                 }
 
+            //delete currently selected trajectory
             case R.id.button_delete: //delete button -> delete the chosen file
-                //try{
-                    //TODO delete the file
-                ///} catch (IOException e) {
-                   // Log.e("File Delete Failure", selectedFile + " Failed to Delete");
-                //}
+                try{
+                    FileManager.deleteFile(getApplicationContext(), currentDisplayFile);
+                    updateAvailableFiles();
+                } catch (IOException e) {
+                    Log.e("File Delete Failure", currentDisplayFile + " Failed to Delete");
+                }
         }
+    }
+
+    /**Recalculates what files are available and initializes spinner*/
+    private void updateAvailableFiles(){
+        files = FileManager.seeFiles(getApplicationContext());  //create a list of fies found in the memory
+        initspinnerfooter();
     }
 
 
@@ -149,7 +158,7 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
             //set the default selected file to the first item on the list
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                currentDisplayFile = files[1];
+                currentDisplayFile = files[0];
             }
         });
     }
