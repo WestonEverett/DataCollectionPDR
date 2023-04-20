@@ -11,6 +11,13 @@ import java.util.ArrayList;
  */
 
 public class DotProduct {
+
+    /**
+     * Caluclates the dot product of two arrays
+     * @param x
+     * @param y
+     * @return
+     */
     public static float dotProd(float[] x, float[] y) {
         if (x.length != y.length)
             throw new RuntimeException("Arrays must be same size");
@@ -21,6 +28,12 @@ public class DotProduct {
         return sum;
     }
 
+    /**
+     * Calculates the acceleration in the direction of gravity
+     * @param accelerations Linear acceleration
+     * @param gravities Gravity unit vector
+     * @return float array of acceleration parallel to gravity
+     */
     public static float[] zAxisAcceleration(ArrayList<float[]> accelerations, ArrayList<float[]> gravities){
         int minArraySize = Math.min(accelerations.size(), gravities.size());
         float[] processedArray = new float[minArraySize];
@@ -39,6 +52,11 @@ public class DotProduct {
         return processedArray;
     }
 
+    /**
+     * Normalizes a float array
+     * @param vector array to be normalized
+     * @return normalized array
+     */
     public static float[] normalize(float[] vector) {
         float magnitude = 0.0f;
         for (float component : vector) {

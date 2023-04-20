@@ -115,18 +115,17 @@ public class MadgwickAHRS {
         this.motionSample = null;
     }
 
-    /*
-     * Algorithm AHRS update method. Requires only gyroscope and accelerometer
-     * data.
-     * gx Gyroscope x axis measurement in radians/s.
-     * gy Gyroscope y axis measurement in radians/s.
-     * gz Gyroscope z axis measurement in radians/s.
-     * ax Accelerometer x axis measurement in any calibrated units.
-     * ay Accelerometer y axis measurement in any calibrated units.
-     * az Accelerometer z axis measurement in any calibrated units.
-     * mx Magnetometer x axis measurement in any calibrated units.
-     * my Magnetometer y axis measurement in any calibrated units.
-     * mz Magnetometer z axis measurement in any calibrated units.
+    /**
+     * Algorithm AHRS update method. Requires magnetometer, gyroscope and accelerometer data.
+     * @param gx Gyroscope x axis measurement in radians/s.
+     * @param gy Gyroscope y axis measurement in radians/s.
+     * @param gz Gyroscope z axis measurement in radians/s.
+     * @param ax Accelerometer x axis measurement in any calibrated units.
+     * @param ay Accelerometer y axis measurement in any calibrated units.
+     * @param az Accelerometer z axis measurement in any calibrated units.
+     * @param mx Magnetometer x axis measurement in any calibrated units.
+     * @param my Magnetometer y axis measurement in any calibrated units.
+     * @param mz Magnetometer z axis measurement in any calibrated units.
      */
     public void update(float gx, float gy, float gz, float ax, float ay,
                        float az, float mx, float my, float mz) {
@@ -264,16 +263,15 @@ public class MadgwickAHRS {
         quaternion[3] = q4 * norm;
     }
 
-    /*
-     * Algorithm IMU update method. Requires only gyroscope and accelerometer
-     * data.
-     * gx Gyroscope x axis measurement in radians/s.
-     * gy Gyroscope y axis measurement in radians/s.
-     * gz Gyroscope z axis measurement in radians/s.
-     * ax Accelerometer x axis measurement in any calibrated units.
-     * ay Accelerometer y axis measurement in any calibrated units.
-     * az Accelerometer z axis measurement in any calibrated units.
-     */
+    /**
+     * Algorithm AHRS update method. Requires only gyroscope and accelerometer data.
+     * @param gx Gyroscope x axis measurement in radians/s.
+     * @param gy Gyroscope y axis measurement in radians/s.
+     * @param gz Gyroscope z axis measurement in radians/s.
+     * @param ax Accelerometer x axis measurement in any calibrated units.
+     * @param ay Accelerometer y axis measurement in any calibrated units.
+     * @param az Accelerometer z axis measurement in any calibrated units.
+    */
     public void update(float gx, float gy, float gz, float ax, float ay,
                        float az) {
 
@@ -347,7 +345,10 @@ public class MadgwickAHRS {
         quaternion[3] = q4 * norm;
     }
 
-    //Finds the user's heading relative to their start location
+    /**
+     * Calulates Heading based on internal quaternion
+     * @return heading
+     */
     public float findHeading(){
         //return (float) -Math.toDegrees(Math.atan2(2f * (quaternion[1] * quaternion[2] + quaternion[0] * quaternion[3]), 0.5f - quaternion[2] * quaternion[2] - quaternion[3] * quaternion[3]));
 
@@ -360,10 +361,10 @@ public class MadgwickAHRS {
     }
     //Finds the user's pitch relative to their start location
     public float findPitch(){
-        return (float) Math.asin(-2.0f * (quaternion[1] * quaternion[3] - quaternion[0] * quaternion[2]));
+        return (float) Math.asin(-2.0f * (quaternion[2] * quaternion[0] - quaternion[1] * quaternion[3]));
     }
     //Finds the user's roll relative to their start location
     public float findRoll(){
-        return (float) Math.atan2(quaternion[0] * quaternion[1] + quaternion[2] * quaternion[3], 0.5f - quaternion[1] * quaternion[1] - quaternion[2] * quaternion[2]);
+        return (float) Math.atan2(quaternion[1] * quaternion[2] + quaternion[3] * quaternion[0], 0.5f - quaternion[2] * quaternion[2] - quaternion[3] * quaternion[3]);
     }
 }

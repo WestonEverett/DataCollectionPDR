@@ -18,7 +18,14 @@ public class GNSSCalculations {
         return calculateDistance((float) startLoc.startLon, (float) startLoc.startLat, (float) endLoc.startLon, (float) endLoc.startLat);
     }
 
-    //Finds the straight-line distance between two map pins
+    /**
+     * Finds the straight-line distance between two map pins
+     * @param startLon Starting Longitude
+     * @param startLat Starting Latitude
+     * @param endLon Ending Longitude
+     * @param endLat Ending Latitude
+     * @return
+     */
     public static double calculateDistance(float startLon, float startLat, float endLon, float endLat) {
         double dLat = Math.toRadians(endLat - startLat);
         double dLon = Math.toRadians(endLon - startLon);
@@ -30,7 +37,9 @@ public class GNSSCalculations {
         return distance;
     }
 
-    //Finds the angle in degrees with respect to North of the line crossing two map points.
+    /**
+     * Finds the angle in degrees with respect to North of the line crossing two map points.
+     */
     public static double calculateBearingDeg(double startLon, double startLat, double endLon, double endLat){
         /*     Let ‘R’ be the radius of Earth,
          *     ‘L’ be the longitude,
@@ -50,7 +59,8 @@ public class GNSSCalculations {
         return bearing;
     }
 
-    /* Finds the change in angle between two map points, i.e. where the user was looking when they
+    /**
+     *  Finds the change in angle between two map points, i.e. where the user was looking when they
      * started recording and where they were looking when they finished recording.
      */
     public static double userHeadingDeltaDeg(UserPositionData startPositionData, UserPositionData endPositionData){

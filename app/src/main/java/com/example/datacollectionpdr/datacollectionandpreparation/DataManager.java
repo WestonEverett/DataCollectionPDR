@@ -232,10 +232,8 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     public void onStepDetectorUpdated(){
         Log.i("DataM", "StpD data updated");
         //Estimate step length
-        StepLengthEstimation stepLengthEstimate = new StepLengthEstimation();
-        stepLengthEstimate.setAccelerations(accelerations);
-        stepLengthEstimate.setGravities(gravities);
-        float stepSize = stepLengthEstimate.findStepLength();
+
+        float stepSize = StepLengthEstimation.findStepLength(accelerations, gravities);
 
         //Update PDR with estimated step length, heading, and floor level and add it to TrajectoryNative
         PDRStep pdrStep = new PDRStep(stepSize, madgwickAHRS.findHeading(), System.currentTimeMillis());
