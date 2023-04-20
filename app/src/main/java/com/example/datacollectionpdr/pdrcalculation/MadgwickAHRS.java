@@ -12,12 +12,6 @@ import com.example.datacollectionpdr.nativedata.PositionData;
  * The one used here is adapted from http://www.x-io.co.uk/open-source-imu-and-ahrs-algorithms/
  * It has been altered to accept a variable sample period.
  */
-/*
- * MadgwickAHRS class. Implementation of Madgwick's IMU and AHRS algorithms in
- * Java.
- *
- *
- */
 
 
 
@@ -66,7 +60,7 @@ public class MadgwickAHRS {
 
         double headingRadians = Math.toRadians(initHeading);
 
-        this.quaternion = new float[] { 0f, 0f, (float) Math.sin(headingRadians / 2), (float) Math.cos(headingRadians / 2) };
+        this.quaternion = new float[] { (float) Math.cos(headingRadians / 2), 0f, 0f, (float) Math.sin(headingRadians / 2) };
     }
 
     public void updateMotionSample(MotionSample motionSample) {
@@ -355,7 +349,14 @@ public class MadgwickAHRS {
 
     //Finds the user's heading relative to their start location
     public float findHeading(){
-        return (float) -Math.toDegrees(Math.atan2(2f * (quaternion[1] * quaternion[2] + quaternion[0] * quaternion[3]), 0.5f - quaternion[2] * quaternion[2] - quaternion[3] * quaternion[3]));
+        //return (float) -Math.toDegrees(Math.atan2(2f * (quaternion[1] * quaternion[2] + quaternion[0] * quaternion[3]), 0.5f - quaternion[2] * quaternion[2] - quaternion[3] * quaternion[3]));
+
+        float w = quaternion[0];
+        float x = 0;
+        float y = 0;
+        float z = quaternion[3];
+
+        return (float) -Math.toDegrees(Math.atan2(2.0f * (w * z + x * y), w * w + x * x - y * y - z * z));
     }
     //Finds the user's pitch relative to their start location
     public float findPitch(){

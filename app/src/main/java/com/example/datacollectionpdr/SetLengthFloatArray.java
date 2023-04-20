@@ -7,12 +7,18 @@ import java.util.ArrayList;
  * Description:
  * Author:  Weston Everett
  * Affiliation: The University of Edinburgh
+ * Set length buffer for holding floats
  */
 public class SetLengthFloatArray {
 
     private int maxLength;
     private ArrayList<Float> internalArray;
 
+    /**
+     * Cosntructor for new instance
+     * @param maxLength number of values to store
+     * @param defaultVal default value
+     */
     public SetLengthFloatArray(int maxLength, Float defaultVal){
         this.maxLength = maxLength;
         internalArray = new ArrayList<>();
@@ -25,6 +31,10 @@ public class SetLengthFloatArray {
         this(maxLength, 0f);
     }
 
+    /**
+     * Add new float to array, cutting last value if necessary
+     * @param val
+     */
     public void addValue(float val){
         internalArray.add(0, val);
         while(internalArray.size() > maxLength){
@@ -32,14 +42,9 @@ public class SetLengthFloatArray {
         }
     }
 
-    public float sumArray(){
-        float sum = 0f;
-        for(int i = 0; i < internalArray.size(); ++i){
-            sum+=internalArray.get(i);
-        }
-        return sum;
-    }
-
+    /**
+     * @return returns current array
+     */
     public Float[] getArray(){
 
         return internalArray.toArray(new Float[0]);
