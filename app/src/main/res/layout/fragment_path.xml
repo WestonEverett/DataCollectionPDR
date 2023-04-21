@@ -18,7 +18,7 @@ tools:context=".MainActivity">
     style="@style/APDefacto.Dark"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_below="@+id/textView5"
+    android:layout_below="@+id/textViewTitle"
     android:layout_alignParentStart="true"
     android:layout_alignParentEnd="true"
     android:layout_centerHorizontal="true"
@@ -50,7 +50,7 @@ tools:context=".MainActivity">
         android:layout_marginStart="18dp"
         android:layout_marginTop="18dp"
         android:gravity="center"
-        android:text="ffffff"
+        android:text="PDR Trajectory"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/orange" />
 
