@@ -63,7 +63,10 @@ public class AltitudeEstimation {
         if(this.changingFloors && !currentlyChanging){
             this.curFloorAltitude = this.recentAltitudes.getMean();
             this.currentFloor = this.currentFloor + Math.round(curFloorAltitude/floor_height);
+        } else if(!currentlyChanging){
+            this.curFloorAltitude = this.recentAltitudes.getMean();
         }
+
 
         changingFloors = currentlyChanging;
     }

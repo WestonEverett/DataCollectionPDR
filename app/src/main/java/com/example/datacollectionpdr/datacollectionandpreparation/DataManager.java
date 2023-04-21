@@ -52,7 +52,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     private boolean hasStartingAltitude; //Flag for initialising the reference altitude
     AltitudeEstimation altitudeEstimation; //Class that contains variables and functions to help with altitude estimation
     private float lpfPressure = 1013.25f; //Atmospheric pressure at sea level, a good estimate for initial pressure
-    private static final float ALPHA = 0.99f; //Very high alpha means strong filtering but slow response time
+    private static final float ALPHA = 0.8f; //Very high alpha means strong filtering but slow response time
 
     /**
      * Initialise data collection tools and flags
@@ -166,7 +166,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
             hasStartingAltitude = true;
         }
         //Low-pass filter helps with sudden variations
-        lpfPressure = pressure; //ALPHA*lpfPressure + (1-ALPHA)*pressure;
+        lpfPressure = ALPHA*lpfPressure + (1-ALPHA)*pressure;
         altitudeEstimation.addAltitude(AltitudeEstimation.findAltitude(lpfPressure));
         Log.i("PressureDelta: ",altitudeEstimation.altitudeDelta()+"; FloorsChanged: " + altitudeEstimation.floorsChanged());
     }
