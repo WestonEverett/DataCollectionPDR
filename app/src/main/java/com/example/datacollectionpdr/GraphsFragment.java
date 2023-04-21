@@ -44,7 +44,7 @@ public class GraphsFragment extends Fragment {
     Spinner dropdown;                               //initialise dropdown menu
     String currentDisplaySensor;                    //initialise string with the currently selected sensor
     private RecentMeasurements recentMeasurements;  //initialise variable to hold values to be displayed on the graph
-    int graphPointsNum = 200;                       //number of samples to be plotted
+    int graphPointsNum = 201;                       //number of samples to be plotted
     Number[] domainLabels;
 
 
@@ -110,7 +110,6 @@ public class GraphsFragment extends Fragment {
      */
     public void PlotThePlot(Number[][] plotData, Number[] domainLabels){
 
-        Log.d("AAA", "Domain num: "+ Arrays.toString(domainLabels));
         //define array list so that any number of data series can  be displayed at once
         ArrayList<SimpleXYSeries> series = new ArrayList<>();
         ArrayList<LineAndPointFormatter> seriesFormats = new ArrayList<>();
@@ -161,7 +160,6 @@ public class GraphsFragment extends Fragment {
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("item", (String) parent.getItemAtPosition(position));     //check which item choosen
                 ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);   //display the selected item when drop down menu rolled up
 
                 currentDisplaySensor=(String) parent.getItemAtPosition(position);   //update the string indicating the choosen sensor
