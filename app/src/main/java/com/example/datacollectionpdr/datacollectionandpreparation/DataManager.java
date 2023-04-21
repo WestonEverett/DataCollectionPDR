@@ -54,10 +54,14 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     private float lpfPressure = 1013.25f; //Atmospheric pressure at sea level, a good estimate for initial pressure
     private static final float ALPHA = 0.99f; //Very high alpha means strong filtering but slow response time
 
+    /**
+     * Initialise data collection tools and flags
+     * @param savedInstanceState stores current app state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Initialise data collection tools and flags
+
         mMotionSensorManager = new com.example.datacollectionpdr.datacollectionandpreparation.DataCollection(this);
         mMotionSensorManager.setOnMotionSensorManagerListener(this);
         WifiData = new HashMap<>();
@@ -65,6 +69,10 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         stepcountDM = 0;
         curStepcount = 0;
     }
+
+    /**
+     * When user unpauses
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -73,6 +81,10 @@ public class DataManager extends PermissionsManager implements DataCollection.On
             mMotionSensorManager.registerMotionSensors();
         }
     }
+
+    /**
+     * When user pauses
+     */
     @Override
     protected void onPause(){
         super.onPause();
@@ -276,7 +288,9 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         }
     }
 
-    /**Sends device sensor information (e.g. manufacturer, model name, etc.) to trajectoryNative*/
+    /**
+     * Sends device sensor information (e.g. manufacturer, model name, etc.) to trajectoryNative
+     */
     @Override
     public void onSensorInfoCollected(SensorDetails accInfo, SensorDetails gyrInfo,
                                       SensorDetails magInfo, SensorDetails barInfo,
@@ -289,12 +303,18 @@ public class DataManager extends PermissionsManager implements DataCollection.On
         trajectoryNative.setRotVectorInfo(rotInfo);
     }
 
+    /**
+     * Overwritten to trigger behavior in UI
+     * @param motionSample includes all parameters relating to motion
+     */
     protected void newCompleteMotionSample(MotionSample motionSample){
-        //Overwritten to trigger behavior in UI
     }
 
+    /**
+     * Overwritten to trigger behavior in UI
+     * @param pdrStep includes step size and heading
+     */
     protected void newPDRStep(PDRStep pdrStep){
-        //Overwritten to trigger behavior in UI
     }
 
     /**

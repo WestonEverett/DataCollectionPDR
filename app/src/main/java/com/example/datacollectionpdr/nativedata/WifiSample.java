@@ -15,15 +15,27 @@ public class WifiSample {
     public long initTime;
     public ArrayList<MacData> macSamples;
 
+    /**
+     * Constructor for wifi sample
+     * @param initTime time sample was taken
+     */
     public WifiSample(long initTime){
         this.initTime = initTime;
         this.macSamples = new ArrayList<>();
     }
 
+    /**
+     * Adds a MAC sample to the list
+     * @param macData
+     */
     public void addMacSample(MacData macData){
         macSamples.add(macData);
     }
 
+    /**
+     * Adds a MAC sample to the dictionary
+     * @param macMap
+     */
     public void addMacSampleDict(HashMap<String, WifiObject> macMap){
         for(String key : macMap.keySet()){
             macSamples.add(new MacData(key, macMap.get(key).power));

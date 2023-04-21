@@ -49,11 +49,10 @@
     <string name="aboutPage_title">INFORMATION  </string>
     <string name="aboutApp_title"> About PathFinder App </string>
     <string name="AboutApp_text"> PathFinder aids research in indoor positioning, creating indoor
-        building maps, and assessing building hotspots.\n \n
+        building maps, and assessing building hotspots.\n\n
         The app collects data from the following sensors:\n
         Accelerometer, Gyroscope, Magnetometer, Barometer, Location, WiFi, Ambient Light, Proximity, Rotation
-        and Activity data.\n \n
-        These data are used to trace your position as you walk around a building, and are
+        and Activity data.\n\n These data are used to trace your position as you walk around a building, and are
         submitted to an online database.</string>
     <string name="howToUse_title">Tips on Using PathFinder </string>
 

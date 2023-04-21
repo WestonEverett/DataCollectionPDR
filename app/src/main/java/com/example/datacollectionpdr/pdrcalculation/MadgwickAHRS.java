@@ -48,12 +48,21 @@ public class MadgwickAHRS {
         return quaternion;
     }
 
-    //Initializes a new instance of the MadgwickAHRS class.
+    /**
+     * Initializes a new instance of the MadgwickAHRS class
+     * @param samplePeriod sample period
+     * @param initHeading initial heading
+     */
     public MadgwickAHRS(float samplePeriod, double initHeading) {
         this(samplePeriod, 1f, initHeading);
     }
 
-     // Initializes a new instance of the MadgwickAHRS class. Parameters: Sample period, algorithm gain beta.
+    /**
+     * Initializes a new instance of the MadgwickAHRS class. Parameters: Sample period, algorithm gain beta
+     * @param samplePeriod sample period
+     * @param beta algorithm gain beta
+     * @param initHeading initial heading
+     */
     public MadgwickAHRS(float samplePeriod, float beta, double initHeading) {
         this.samplePeriod = samplePeriod;
         this.beta = beta;
@@ -63,6 +72,10 @@ public class MadgwickAHRS {
         this.quaternion = new float[] { (float) Math.cos(headingRadians / 2), 0f, 0f, (float) Math.sin(headingRadians / 2) };
     }
 
+    /**
+     * Updates the motion sample
+     * @param motionSample
+     */
     public void updateMotionSample(MotionSample motionSample) {
         if(this.positionData != null){
             this.update(motionSample, this.positionData);
@@ -71,6 +84,10 @@ public class MadgwickAHRS {
         }
     }
 
+    /**
+     * Updates the position data
+     * @param positionData
+     */
     public void updatePositionData(PositionData positionData) {
         if(this.motionSample != null){
             this.update(this.motionSample, positionData);
@@ -79,21 +96,36 @@ public class MadgwickAHRS {
         }
     }
 
+    /**
+     * Updates magnetometer values
+     * @param magnetometer
+     */
     public void updateMagnetometer(float[] magnetometer){
         this.magnetometer = magnetometer;
         checkIfUpdateReady();
     }
 
+    /**
+     * Updates accelerometer values
+     * @param accelerometer
+     */
     public void updateAccelerometer(float[] accelerometer){
         this.accelerometer = accelerometer;
         checkIfUpdateReady();
     }
 
+    /**
+     * Updates gyroscope values
+     * @param gyroscope
+     */
     public void updateGyroscope(float[] gyroscope){
         this.gyroscope = gyroscope;
         checkIfUpdateReady();
     }
 
+    /**
+     * Checks if all sensors have updated
+     */
     private void checkIfUpdateReady(){
         if(this.gyroscope != null &&
         this.accelerometer != null){
@@ -104,6 +136,11 @@ public class MadgwickAHRS {
         }
     }
 
+    /**
+     * Updates data used for estimation
+     * @param motionSample
+     * @param positionData
+     */
     public void update(MotionSample motionSample, PositionData positionData) {
         float[] acc = motionSample.getAcc();
         float[] gyro = motionSample.getGyro();
@@ -359,11 +396,19 @@ public class MadgwickAHRS {
 
         return (float) -Math.toDegrees(Math.atan2(2.0f * (w * z + x * y), w * w + x * x - y * y - z * z));
     }
-    //Finds the user's pitch relative to their start location
+
+    /**
+     * Finds the user's pitch relative to their start location
+     */
+
     public float findPitch(){
         return (float) Math.asin(-2.0f * (quaternion[2] * quaternion[0] - quaternion[1] * quaternion[3]));
     }
-    //Finds the user's roll relative to their start location
+
+    /**
+     * Finds the user's roll relative to their start location
+     * @return
+     */
     public float findRoll(){
         return (float) Math.atan2(quaternion[1] * quaternion[2] + quaternion[3] * quaternion[0], 0.5f - quaternion[2] * quaternion[2] - quaternion[3] * quaternion[3]);
     }

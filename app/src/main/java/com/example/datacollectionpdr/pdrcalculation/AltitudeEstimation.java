@@ -14,19 +14,43 @@ public class AltitudeEstimation {
     private static float FLOOR_HEIGHT = 4f; // In metres
     private float altitude = 0.0f;
     private float startingAltitude = 0.0f;
+
+    /**
+     * Sets current altitude
+     * @param altitude altitude
+     */
     public void setAltitude(float altitude){
         this.altitude = altitude;
     }
+
+    /**
+     * Sets starting altitude
+     * @param startingAltitude starting altitude
+     */
     public void setStartingAltitude(float startingAltitude){
         this.startingAltitude = startingAltitude;
     }
+
+    /**
+     * Get current altitude
+     * @return
+     */
     public float getAltitude(){
         return this.altitude;
     }
+
+    /**
+     * Get starting altitude
+     * @return
+     */
     public float getStartingAltitude(){
         return this.startingAltitude;
     }
-    //Returns altitude change since the first barometer measurement
+
+    /**
+     * Returns altitude change since the first barometer measurement
+     * @return
+     */
     public float altitudeDelta(){return this.altitude - this.startingAltitude;}
     //Returns an estimate of the number of floors changed as an integer
     public int floorsChanged(){

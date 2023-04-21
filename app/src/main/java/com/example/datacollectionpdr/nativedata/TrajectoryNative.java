@@ -217,81 +217,142 @@ public class TrajectoryNative {
         return motions;
     }
 
-    //inserts new pdr to internal list after modify time to be relative
+    /**
+     * inserts new pdr to internal list after modify time to be relative
+     * @param pdrStep PDR step object
+     */
     public void addPDRStep(PDRStep pdrStep){
         pdrStep.initTime = pdrStep.initTime - this.initTime;
         pdrs.add(pdrStep);
     }
 
-    //overload that does not modify time
+    /**
+     * overload that does not modify time
+     */
     public void addRawPDRStep(PDRStep pdrStep){
         pdrs.add(pdrStep);
     }
 
+    /**
+     * Adds AP data
+     * @param apData AP data
+     */
     public void addAPData(APData apData){
         aps.add(apData);
     }
 
+    /**
+     * Adds location data
+     * @param gnssData location data
+     */
     public void addGNSS(GNSSData gnssData){
         //converts absolute to relative time
         gnssData.initTime = gnssData.initTime - this.initTime;
         gnssSamples.add(gnssData);
     }
 
+    /**
+     * Adds ambient light data
+     * @param lightData ambient light
+     */
     public void addLight(LightData lightData){
         //converts absolute to relative time
         lightData.initTime = lightData.initTime - this.initTime;
         lights.add(lightData);
     }
 
+    /**
+     * Adds wifi data
+     * @param wifiSample aggregated wifi data
+     */
     public void addWifi(WifiSample wifiSample){
         //converts absolute to relative time
         wifiSample.initTime = wifiSample.initTime - this.initTime;
         wifis.add(wifiSample);
     }
 
+    /**
+     * Adds motion sample data
+     * @param motionSample motion sample
+     */
     public void addMotion(MotionSample motionSample){
         //converts absolute to relative time
         motionSample.initTime = motionSample.initTime - this.initTime;
         motions.add(motionSample);
     }
 
+    /**
+     * Adds position data
+     * @param positionData position data
+     */
     public void addPosition(PositionData positionData){
         //converts absolute to relative time
         positionData.initTime = positionData.initTime - this.initTime;
         positions.add(positionData);
     }
 
+    /**
+     * Adds pressure data
+     * @param baro pressure data
+     */
     public void addPressure(PressureData baro){
         //converts absolute to relative time
         baro.timestamp = baro.timestamp - this.initTime;
         baros.add(baro);
     }
 
+    /**
+     * Sets accelerometer information
+     * @param sensorDetails
+     */
     public void setAccInfo(SensorDetails sensorDetails){
         accInfo = sensorDetails;
     }
 
+    /**
+     * Sets gyroscope information
+     * @param sensorDetails
+     */
     public void setGyroInfo(SensorDetails sensorDetails){
         gyroInfo = sensorDetails;
     }
 
+    /**
+     * Sets rotation vector information
+     * @param sensorDetails
+     */
     public void setRotVectorInfo(SensorDetails sensorDetails){
         rotVectorInfo = sensorDetails;
     }
 
+    /**
+     * Sets magnetometer information
+     * @param sensorDetails
+     */
     public void setMagInfo(SensorDetails sensorDetails){
         magInfo = sensorDetails;
     }
 
+    /**
+     * Sets barometer information
+     * @param sensorDetails
+     */
     public void setBaroInfo(SensorDetails sensorDetails){
         baroInfo = sensorDetails;
     }
 
+    /**
+     * Sets ambient light sensor information
+     * @param sensorDetails
+     */
     public void setLightInfo(SensorDetails sensorDetails){
         lightInfo = sensorDetails;
     }
 
+    /**
+     * Sets data ID
+     * @param dataID
+     */
     public void setDataID(String dataID) { this.dataID = dataID; }
 
     /** Trajectory correction function

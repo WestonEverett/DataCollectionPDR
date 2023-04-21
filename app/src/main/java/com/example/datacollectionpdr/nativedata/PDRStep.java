@@ -53,14 +53,26 @@ public class PDRStep {
         this.initTime = initTime;
     }
 
+    /**
+     * Get X coordinate
+     * @return
+     */
     public float getX() {
         return x;
     }
 
+    /**
+     * Get Y coordinate
+     * @return
+     */
     public float getY() {
         return y;
     }
 
+    /**
+     * Get step magnitude
+     * @return
+     */
     public float getMagnitude() {
         return magnitude;
     }
@@ -95,10 +107,18 @@ public class PDRStep {
         this.updateXY();
     }
 
+    /**
+     * Get estimated floor
+     * @return
+     */
     public int getEstFloor() {
         return estFloor;
     }
 
+    /**
+     * Set estimated floor
+     * @param estFloor floor level
+     */
     public void setEstFloor(int estFloor) {
         this.estFloor = estFloor;
     }

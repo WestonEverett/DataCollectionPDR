@@ -10,6 +10,11 @@ public class PressureData {
     public float pressure;
     public long timestamp;
 
+    /**
+     * Constructor for pressure data
+     * @param timestamp time data was captured
+     * @param pressure barometer reading
+     */
     public PressureData(long timestamp, float pressure){
         this.pressure = pressure;
         this.timestamp = timestamp;

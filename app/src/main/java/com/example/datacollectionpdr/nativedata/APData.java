@@ -25,12 +25,22 @@ public class APData {
         this.freq = freq;
     }
 
+    /**
+     * Sets object values
+     * @param macStr mac address as string
+     * @param ssid ssid as string
+     * @param freq frequency
+     */
     public APData(String macStr, String ssid, long freq){
         this.mac = Long.parseLong(macStr.replace(":", ""), 16);
         this.ssid = ssid;
         this.freq = freq;
     }
 
+    /**
+     * Sets object values
+     * @param wifiObject includes several values relating to WiFi
+     */
     public APData(WifiObject wifiObject){
         this.mac = Long.parseLong(wifiObject.mac.replace(":", ""), 16);
         this.ssid = wifiObject.ssid;
