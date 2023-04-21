@@ -13,8 +13,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends PermissionsManager {
 
     private static final int REQUEST_ID_READ_WRITE_PERMISSION = 99;
-    public static String serverKeyString= "6xJi8iwetoU6miQZyduemQ"; //String to store server ID (set to default at initialisation)
-    public static String fileNameString="File Name";    //String for filename
+    public static String serverKeyString= "KSEYn83_LuvX5XB1czeJGQ"; //String to store server ID (set to default at initialisation)
+    public static String fileNameString="File_Name";    //String for filename
 
 
     /**Initialise view and navigation items in the activity*/
