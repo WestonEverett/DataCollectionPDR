@@ -3,6 +3,7 @@ package com.example.datacollectionpdr;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +48,10 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+
+        StrictMode.setThreadPolicy(policy);
 
         files = FileManager.seeFiles(getApplicationContext());  //create a list of fies found in the memory
 
@@ -112,7 +117,8 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
             //Send currently loaded trajectory
             case R.id.button_sendfromfile:  //send button -> send selected file to server
                 if(files.length != 0){
-                    ServerManager.sendData(this.trajectoryNative, MainActivity.serverKeyString);
+                    String response = ServerManager.sendData(this.trajectoryNative, MainActivity.serverKeyString);
+                    Log.i("ServerResponse", response);
                 }
                 break;
 

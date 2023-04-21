@@ -61,8 +61,9 @@ public class AltitudeEstimation {
         Log.i("checkFloorsVar", "Variance: " + variance);
 
         if(this.changingFloors && !currentlyChanging){
-            this.curFloorAltitude = this.recentAltitudes.getMean();
-            this.currentFloor = this.currentFloor + Math.round(curFloorAltitude/floor_height);
+            float tempAlt = this.recentAltitudes.getMean();
+            this.currentFloor = this.currentFloor + Math.round((tempAlt - curFloorAltitude)/floor_height);
+            curFloorAltitude = tempAlt;
         } else if(!currentlyChanging){
             this.curFloorAltitude = this.recentAltitudes.getMean();
         }
