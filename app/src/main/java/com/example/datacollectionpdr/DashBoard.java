@@ -100,27 +100,35 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
         switch (v.getId()) {
             //Send currently loaded trajectory
             case R.id.button_sendfromfile:  //send button -> send selected file to server
-                ServerManager.sendData(this.trajectoryNative, MainActivity.serverKeyString);
+                if(files.length != 0){
+                    ServerManager.sendData(this.trajectoryNative, MainActivity.serverKeyString);
+                }
                 break;
 
             //Load currently selected trajectory
             case R.id.button_load: //load button -> show trajectory saved in the chosen graph on the plot
                 Log.e("button", "Starting load of " + currentDisplayFile);
-                try{
-                    this.trajectoryNative = FileManager.getTrajectoryFile(getApplicationContext(), currentDisplayFile);
-                    UITools.plotPDRTrajectory(this.trajectoryNative.getPdrs(), Color.RED, plot);
-                } catch (IOException e) {
-                    Log.e("Load Failure", e.toString());
+                if(files.length != 0){
+                    try{
+                        this.trajectoryNative = FileManager.getTrajectoryFile(getApplicationContext(), currentDisplayFile);
+                        UITools.plotPDRTrajectory(this.trajectoryNative.getPdrs(), Color.RED, plot);
+                    } catch (IOException e) {
+                        Log.e("Load Failure", e.toString());
+                    }
                 }
+                break;
 
             //delete currently selected trajectory
             case R.id.button_delete: //delete button -> delete the chosen file
-                try{
-                    FileManager.deleteFile(getApplicationContext(), currentDisplayFile);
-                    updateAvailableFiles();
-                } catch (IOException e) {
-                    Log.e("File Delete Failure", currentDisplayFile + " Failed to Delete");
+                if(files.length != 0) {
+                    try{
+                        FileManager.deleteFile(getApplicationContext(), currentDisplayFile);
+                        updateAvailableFiles();
+                    } catch (IOException e) {
+                        Log.e("File Delete Failure", currentDisplayFile + " Failed to Delete");
+                    }
                 }
+                break;
         }
     }
 
