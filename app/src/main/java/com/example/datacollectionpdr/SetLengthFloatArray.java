@@ -42,6 +42,40 @@ public class SetLengthFloatArray {
         }
     }
 
+    public Float getMean(){
+        Float mean = 0.0f;
+
+        // Calculate the mean
+        for (Float num : internalArray) {
+            mean += num;
+        }
+        mean /= internalArray.size();
+
+        return mean;
+    }
+
+    public Float getVariance() {
+        int length = internalArray.size();
+
+        Float mean = 0.0f;
+        Float sum = 0.0f;
+        Float variance = 0.0f;
+
+        // Calculate the mean
+        for (Float num : internalArray) {
+            mean += num;
+        }
+        mean /= length;
+
+        // Calculate the variance
+        for (Float num : internalArray) {
+            sum += (float) Math.pow(num - mean, 2);
+        }
+        variance = sum / length;
+
+        return variance;
+    }
+
     /**
      * @return returns current array
      */

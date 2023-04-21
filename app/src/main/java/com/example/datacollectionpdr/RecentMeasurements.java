@@ -2,6 +2,7 @@ package com.example.datacollectionpdr;
 
 import com.example.datacollectionpdr.nativedata.MotionSample;
 import com.example.datacollectionpdr.nativedata.PressureData;
+import com.example.datacollectionpdr.pdrcalculation.AltitudeEstimation;
 
 /**
  * Class that manages sensor data and structures them into formats used in the UI visualisation tools
@@ -80,7 +81,7 @@ public class RecentMeasurements {
      * @param pressureData  - Object containing the most recent barometer reading and timestamp
      */
     public void updateMeasurements(PressureData pressureData) {
-        baroRecentMeasurements[0].addValue(pressureData.pressure);  //get reading
+        baroRecentMeasurements[0].addValue(AltitudeEstimation.findAltitude(pressureData.pressure));  //get reading
         baroTimeRecentMeasurements.addValue(pressureData.timestamp);//get timestamp
     }
 

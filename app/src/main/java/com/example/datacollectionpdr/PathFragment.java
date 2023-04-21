@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -63,11 +65,12 @@ public class PathFragment extends Fragment {
         DataViewModel viewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
         viewModel.getPDRStep().observe(getViewLifecycleOwner(), item -> {   //set up listener to get updated PDR values from dataViewModel
 
-            //if(item.getEstFloor() != curFloor){
-            //    curSteps = new ArrayList<>();
-            //    curFloor = item.getEstFloor();
-            //}
-            //TODO should thid be commented out???
+            if(item.getEstFloor() != curFloor){
+                curSteps = new ArrayList<>();
+                curFloor = item.getEstFloor();
+            }
+
+            //Toast.makeText(getContext(), String.valueOf(item.getEstFloor()), Toast.LENGTH_SHORT);
 
             curSteps.add(item);         //add another step to the trajectory
             UITools.plotPDRTrajectory(curSteps, Color.RED, plot);   //re-plot the plot

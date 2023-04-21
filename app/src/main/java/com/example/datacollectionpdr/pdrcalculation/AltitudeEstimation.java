@@ -2,8 +2,12 @@ package com.example.datacollectionpdr.pdrcalculation;
 
 import android.hardware.SensorManager;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.example.datacollectionpdr.SetLengthFloatArray;
+
 /** AltitudeEstimation.java
- * Author: Alexandros Miteloudis Vagionas
+ * Author: Alexandros Miteloudis Vagionas, Weston Everett
  * Affiliation: The University of Edinburgh
  * Description: Class for holding and processing barometer data into altitude change and an estimate
  * of the user's current floor. Floor height is assumed to be 4 metres, but this can vary. Over a 30
@@ -11,30 +15,52 @@ import android.util.Log;
  * is necessary as a full floor change is larger.
  */
 public class AltitudeEstimation {
-    private static float FLOOR_HEIGHT = 4f; // In metres
-    private float altitude = 0.0f;
-    private float startingAltitude = 0.0f;
-    public void setAltitude(float altitude){
-        this.altitude = altitude;
+    private final float floor_height; // In metres
+    private final float varianceThreshold = .1f;
+    private float curFloorAltitude;
+    private float lastAltitude;
+    private SetLengthFloatArray recentAltitudes;
+    private boolean changingFloors;
+    private int currentFloor;
+
+    public AltitudeEstimation(float floorConstant, int memoryLength, float startingAltitude){
+        this.floor_height = floorConstant;
+        this.recentAltitudes = new SetLengthFloatArray(memoryLength, startingAltitude);
+        this.curFloorAltitude = startingAltitude;
+        this.lastAltitude = startingAltitude;
+        this.changingFloors = false;
+        this.currentFloor = 0;
     }
-    public void setStartingAltitude(float startingAltitude){
-        this.startingAltitude = startingAltitude;
+
+    public void addAltitude(float altitude){
+        recentAltitudes.addValue(altitude);
+        this.lastAltitude = altitude;
+
+        this.checkFloors();
     }
-    public float getAltitude(){
-        return this.altitude;
+
+    private void checkFloors(){
+        float variance = recentAltitudes.getVariance();
+        boolean currentlyChanging = (variance > varianceThreshold);
+
+        Log.i("checkFloorsVar", "Variance: " + variance);
+
+        if(this.changingFloors && !currentlyChanging){
+            this.curFloorAltitude = this.recentAltitudes.getMean();
+            this.currentFloor = this.currentFloor + Math.round(curFloorAltitude/floor_height);
+        }
+
+        changingFloors = currentlyChanging;
     }
-    public float getStartingAltitude(){
-        return this.startingAltitude;
-    }
-    //Returns altitude change since the first barometer measurement
-    public float altitudeDelta(){return this.altitude - this.startingAltitude;}
+
+    //Returns altitude change since the recent barometer measurement
+    public float altitudeDelta(){return this.lastAltitude - this.curFloorAltitude;}
     //Returns an estimate of the number of floors changed as an integer
     public int floorsChanged(){
-        int numOfFloorsChanged = Math.round(this.altitudeDelta()/FLOOR_HEIGHT);
-        return numOfFloorsChanged;
+        return currentFloor;
     }
     //All altitudes are compared to a standard atmospheric pressure of 1013.25 millibar
-    public float findAltitude(float pressure){
+    public static float findAltitude(float pressure){
         return SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE,pressure);
     }
 
