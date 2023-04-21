@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,8 @@ public class PathFragment extends Fragment {
     XYPlot plot;                                                //initialise XYplot plot
     private int curFloor = 0;                                   //initialise current floor level to 0
     private ArrayList<PDRStep> curSteps = new ArrayList<>();    //initialise step count
+    TextView graphTitleText;
+    String title = "PDR Trajectory on floor: ";
 
     public PathFragment() {
         // required empty public constructor.
@@ -65,12 +68,18 @@ public class PathFragment extends Fragment {
         DataViewModel viewModel = new ViewModelProvider(requireActivity()).get(DataViewModel.class);
         viewModel.getPDRStep().observe(getViewLifecycleOwner(), item -> {   //set up listener to get updated PDR values from dataViewModel
 
+            String titleFull=title + item.getEstFloor();
+            graphTitleText = view.findViewById(R.id.textViewTitle);    //find text box for sensor info display
+            graphTitleText.setText(titleFull);               //Set text when no item selected
+
+
+
             if(item.getEstFloor() != curFloor){
                 curSteps = new ArrayList<>();
                 curFloor = item.getEstFloor();
             }
 
-            //Toast.makeText(getContext(), String.valueOf(item.getEstFloor()), Toast.LENGTH_SHORT);
+            Toast.makeText(getContext(), String.valueOf(item.getEstFloor()), Toast.LENGTH_SHORT);
 
             curSteps.add(item);         //add another step to the trajectory
             UITools.plotPDRTrajectory(curSteps, Color.RED, plot);   //re-plot the plot

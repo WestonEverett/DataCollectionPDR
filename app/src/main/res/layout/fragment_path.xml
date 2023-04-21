@@ -1,36 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:ap="http://schemas.android.com/apk/res-auto"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:ap="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:layout_margin="12dp"
+android:layout_marginHorizontal="12dp"
+android:layout_marginVertical="12dp"
+android:layout_marginStart="12dp"
+android:background="@color/blue_dark"
+tools:context=".MainActivity">
+
+
+<com.androidplot.xy.XYPlot
+    android:id="@+id/plot"
+    style="@style/APDefacto.Dark"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PathFragment"
-    android:background="@color/blue_dark">
+    android:layout_below="@+id/textView5"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentEnd="true"
+    android:layout_centerHorizontal="true"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginBottom="24dp"
+    android:background="@drawable/text_background"
+    ap:backgroundColor="#00FFFFFF"
+    ap:borderThickness="1dp"
+    ap:domainTitle="Number of Samples"
+    ap:graphBackgroundColor="#00FFFFFF"
+    ap:graphWidthMode="fill"
+    ap:gridBackgroundColor="#00FFFFFF"
+    ap:lineLabelRotationBottom="-45"
+    ap:lineLabels="left|bottom"
+    ap:paddingTop="6dp"
+    ap:rangeTitle="MeasuredValues"
+    >
 
-    <com.androidplot.xy.XYPlot
-        android:id="@+id/plot"
-        style="@style/APDefacto.Dark"
+</com.androidplot.xy.XYPlot>
+
+    <TextView
+        android:id="@+id/textViewTitle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/spinner2"
+        android:layout_height="38dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:layout_marginEnd="14dp"
-        android:background="@drawable/text_background"
-        ap:backgroundColor="#00FFFFFF"
-        ap:domainTitle="x-direction [m]"
-        ap:graphBackgroundColor="#00FFFFFF"
-        ap:gridBackgroundColor="#00FFFFFF"
-        ap:lineLabelRotationBottom="-45"
-        ap:lineLabels="left|bottom"
-        ap:rangeTitle="y-direction [m]"
-        ap:title="@string/PDRDuringTitle"
-        ap:titleTextColor="@color/orange" />
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="18dp"
+        android:gravity="center"
+        android:text="ffffff"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/orange" />
 
-</FrameLayout>
+
+</RelativeLayout>
 
 
