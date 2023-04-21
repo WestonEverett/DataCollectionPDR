@@ -73,7 +73,7 @@
 
 
     <!-- Files Page -->
-    <string name="savedTrajectories_title">Saved Trajectories Review</string>
+    <string name="savedTrajectories_title">SAVED TRAJECTORIES REVIEW</string>
     <string name="textView_choosefileload">Choose saved trajectory file to be displayed</string>
     <string name="Load_button">Load Trajectory</string>
     <string name="ButtonDelete">DELETE FILE</string>

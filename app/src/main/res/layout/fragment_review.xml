@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:layout_marginHorizontal="12dp"
     android:layout_marginTop="12dp"
-    android:layout_marginBottom="72dp"
+    android:layout_marginBottom="24dp"
     tools:context=".ReviewFragment">
 
     <TextView
@@ -42,14 +42,14 @@
             android:layout_height="match_parent"
             android:background="@drawable/text_background"
             ap:backgroundColor="#00FFFFFF"
+            ap:domainTitle="domain"
             ap:graphBackgroundColor="#00FFFFFF"
             ap:gridBackgroundColor="#00FFFFFF"
-            ap:domainTitle="domain"
             ap:lineLabelRotationBottom="-45"
             ap:lineLabels="left|bottom"
             ap:rangeTitle="range"
             ap:title="@string/PDRReviewTitle"
-            ap:titleTextColor="@color/orange"/>
+            ap:titleTextColor="@color/orange" />
     </FrameLayout>
 
     <Button
@@ -124,17 +124,17 @@
             android:layout_height="65dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
+            android:textColorHint="@color/secondary_text"
             app:layout_constraintEnd_toStartOf="@+id/button_entertext_file"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_file"
-            android:textColorHint="@color/secondary_text">
+            app:layout_constraintTop_toBottomOf="@+id/textView_file">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editText1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/editText1"
                 android:imeOptions="actionDone"
-                android:inputType="text"/>
+                android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -180,17 +180,17 @@
             android:layout_height="65dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
+            android:textColorHint="@color/secondary_text"
             app:layout_constraintEnd_toStartOf="@+id/button_entertext"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_id_propmpt"
-            android:textColorHint="@color/secondary_text">
+            app:layout_constraintTop_toBottomOf="@+id/textView_id_propmpt">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editText2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/editText2"
                 android:imeOptions="actionDone"
-                android:inputType="text"/>
+                android:inputType="text" />
         </com.google.android.material.textfield.TextInputLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
