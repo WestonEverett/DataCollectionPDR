@@ -67,6 +67,17 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
         deleteButton = findViewById(R.id.button_delete);        //Initialise button for sending to server
         deleteButton.setOnClickListener(this);                  //set button listener
 
+        if(files.length == 0){
+            sendButton.setEnabled(false);
+            sendButton.setTextColor(getResources().getColor(R.color.blue_light));
+
+            loadButton.setEnabled(false);
+            loadButton.setTextColor(getResources().getColor(R.color.blue_light));
+
+            deleteButton.setEnabled(false);
+            deleteButton.setTextColor(getResources().getColor(R.color.blue_light));
+        }
+
         plot = (XYPlot) findViewById(R.id.plot3);               //initialise plot for displaying trajectory
 
         BottomNavigationView bottomNavigationView=findViewById(R.id.bottom_navigation); //initialise bottom navigation
@@ -135,6 +146,16 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
     /**Recalculates what files are available and initializes spinner*/
     private void updateAvailableFiles(){
         files = FileManager.seeFiles(getApplicationContext());  //create a list of fies found in the memory
+        if(files.length == 0){
+            sendButton.setEnabled(false);
+            sendButton.setTextColor(getResources().getColor(R.color.blue_light));
+
+            loadButton.setEnabled(false);
+            loadButton.setTextColor(getResources().getColor(R.color.blue_light));
+
+            deleteButton.setEnabled(false);
+            deleteButton.setTextColor(getResources().getColor(R.color.blue_light));
+        }
         initspinnerfooter();
     }
 
