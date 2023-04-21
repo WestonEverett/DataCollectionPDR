@@ -45,6 +45,8 @@ public class GraphsFragment extends Fragment {
     String currentDisplaySensor;                    //initialise string with the currently selected sensor
     private RecentMeasurements recentMeasurements;  //initialise variable to hold values to be displayed on the graph
     int graphPointsNum = 200;                       //number of samples to be plotted
+    Number[] domainLabels;
+
 
     public GraphsFragment() {
         // required empty public constructor.
@@ -58,6 +60,11 @@ public class GraphsFragment extends Fragment {
         recentMeasurements = new RecentMeasurements(graphPointsNum);   //set how much data ets plotted
         currentDisplaySensor = "Accelerometer";                         //set initial sensor to be plotted
         PixelUtils.init(requireActivity());                             //ensure the plot can be created with PixelUtils library
+
+        domainLabels = new Number[graphPointsNum]; //initialise the x axis labels
+        for(int i = 0; i < graphPointsNum; i++){         //set the labels to be sample numbers
+            domainLabels[i]=i;
+        }
     }
 
     /**sets up the view from fragment_graphs layout file and initialises the dropdown menu and graph
@@ -87,7 +94,7 @@ public class GraphsFragment extends Fragment {
         //set up sensor samples to be updated when new measurements are ready
         viewModel.getMotionSample().observe(getViewLifecycleOwner(), item -> {
             recentMeasurements.updateMeasurements(item);
-            PlotThePlot(recentMeasurements.getData(currentDisplaySensor));  //when new data available call function that plots the data
+            PlotThePlot(recentMeasurements.getData(currentDisplaySensor), domainLabels);  //when new data available call function that plots the data
         });
 
         //set up pressure sensor samples to be updated when new measurements are ready
@@ -101,13 +108,9 @@ public class GraphsFragment extends Fragment {
      * samples plotted. Any number of series can be plotted depending on the sensor
      * @param plotData - data to be plotted (taken from sensor readings)
      */
-    public void PlotThePlot(Number[][] plotData){
+    public void PlotThePlot(Number[][] plotData, Number[] domainLabels){
 
-        Number[] domainLabels = new Number[graphPointsNum]; //initialise the x axis labels
-        for(long i = 0; i <= plotData.length; i++){         //set the labels to be sample numbers
-            domainLabels[(int)i]=i;
-        }
-
+        Log.d("AAA", "Domain num: "+ Arrays.toString(domainLabels));
         //define array list so that any number of data series can  be displayed at once
         ArrayList<SimpleXYSeries> series = new ArrayList<>();
         ArrayList<LineAndPointFormatter> seriesFormats = new ArrayList<>();
