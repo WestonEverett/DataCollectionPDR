@@ -1,6 +1,7 @@
 package com.example.datacollectionpdr;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,7 +12,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.androidplot.xy.XYPlot;
 import com.example.datacollectionpdr.nativedata.TrajectoryNative;
@@ -48,9 +52,9 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
     }
 
     /**
-     When view for the fragment is created initialise all the views, buttons etc.
-     input: saved state of the activity
-     output: view from fragment review layout with all the buttons,text inputs etc.
+     * When view for the fragment is created initialise all the views, buttons etc.
+     * input: saved state of the activity
+     * output: view from fragment review layout with all the buttons,text inputs etc.
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,23 +78,24 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
         enterFileNameButton.setOnClickListener(this);                                 //Set up Listener
 
         TextInputLayout textInputLayout = view.findViewById(R.id.textInput_serverid);//Initialise server id text input
-        textInputLayout.setHint("Current ID: "+ MainActivity.serverKeyString);      //set hint text
+        textInputLayout.setHint("Current ID: " + MainActivity.serverKeyString);      //set hint text
 
         TextInputLayout textInputLayoutFile = view.findViewById(R.id.textInput_filename);  //Initialise file name text input
-        textInputLayoutFile.setHint("Suggested Name: "+ MainActivity.fileNameString);      //set hint text
-        //TODO set he hint string to actual filename suggested
+        textInputLayoutFile.setHint("Suggested Name: " + MainActivity.fileNameString);      //set hint text
 
         trajectoryNative = ((RecordingActivity) requireActivity()).trajectoryNative;            //Get trajectory
         plot = (XYPlot) view.findViewById(R.id.plot2);                                      //Initialise plotXY
         UITools.plotPDRTrajectory(trajectoryNative.getPdrs(), Color.RED, plot);             //plot trajectory from PDR
 
+        setKeyboard();
+
         return view; // Inflate the layout for this fragment
     }
 
     /**
-     Do what you want to do when button is clicked
-     input: fragment review view
-     output: action depending on the button pressed
+     * Do what you want to do when button is clicked
+     * input: fragment review view
+     * output: action depending on the button pressed
      */
     @Override
     public void onClick(View v) {
@@ -126,5 +131,29 @@ public class ReviewFragment extends Fragment  implements View.OnClickListener {
                 textInputLayoutFile.setHint("Chosen Name: " + MainActivity.fileNameString);
                 break;
         }
+    }
+
+    public void setKeyboard() {
+        EditText editText1m = view.findViewById(R.id.editText1);
+        editText1m.setOnEditorActionListener((textView, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // Hide the keyboard
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
+                return true;
+            }
+            return false;
+        });
+
+        EditText editText2m = view.findViewById(R.id.editText2);
+        editText2m.setOnEditorActionListener((textView, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // Hide the keyboard
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
+                return true;
+            }
+            return false;
+        });
     }
 }
