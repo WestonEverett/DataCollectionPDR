@@ -53,7 +53,10 @@ public class AltitudeEstimation {
         changingFloors = currentlyChanging;
     }
 
-    //Returns altitude change since the recent barometer measurement
+    /**
+     * Returns altitude change since the first barometer measurement
+     * @return
+     */
     public float altitudeDelta(){return this.lastAltitude - this.curFloorAltitude;}
     //Returns an estimate of the number of floors changed as an integer
     public int floorsChanged(){

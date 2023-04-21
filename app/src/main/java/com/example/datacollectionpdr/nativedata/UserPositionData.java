@@ -13,6 +13,13 @@ public class UserPositionData {
     public final double startRefLon;
     public final double heading;
 
+    /**
+     * Constructor for position data as supplied by user using pins on a map
+     * @param startLat starting latitude
+     * @param startLon starting longitude
+     * @param startRefLat starting reference point latitude
+     * @param startRefLon starting reference point longitude
+     */
     public UserPositionData(double startLat, double startLon, double startRefLat, double startRefLon){
         this.startLat = startLat;
         this.startLon = startLon;

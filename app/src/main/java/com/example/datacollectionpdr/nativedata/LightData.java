@@ -10,6 +10,11 @@ public class LightData {
     public float light;
     public long initTime;
 
+    /**
+     * Constructor for ambient light data
+     * @param initTime time collected
+     * @param light light level
+     */
     public LightData(long initTime, float light){
         this.initTime = initTime;
         this.light = light;

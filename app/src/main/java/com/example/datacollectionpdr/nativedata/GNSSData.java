@@ -15,6 +15,16 @@ public class GNSSData {
     public float lat; //latitude
     public float speed;
 
+    /**
+     * Constructor for location data
+     * @param provider location provider
+     * @param acc accuracy
+     * @param alt altitude
+     * @param initTime time
+     * @param lon longitude
+     * @param lat latitude
+     * @param speed user speed
+     */
     public GNSSData(String provider, float acc, float alt, long initTime, float lon, float lat, float speed){
         this.provider = provider;
         this.acc = acc;

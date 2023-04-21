@@ -14,10 +14,15 @@ import java.util.Arrays;
  */
 
 public class StepLengthEstimation {
-    ////// Finding step length //////
     private final static float CONSTANT_K = 7/48f; //From Analog Devices paper "Using the ADXL202 in Pedometer and Personal Navigation Applications"
     private final static float defaultStepLengthEstimate = 1;
 
+    /**
+     * Finds step length
+     * @param accelerations accelerometer
+     * @param gravities gravity values
+     * @return
+     */
     public static float findStepLength(ArrayList<float[]> accelerations, ArrayList<float[]> gravities){
         //Finds dot product of each acc vector with respect to gravity
         float[] zAxisAcceleration = DotProduct.zAxisAcceleration(accelerations, gravities);

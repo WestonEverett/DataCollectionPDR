@@ -74,16 +74,11 @@ public class DataCollection implements SensorEventListener {
 
     // WiFi data works differently to all other sensors
     // Stored as hashmap of BSSID and maximum observed signal level in dBm
-
     HashMap<String, WifiObject> wifiData = new HashMap<>();
-    /*BroadcastReceiver wifiScanReceiver = new BroadcastReceiver() {
-        public void onReceive(Context c, Intent intent) {
 
-
-        }
-    };
-    */
-    //DataCollection LocationListener gets provider, accuracy, altitude, time, longitude, latitude and speed.
+    /**
+     * DataCollection LocationListener gets provider, accuracy, altitude, time, longitude, latitude and speed.
+     */
     class DCLocationListener implements LocationListener{
         @Override
         public void onLocationChanged(@NonNull Location location){
@@ -103,6 +98,10 @@ public class DataCollection implements SensorEventListener {
         }
     }
 
+    /**
+     * Initializes sensors
+     * @param context required for things to function properly
+     */
     public DataCollection(Context context){
         this.context = context;
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
@@ -137,16 +136,26 @@ public class DataCollection implements SensorEventListener {
         }
     }
 
+    /**
+     *
+     * @param motionSensorManagerListener Motion sensor manager listener
+     */
     public void setOnMotionSensorManagerListener(OnMotionSensorManagerListener motionSensorManagerListener){
         this.motionSensorManagerListener = motionSensorManagerListener;
     }
 
+    /**
+     * Unregisters all listeners
+     */
     public void unregisterMotionSensors(){
         sensorsRegistered = true;
         sensorManager.unregisterListener(this);
         //context.unregisterReceiver(wifiScanReceiver);
     }
 
+    /**
+     * Registers all sensor event listeners
+     */
     public void registerMotionSensors(){
         sensorsRegistered = false;
         sensorManager.registerListener(this, MagneticFieldUncalibrated, 10000); // 100 Samples/s
@@ -198,7 +207,11 @@ public class DataCollection implements SensorEventListener {
     //Counter for number of currently aggregated samples
     private int purgeWifiDataCount;
 
-    //Function returns packaged sensor information in a SensorDetails object
+    /**Function returns packaged sensor information in a SensorDetails object
+     *
+     * @param type sensor type
+     * @return
+     */
     public SensorDetails getSensorDetails(int type){
         String name = sensorManager.getDefaultSensor(type).getName();
         String vendor = sensorManager.getDefaultSensor(type).getVendor();
@@ -208,6 +221,10 @@ public class DataCollection implements SensorEventListener {
         return new SensorDetails(name, vendor,res,power,version,type);
     };
 
+    /**
+     * Aggregates WiFi data using the ID as a key. Also updates location data.
+     * Functions combined to avoid cumbersome permissions checks in multiple places.
+     */
     private void checkWifiUpdate(){
         long currentTimestamp = System.currentTimeMillis();
         if(currentTimestamp-lastTimestamp > WIFI_UPDATE_INTERVAL){
@@ -255,6 +272,10 @@ public class DataCollection implements SensorEventListener {
         }
     }
 
+    /**
+     * Calls the right function depending on which sensor updated
+     * @param sensorEvent current sensor update
+     */
     @Override
     public void onSensorChanged(SensorEvent sensorEvent){
         //Scan for WiFi networks every interval and increment count
@@ -316,7 +337,9 @@ public class DataCollection implements SensorEventListener {
         }
     }
 
-    //Functions initialised here and instantiated in DataManager
+    /**
+     * Functions initialised here and instantiated in DataManager
+     */
     public interface OnMotionSensorManagerListener{
         void onMagnetometerUncalibratedValueUpdated(float[] magneticfield);
         void onAccelerometerUncalibratedValueUpdated(float[] acceleration);
@@ -338,7 +361,9 @@ public class DataCollection implements SensorEventListener {
                                    SensorDetails AmbInfo, SensorDetails RotInfo);
     }
 
-    /**Code left for potential future implementations of dealing with accuracy changes*/
+    /**
+     * Code left for potential future implementations of dealing with accuracy changes
+     */
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         switch (sensor.getType()){

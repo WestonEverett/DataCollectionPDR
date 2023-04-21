@@ -29,6 +29,10 @@ public class PermissionsManager extends AppCompatActivity{
 
     private static final int REQUEST_ID_READ_WRITE_PERMISSION = 99; // What is this constant even?
 
+    /**
+     * Ask for permissions as soon as this is created
+     * @param savedInstanceState to save what the user was doing
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,11 +97,17 @@ public class PermissionsManager extends AppCompatActivity{
         }
     }
 
+    /**
+     * On resume
+     */
     @Override
     protected void onResume() {
         super.onResume();
     }
 
+    /**
+     * On pause
+     */
     @Override
     protected void onPause(){
         super.onPause();
