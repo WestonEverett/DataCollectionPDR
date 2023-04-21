@@ -36,7 +36,7 @@ public class MotionSample {
 
     /**
      * Returns the acceleration value
-     * @return
+     * @return acceleration array
      */
     public float[] getAcc() {
         return acc;
@@ -53,7 +53,7 @@ public class MotionSample {
 
     /**
      * Returns the gyroscope value
-     * @return
+     * @return gyroscope values
      */
     public float[] getGyro() {
         return gyro;
@@ -70,7 +70,7 @@ public class MotionSample {
 
     /**
      * Returns the rotation vector
-     * @return
+     * @return rotation vector
      */
     public float[] getRotVector() {
         return rotVector;
@@ -87,7 +87,7 @@ public class MotionSample {
 
     /**
      * Determines if the sample has an accuracy value saved
-     * @return
+     * @return boolean whether accelerometer is set
      */
     public boolean hasAcc() {
         return accFlag;
@@ -95,7 +95,7 @@ public class MotionSample {
 
     /**
      * Determines if the sample has a gyroscope value saved
-     * @return
+     * @return boolean whether gyroscope data is set
      */
     public boolean hasGyro() {
         return gyroFlag;
@@ -103,7 +103,7 @@ public class MotionSample {
 
     /**
      * Determines if the sample has a rotation vector value saved
-     * @return
+     * @return boolean whether rotation vector is set
      */
     public boolean hasRotVector() {
         return rotVectorFlag;
@@ -111,7 +111,7 @@ public class MotionSample {
 
     /**
      * Determines if the sample has all values saved
-     * @return
+     * @return boolean of if all data has been set
      */
     public boolean isComplete() {
         return (gyroFlag && accFlag && rotVectorFlag);

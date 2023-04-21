@@ -53,11 +53,19 @@ public class PDRStep {
         this.initTime = initTime;
     }
 
+    /**
+     * Changes X by a set amount
+     * @param delX amount to change x by
+     */
     public void offsetX(float delX){
         this.x += delX;
         this.updateMagAndHeading();
     }
 
+    /**
+     * Changes the y value by a provided amunt
+     * @param delY amunt to change y
+     */
     public void offsetY(float delY){
         this.y += delY;
         this.updateMagAndHeading();
@@ -65,7 +73,7 @@ public class PDRStep {
 
     /**
      * Get X coordinate
-     * @return
+     * @return current x coordinate
      */
     public float getX() {
         return x;
@@ -73,7 +81,7 @@ public class PDRStep {
 
     /**
      * Get Y coordinate
-     * @return
+     * @return current y coordinate
      */
     public float getY() {
         return y;

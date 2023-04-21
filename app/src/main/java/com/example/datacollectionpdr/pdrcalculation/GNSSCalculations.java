@@ -39,6 +39,11 @@ public class GNSSCalculations {
 
     /**
      * Finds the angle in degrees with respect to North of the line crossing two map points.
+     * @param startLon starting longitude
+     * @param startLat starting latitude
+     * @param endLon reference longitude
+     * @param endLat reference latitude
+     * @return final bearing
      */
     public static double calculateBearingDeg(double startLon, double startLat, double endLon, double endLat){
         /*     Let ‘R’ be the radius of Earth,
@@ -60,8 +65,11 @@ public class GNSSCalculations {
     }
 
     /**
-     *  Finds the change in angle between two map points, i.e. where the user was looking when they
+     * Finds the change in angle between two map points, i.e. where the user was looking when they
      * started recording and where they were looking when they finished recording.
+     * @param startPositionData Starting position/reference
+     * @param endPositionData Ending position/referencce
+     * @return change between the heading of the two values
      */
     public static double userHeadingDeltaDeg(UserPositionData startPositionData, UserPositionData endPositionData){
         double baseHeading = endPositionData.heading - startPositionData.heading;

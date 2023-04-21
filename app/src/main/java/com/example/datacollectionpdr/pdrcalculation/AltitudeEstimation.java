@@ -23,6 +23,12 @@ public class AltitudeEstimation {
     private boolean changingFloors;
     private int currentFloor;
 
+    /**
+     * Altitude estimator constructor, responsivle for estimating floors
+     * @param floorConstant assumed normal height of a floor (between 2-6 meters)
+     * @param memoryLength number of values to buffer (trade-off of accuracy for response time)
+     * @param startingAltitude initial floor altitude
+     */
     public AltitudeEstimation(float floorConstant, int memoryLength, float startingAltitude){
         this.floor_height = floorConstant;
         this.recentAltitudes = new SetLengthFloatArray(memoryLength, startingAltitude);
@@ -32,6 +38,10 @@ public class AltitudeEstimation {
         this.currentFloor = 0;
     }
 
+    /**
+     * adds an altitude measurement to the buffer storage
+     * @param altitude measurement to be added
+     */
     public void addAltitude(float altitude){
         recentAltitudes.addValue(altitude);
         this.lastAltitude = altitude;
@@ -39,6 +49,11 @@ public class AltitudeEstimation {
         this.checkFloors();
     }
 
+    /**
+     * Calculates variance of recent altitude measurements
+     * High variance means the phone is likely in the process of changing floors
+     * When the phone stabilizes, it is assumed to be stable on a new floor
+     */
     private void checkFloors(){
         float variance = recentAltitudes.getVariance();
         boolean currentlyChanging = (variance > varianceThreshold);
@@ -58,11 +73,20 @@ public class AltitudeEstimation {
      * @return
      */
     public float altitudeDelta(){return this.lastAltitude - this.curFloorAltitude;}
-    //Returns an estimate of the number of floors changed as an integer
+
+    /**
+     * returns the current floor (relative to start point)
+     * @return
+     */
     public int floorsChanged(){
         return currentFloor;
     }
-    //All altitudes are compared to a standard atmospheric pressure of 1013.25 millibar
+
+    /**
+     * Static function for calculating altitude
+     * @param pressure pressure to get altitude of
+     * @return
+     */
     public static float findAltitude(float pressure){
         return SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE,pressure);
     }
