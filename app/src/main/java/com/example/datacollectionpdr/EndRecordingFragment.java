@@ -183,6 +183,7 @@ public class EndRecordingFragment extends Fragment implements View.OnClickListen
                 TrajectoryNative trajectoryNative = ((RecordingActivity) requireActivity()).trajectoryNative;
                 trajectoryNative.applyGyroCorrection(endPos);   //correct gyro drift
                 trajectoryNative.applyTrajectoryScaling(endPos);    //Correct scaling to the steps
+                // trajectoryNative.applyAdditiveCorrection(endPos); (Possible alternative correction option)
                 FragmentTransaction fragmentTransaction = requireActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.fragmentContainerView_recording_activity, new ReviewFragment());
                 fragmentTransaction.commit();   //go to review fragment

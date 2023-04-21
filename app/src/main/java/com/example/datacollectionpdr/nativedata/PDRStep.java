@@ -53,6 +53,16 @@ public class PDRStep {
         this.initTime = initTime;
     }
 
+    public void offsetX(float delX){
+        this.x += delX;
+        this.updateMagAndHeading();
+    }
+
+    public void offsetY(float delY){
+        this.y += delY;
+        this.updateMagAndHeading();
+    }
+
     public float getX() {
         return x;
     }

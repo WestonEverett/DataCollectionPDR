@@ -361,6 +361,42 @@ public class TrajectoryNative {
         }
     }
 
+    public void applyAdditiveCorrection(UserPositionData endPos){
+
+        double deltaX = GNSSCalculations.calculateDistance(
+                (float) initPos.startLon,
+                (float) initPos.startLat,
+                (float) endPos.startLon,
+                (float) initPos.startLat
+        );
+
+        double deltaY = GNSSCalculations.calculateDistance(
+                (float) initPos.startLon,
+                (float) initPos.startLat,
+                (float) initPos.startLon,
+                (float) endPos.startLat
+        );
+
+        float totalX = 0;
+        float totalY = 0;
+
+        if(pdrs != null && !pdrs.isEmpty()) {
+            for(PDRStep pdrStep : pdrs){
+                totalX = totalX + pdrStep.getX();
+                totalY = totalY + pdrStep.getY();
+            }
+        }
+
+        //Calculates difference to correct
+        double errorX = (deltaX - totalX) / (float) pdrs.size();
+        double errorY = (deltaY - totalY)  / (float) pdrs.size();
+
+        for (PDRStep pdr: pdrs) {
+            pdr.offsetX((float) errorX);
+            pdr.offsetY((float) errorY);
+        }
+    }
+
     /**
        * Serializes the current TrajectoryNative object to a Trajectory object with TrajectoryBuilder
      */

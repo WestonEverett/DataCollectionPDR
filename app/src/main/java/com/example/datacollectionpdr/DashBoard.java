@@ -35,7 +35,7 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
     XYPlot plot;                         //plot for displaying the trajectories
     TrajectoryNative trajectoryNative;   //trajectory object
     Spinner dropdown;                    //dropdown menu
-    String currentDisplayFile;           //string with the currently selected file
+    String currentDisplayFile = "N/A";           //string with the currently selected file
 
     Button sendButton;                  //Send Button
     Button loadButton;                  //Load Button
