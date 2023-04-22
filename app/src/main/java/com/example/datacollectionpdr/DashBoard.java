@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -118,6 +119,7 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
             case R.id.button_sendfromfile:  //send button -> send selected file to server
                 if(files.length != 0){
                     String response = ServerManager.sendData(this.trajectoryNative, MainActivity.serverKeyString);
+                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                     Log.i("ServerResponse", response);
                 }
                 break;

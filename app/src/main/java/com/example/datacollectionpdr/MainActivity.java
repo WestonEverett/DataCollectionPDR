@@ -13,7 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class MainActivity extends PermissionsManager {
 
     private static final int REQUEST_ID_READ_WRITE_PERMISSION = 99;
-    public static String serverKeyString= "KSEYn83_LuvX5XB1czeJGQ"; //String to store server ID (set to default at initialisation)
+    public static String serverKeyString= "DsquASsno26b9wnx6O2H8g"; //String to store server ID (set to default at initialisation)
     public static String fileNameString="File_Name";    //String for filename
 
 
