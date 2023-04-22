@@ -43,7 +43,7 @@ public class DataManager extends PermissionsManager implements DataCollection.On
     protected TrajectoryNative trajectoryNative; //Class used to send data to server
     private boolean isRecording; //Used to register sensors only when user is recording data
     HashMap<String, WifiObject> WifiData; //Contains a map of all data gathered from WiFi, indexed by MAC address
-    private float[] curGravity = new float[]{0f, 9.8f, 0f}; //Holds the latest gravity sensor values
+    private float[] curGravity = new float[]{0f, -9.8f, 0f}; //Holds the latest gravity sensor values
     private float[] curMagnetic; //Holds the latest magnetic field sensor values
     public GNSSData curGNSSData; //Holds the latest location data
     private ArrayList<float[]> accelerations = new ArrayList<>(); //Holds all acceleration values since the last step
