@@ -22,12 +22,22 @@ import com.example.datacollectionpdr.nativedata.PressureData;
 import com.example.datacollectionpdr.nativedata.SensorDetails;
 import com.example.datacollectionpdr.nativedata.WifiSample;
 
+/** TrajectoryBuilder.java
+ * Authors: Weston Everett
+ * Affiliation: The University of Edinburgh
+ * Description: Serializes TrajectoryNative into Trajectory
+ */
+
 public class TrajectoryBuilder {
 
     long initTime;
 
     Trajectory.Builder trajectoryBuilder;
 
+    /**
+     * Constructor
+     * @param initTime starting time
+     */
     public TrajectoryBuilder(long initTime){
         this.initTime = initTime;
         trajectoryBuilder = Trajectory.newBuilder();
@@ -40,6 +50,10 @@ public class TrajectoryBuilder {
         trajectoryBuilder.setDataIdentifier(dataID);
     }
 
+    /**
+     * returns built trajectory
+     * @return new Trajectory
+     */
     public Trajectory build(){
         return trajectoryBuilder.build();
     }
@@ -52,6 +66,12 @@ public class TrajectoryBuilder {
         trajectoryBuilder.setAndroidVersion(androidVersion);
     }
 
+    /**
+     * Adds PDR
+     * @param x X
+     * @param y Y
+     * @param curTime occurence
+     */
     public void addPDR(float x, float y, long curTime){
         Pdr_Sample.Builder newPDR = Pdr_Sample.newBuilder();
         newPDR.setRelativeTimestamp(curTime);
@@ -65,6 +85,12 @@ public class TrajectoryBuilder {
         addPDR(pdrStep.getX(), pdrStep.getY(), pdrStep.initTime);
     }
 
+    /**
+     * Adds AP data
+     * @param mac mac address
+     * @param ssid ssid/name
+     * @param freq frequency
+     */
     public void addAP(long mac, String ssid, long freq){
         AP_Data.Builder newAP = AP_Data.newBuilder();
         newAP.setMac(mac);
@@ -78,6 +104,16 @@ public class TrajectoryBuilder {
         addAP(apdata.mac, apdata.ssid, apdata.freq);
     }
 
+    /**
+     * Adds GPS (GNSS) data
+     * @param provider
+     * @param acc
+     * @param alt
+     * @param curTime
+     * @param lon
+     * @param lat
+     * @param speed
+     */
     public void addGNSS(String provider, float acc, float alt, long curTime, float lon, float lat, float speed){
         GNSS_Sample.Builder newGNSS = GNSS_Sample.newBuilder();
         newGNSS.setAccuracy(acc);
@@ -95,6 +131,11 @@ public class TrajectoryBuilder {
         addGNSS(gnssData.provider, gnssData.acc, gnssData.alt, gnssData.initTime, gnssData.lon, gnssData.lat, gnssData.speed);
     }
 
+    /**
+     * Adds light data
+     * @param light light
+     * @param curTime time of measurement
+     */
     public void addLight(float light, long curTime){
         Light_Sample.Builder newLight = Light_Sample.newBuilder();
         newLight.setLight(light);
@@ -107,6 +148,12 @@ public class TrajectoryBuilder {
         addLight(lightData.light, lightData.initTime);
     }
 
+    /**
+     * adds wifi data
+     * @param curTime measurement time
+     * @param mac address
+     * @param rssi power
+     */
     public void addWifi(long curTime, long[] mac, int[] rssi){
         WiFi_Sample.Builder newWifi = WiFi_Sample.newBuilder();
         long relTime = curTime;
@@ -143,6 +190,14 @@ public class TrajectoryBuilder {
         trajectoryBuilder.addWifiData(newWifi.build());
     }
 
+    /**
+     * Adds motion sample
+     * @param acc accelerometer
+     * @param gyro gyroscope
+     * @param rotVector rotation vector
+     * @param steps steps taken
+     * @param curTime measurement time
+     */
     public void addMotion(float[] acc, float[] gyro, float[] rotVector, int steps, long curTime){
         Motion_Sample.Builder newMotion = Motion_Sample.newBuilder();
 
@@ -169,6 +224,11 @@ public class TrajectoryBuilder {
         addMotion(motionSample.getAcc(), motionSample.getGyro(), motionSample.getRotVector(), motionSample.steps, motionSample.initTime);
     }
 
+    /**
+     * Position Data (magnetometer for some reason)
+     * @param curTime measure time
+     * @param mag magnetometer vector
+     */
     public void addPosition(long curTime, float[] mag){
         Position_Sample.Builder newPosition = Position_Sample.newBuilder();
         newPosition.setRelativeTimestamp(curTime);
@@ -183,6 +243,11 @@ public class TrajectoryBuilder {
         addPosition(positionData.initTime, positionData.mag);
     }
 
+    /**
+     * Add pressure data
+     * @param pressure pressure reading
+     * @param curTime measurement time
+     */
     public void addBaro(float pressure, long curTime){
         Pressure_Sample.Builder newPressure = Pressure_Sample.newBuilder();
         newPressure.setPressure(pressure);
@@ -255,6 +320,16 @@ public class TrajectoryBuilder {
         addLightInfo(sensorDetails.name, sensorDetails.vendor, sensorDetails.res, sensorDetails.power, sensorDetails.version, sensorDetails.type);
     }
 
+    /**
+     * Generates sensor information
+     * @param name sensor name
+     * @param vendor sensor vendor
+     * @param res sensor resolution
+     * @param power sesnsor power
+     * @param version sensor version
+     * @param type sensor type
+     * @return Sensor_Info
+     */
     private Sensor_Info createSensorInfo(String name, String vendor, float res, float power, int version, int type){
         Sensor_Info.Builder newSensor = Sensor_Info.newBuilder();
         newSensor.setName(name);

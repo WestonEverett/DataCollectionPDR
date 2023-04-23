@@ -23,7 +23,7 @@ import java.util.Date;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-/** TrajectoryNative.java
+/** FileManager.java
  * Authors: Weston Everett
  * Affiliation: The University of Edinburgh
  * Description: Class containing static methods for reading/writing data from files

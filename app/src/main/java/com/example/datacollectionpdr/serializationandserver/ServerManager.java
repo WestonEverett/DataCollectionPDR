@@ -14,10 +14,10 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-/** TrajectoryNative.java
+/** ServerManager.java
  * Authors: Weston Everett
  * Affiliation: The University of Edinburgh
- * Description: Class containing static methods for reading/writing data from files
+ * Description: Class containing static methods for reading/writing data from the server
  */
 
 public class ServerManager {
