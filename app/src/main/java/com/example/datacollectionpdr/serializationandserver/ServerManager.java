@@ -26,6 +26,12 @@ public class ServerManager {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     public static final String site = "https://openpositioning.org";
 
+    /**
+     * Sends data to the server
+     * @param trajectoryNative data to serial/send
+     * @param apiKey apikey to use
+     * @return server response
+     */
     public static String sendData(TrajectoryNative trajectoryNative, String apiKey) {
 
         OkHttpClient client = new OkHttpClient();
@@ -55,6 +61,10 @@ public class ServerManager {
         }
     }
 
+    /**
+     * Pulls data from server
+     * @return server response
+     */
     public String downloadData(){
         OkHttpClient client = new OkHttpClient();
 
@@ -75,6 +85,10 @@ public class ServerManager {
         return responseBody;
     }
 
+    /**
+     * Reads available data from server
+     * @return response string
+     */
     public String readData(){
         OkHttpClient client = new OkHttpClient();
         // URL of the server
