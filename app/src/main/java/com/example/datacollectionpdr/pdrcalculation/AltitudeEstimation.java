@@ -39,14 +39,14 @@ public class AltitudeEstimation {
     }
 
     /**
-     * adds an altitude measurement to the buffer storage
+     * Updates with new altitude
      * @param altitude measurement to be added
      */
     public void addAltitude(float altitude){
-        recentAltitudes.addValue(altitude); //get altitude before change
-        this.lastAltitude = altitude;   //get altitude after change
+        recentAltitudes.addValue(altitude); //Adds altitude to buffer
+        this.lastAltitude = altitude;   //caches the altitude
 
-        this.checkFloors(); //check the number of floors changed
+        this.checkFloors(); //Tests for stairs-state
     }
 
     /**
@@ -56,16 +56,16 @@ public class AltitudeEstimation {
      */
     private void checkFloors(){
         float variance = recentAltitudes.getVariance(); //calculate barometer variance
-        boolean currentlyChanging = (variance > varianceThreshold); //check if variance big enough for a floor change
+        boolean currentlyChanging = (variance > varianceThreshold); //choose which state
 
         Log.i("checkFloorsVar", "Variance: " + variance);
 
-        if(this.changingFloors && !currentlyChanging){  //if changing floors
+        if(this.changingFloors && !currentlyChanging){  //if changing state from change -> stable
             float tempAlt = this.recentAltitudes.getMean();
             this.currentFloor = this.currentFloor + Math.round((tempAlt - curFloorAltitude)/floor_height);
             curFloorAltitude = tempAlt;
         } else if(!currentlyChanging){
-            this.curFloorAltitude = this.recentAltitudes.getMean(); //if not changing before then save altitude before change
+            this.curFloorAltitude = this.recentAltitudes.getMean(); //if state stays stable -> stable
         }
 
 
@@ -73,7 +73,7 @@ public class AltitudeEstimation {
     }
 
     /**
-     * Returns altitude change since the first barometer measurement
+     * Returns altitude change from the floor altitude
      * @return altitude delta
      */
     public float altitudeDelta(){return this.lastAltitude - this.curFloorAltitude;}
