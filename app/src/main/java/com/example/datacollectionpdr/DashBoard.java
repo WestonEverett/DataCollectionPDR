@@ -119,7 +119,7 @@ public class DashBoard extends AppCompatActivity implements View.OnClickListener
             case R.id.button_sendfromfile:  //send button -> send selected file to server
                 if(files.length != 0){
                     String response = ServerManager.sendData(this.trajectoryNative, MainActivity.serverKeyString);
-                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
                     Log.i("ServerResponse", response);
                 }
                 break;

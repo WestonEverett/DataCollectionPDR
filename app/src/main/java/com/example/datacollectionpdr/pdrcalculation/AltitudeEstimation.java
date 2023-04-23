@@ -43,10 +43,10 @@ public class AltitudeEstimation {
      * @param altitude measurement to be added
      */
     public void addAltitude(float altitude){
-        recentAltitudes.addValue(altitude);
-        this.lastAltitude = altitude;
+        recentAltitudes.addValue(altitude); //get altitude before change
+        this.lastAltitude = altitude;   //get altitude after change
 
-        this.checkFloors();
+        this.checkFloors(); //check the number of floors changed
     }
 
     /**
@@ -55,17 +55,17 @@ public class AltitudeEstimation {
      * When the phone stabilizes, it is assumed to be stable on a new floor
      */
     private void checkFloors(){
-        float variance = recentAltitudes.getVariance();
-        boolean currentlyChanging = (variance > varianceThreshold);
+        float variance = recentAltitudes.getVariance(); //calculate barometer variance
+        boolean currentlyChanging = (variance > varianceThreshold); //check if variance big enough for a floor change
 
         Log.i("checkFloorsVar", "Variance: " + variance);
 
-        if(this.changingFloors && !currentlyChanging){
+        if(this.changingFloors && !currentlyChanging){  //if changing floors
             float tempAlt = this.recentAltitudes.getMean();
             this.currentFloor = this.currentFloor + Math.round((tempAlt - curFloorAltitude)/floor_height);
             curFloorAltitude = tempAlt;
         } else if(!currentlyChanging){
-            this.curFloorAltitude = this.recentAltitudes.getMean();
+            this.curFloorAltitude = this.recentAltitudes.getMean(); //if not changing before then save altitude before change
         }
 
 
@@ -74,13 +74,13 @@ public class AltitudeEstimation {
 
     /**
      * Returns altitude change since the first barometer measurement
-     * @return
+     * @return altitude delta
      */
     public float altitudeDelta(){return this.lastAltitude - this.curFloorAltitude;}
 
     /**
      * returns the current floor (relative to start point)
-     * @return
+     * @return floor number
      */
     public int floorsChanged(){
         return currentFloor;
@@ -89,7 +89,7 @@ public class AltitudeEstimation {
     /**
      * Static function for calculating altitude
      * @param pressure pressure to get altitude of
-     * @return
+     * @return altitude
      */
     public static float findAltitude(float pressure){
         return SensorManager.getAltitude(SensorManager.PRESSURE_STANDARD_ATMOSPHERE,pressure);
